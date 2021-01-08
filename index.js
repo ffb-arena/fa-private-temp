@@ -59,8 +59,8 @@ const acc = {
 const diag = 1 / Math.SQRT2;
 const wasdSmooth = 0.038;
 const petalLag = 0.35;
-const petalSmooth = 4;
-const normal = 60, attack = 100, defend = 30; // petal positions
+const petalSmooth = 2;
+const normal = 60, attack = 80, defend = 40; // petal positions
 const names = [
     "John",
     "Milk&Cookies",
@@ -75,7 +75,8 @@ const names = [
     "dunked on yt",
     "[MG]MasterOv",
     "GebitDiver",
-    "no mates :((("
+    "no mates :(((",
+    "PUS ABOVE ALL"
 ];
 
 // Classes
@@ -378,8 +379,8 @@ wss.on('connection', function connection(ws) {
 // Main loop
 function mainloop() {
     time.last = Date.now() - time.old;
-    const mul = time.last / frame;
     for (const room in rooms) {
+        const mul = time.last / frame;
         if (rooms[room].inGame) {
 
             // Updating positions
@@ -515,12 +516,15 @@ function mainloop() {
                 rooms[room].players[p].privInfo.petalCentre.y += petalLag * (rooms[room].players[p].pubInfo.y - rooms[room].players[p].privInfo.petalCentre.y);
 
                 rooms[room].players[p].pubInfo.petals.forEach(petal => {
-                    if (rooms[room].players[p].privInfo.keys.spaceDown || rooms[room].players[p].privInfo.keys.leftMouse) {
-                        petal.coordR = Math.min(attack, petal.coordR + petalSmooth);
-                    } else if (rooms[room].players[p].privInfo.keys.shiftLeft || rooms[room].players[p].privInfo.keys.shiftRight || rooms[room].players[p].privInfo.keys.leftMouse) {
-                        petal.coordR = Math.max(defend, petal.coordR - petalSmooth);
-                    } else {
-                        // normal
+                    if (rooms[room].players[p].privInfo.keys.spaceDown 
+                        || rooms[room].players[p].privInfo.keys.leftMouse) petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
+                    else if (rooms[room].players[p].privInfo.keys.shiftLeft 
+                        || rooms[room].players[p].privInfo.keys.shiftRight 
+                        || rooms[room].players[p].privInfo.keys.rightMouse) petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
+                    else {
+                        (petal.coordR < normal)
+                            ? petal.coordR = Math.min(normal, petal.coordR + petalSmooth * mul)
+                            : petal.coordR = Math.max(normal, petal.coordR - petalSmooth * mul);
                     }
                     let change = petal.change * mul;
                     petal.update({
