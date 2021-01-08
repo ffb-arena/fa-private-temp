@@ -398,9 +398,9 @@ function mainloop() {
                     // Up
                     directions.forEach(d => {
                         if (rooms[room].players[p].privInfo.keys[`${d}Down`]) {
-                            console.log("test")
-                        } else {
-
+                            
+                        } else if (rooms[room].players[p].privInfo.movement.acc[d]) {
+                            rooms[room].players[p].privInfo.movement.acc[d] = Math.max(0, rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul)
                         }
                     });
                     if (rooms[room].players[p].privInfo.keys.upDown) {
