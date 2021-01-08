@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Increased competition in the garden has lead to ruthless combat...">
+    <title>test</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body id="body">
+    <div id="container">
+        <img src="fa.png" id="title">
+
+        <div id="start">
+            <button id="join">join room</button>
+            <button id="make">create room</button>
+        </div>
+
+        <div id="creating">
+            <input id="input-join" placeholder="room id" autocomplete="off">
+            <button id="join-submit">join room</button>
+        </div>
+
+        <div id="joining">
+            <input id="input-create" placeholder="room id" autocomplete="off">
+            <button id="create-submit">create room</button>
+        </div>
+
+        <button id="back">back</button>
+
+        <div id="ready">
+            <input id="name" placeholder="change this" autocomplete="off">
+        </div>
+
+        <p id="system-text"></p>
+
+        <div id="room-container">
+            <p id="room-ID"></p>
+        </div>
+
+        <div id="room-settings-container">
+            <p id="room-settings">Room Settings</p>
+            <input id="x" type="number" min="2" max="300"> <p id="by">by</p> <input id="y" type="number" min="2" max="300"> <p id="units">units</p>
+        </div>
+
+        <div id="settings-container">
+            <p id="settings">Settings</p>
+            <div id="keyboard"></div>
+            <p id="km">Keyboard movement</p>
+            <div id="helper"></div>
+            <p id="mh">Movement helper</p>
+        </div>
+        <p id="performance">test</p>
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="stuff.js"></script>
+</body>
+</html>

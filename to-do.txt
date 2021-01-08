@@ -1,0 +1,16 @@
+-basics
+    -in/out
+    -FIX PLAYER RENDERING
+-health
+    -collision detection
+    -petal stats
+    -ramming
+    -hp bar
+    -death
+    -level
+
+
+ask people
+-movement good?
+-collisions?
+-petal lag ok?

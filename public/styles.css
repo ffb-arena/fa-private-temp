@@ -1,0 +1,325 @@
+/* My CSS is very bad also, you might lose braincells trying to read this */
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #1ea761;
+}
+#start {
+    width: 100vw;
+}
+#container {
+    height: 100%;
+    width: 100%
+}
+
+/* Setting all fonts */
+button, p, input {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+/* Code I swiped so that number inputs work */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+/* Document stuff */
+#title {
+    position: absolute;
+    height: 200px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    top: 11vh;
+}
+
+/* Back button */
+#back {
+    position: absolute;
+    bottom: 11.5vh;
+
+    cursor: pointer;
+    background-color: #ffffff;
+
+    width: 80px;
+    height: 40px;
+    font-size: 20px;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+}
+#back:hover {
+    background-color: #e1e1e1;
+}
+
+/* First thing you see */
+#join {
+    cursor: pointer;
+    background-color: #ffffff;
+
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 52vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+}
+#join:hover {
+    background-color: #e1e1e1;
+}
+#make {
+    cursor: pointer;
+    background-color: #ffffff;
+
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 5vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+}
+#make:hover {
+    background-color: #e1e1e1;
+}
+
+/* Back button */
+#back {
+    position: relative;
+
+    margin-left: 33vw;
+    margin-bottom: 10vh;
+}
+
+/* Joining games */
+#input-join {
+    width: 250px;
+    height: 38px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 52vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+
+    padding-left: 5px;
+}
+#join-submit {
+    cursor: pointer;
+    background-color: #ffffff;
+
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 5vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+}
+#join-submit:hover {
+    background-color: #e1e1e1;
+}
+
+/* Creating games */
+#input-create {
+    width: 250px;
+    height: 38px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 52vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+
+    padding-left: 5px;
+}
+#create-submit {
+    cursor: pointer;
+    background-color: #ffffff;
+
+    width: 200px;
+    height: 50px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 5vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+}
+#create-submit:hover {
+    background-color: #e1e1e1;
+}
+
+/* Name/join menu */
+#name {
+    width: 300px;
+    height: 38px;
+    font-size: 30px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    margin-top: 43vh;
+
+    border: 5px solid #000000;
+    border-radius: 6px;
+
+    padding-left: 5px;
+}
+
+/* Error/success messages */
+#system-text {
+    color: #ffffff;
+    font-size: 20px;
+    -webkit-text-stroke: 1px black;
+    position: relative;
+    width: 160px;
+    bottom: 28.5vh;
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+}
+
+#room-container {
+    position: absolute;
+    height: 100px;
+    width: 200px;
+    left: 63vw;
+    bottom: 30vh;
+}
+#room-ID {
+    color: #ffffff;
+    font-size: 20px;
+    -webkit-text-stroke: 1px black;
+    position: absolute;
+}
+
+/* Room settings */
+#room-settings-container {
+    position: absolute;
+    left: 70%;
+    bottom: 25vh;
+    width: 300px;
+    height: 300px;
+    background-color: #5a9fdb;
+    border: 5px solid #4981b1;
+    border-radius: 3px;
+}
+#room-settings {
+    margin-left: 17px;
+}
+#x {
+    width: 30px;
+    margin-left: 17px;
+}
+#by {
+    position: absolute;
+    bottom: 214px;
+    left: 60px;
+}
+#y {
+    width: 30px;
+    margin-left: 30px;
+}
+#units {
+    position: absolute;
+    bottom: 214px;
+    left: 127px;
+}
+
+/* Settings */
+#settings-container {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    background-color: #5a9fdb;
+    border: 5px solid #4981b1;
+    border-radius: 3px;
+    width: 175px;
+    height: 125px;
+}
+#settings {
+    letter-spacing: -1px;
+    bottom: 18px;
+    left: 38px;
+    position: relative;
+    color: #ffffff;
+    font-size: 25px;
+    -webkit-text-stroke: 1px black;
+}
+#keyboard, #helper {
+    cursor: pointer;
+    position: absolute;
+    left: 7px;
+    width: 18px;
+    height: 18px;
+    background-color: #666666;
+    border: 4px solid #333333;
+    border-radius: 2px; 
+}
+#keyboard {
+    bottom: 50px;
+}
+#helper {
+    bottom: 12px;
+}
+#km, #mh {
+    color: #ffffff;
+    position: relative;
+    font-size: 13px;
+    left: 42px;
+    -webkit-text-stroke: 0.5px black;
+}
+#km {
+    bottom: 25px;
+}
+#mh {
+    bottom: 16px
+}
+
+/* Ping and stuff */
+#performance {
+    color: #ffffff;
+    position: absolute;
+    bottom: 0;
+    right: 20px;
+    -webkit-text-stroke: 0.5px black;
+}
