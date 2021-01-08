@@ -78,6 +78,12 @@ const names = [
     "no mates :(((",
     "PUS ABOVE ALL"
 ];
+const directions = [
+    "up",
+    "right",
+    "down",
+    "left"
+];
 
 // Classes
 class Petal {
@@ -152,14 +158,9 @@ wss.on('connection', function connection(ws) {
                     // Creating a room
                     case "a":
                         if (myRoom !== undefined) return;
-                        for (const prop in rooms) {
-                            if (prop === msg[2]) {
-                                exists = true;
-                            }
-                        }
-                        if (exists) {
-                            ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
-                        } else {
+                        for (const prop in rooms) if (prop === msg[2]) exists = true;
+                        if (exists)  ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
+                        else {
                             let roomX, roomY;
                             roomX = Math.min(
                                 299, 
@@ -192,18 +193,12 @@ wss.on('connection', function connection(ws) {
                     // Joining a room
                     case "b":
                         if (myRoom !== undefined) return;
-                        for (const prop in rooms) {
-                            if (prop === msg[2]) {
-                                exists = true;
-                            }
-                        }
+                        for (const prop in rooms) if (prop === msg[2]) exists = true;
                         if (exists) {
                             ws.send(JSON.stringify(["a", "b", "a", msg[2], rooms[msg[2]].info]));
                             myRoom = msg[2];
                             rooms[msg[2]].connected++;
-                        } else {
-                            ws.send(JSON.stringify(["a", "b", "b", msg[2]]));
-                        }
+                        } else ws.send(JSON.stringify(["a", "b", "b", msg[2]]));
                         break;
 
                     // Disconnecting from room
@@ -401,6 +396,13 @@ function mainloop() {
                     // Updating acceleration
 
                     // Up
+                    directions.forEach(d => {
+                        if (rooms[room].players[p].privInfo.keys[`${d}Down`]) {
+                            console.log("test")
+                        } else {
+
+                        }
+                    });
                     if (rooms[room].players[p].privInfo.keys.upDown) {
                         if (rooms[room].players[p].privInfo.keys.downDown) {
                             rooms[room].players[p].privInfo.movement.acc.up -= wasdSmooth * mul;
