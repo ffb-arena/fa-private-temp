@@ -278,21 +278,11 @@ function drawMinimap() {
 }
 
 function calculateRelPos(pos, axis) {
-    if (axis === "x") {
-        return window.innerWidth / 2 + pos * res - me.info.x * res;
-    } else {
-        return window.innerHeight / 2 - pos * res + me.info.y * res;
-    }
+    if (axis === "x") return window.innerWidth / 2 + pos * res - me.info.x * res;
+    else return window.innerHeight / 2 - pos * res + me.info.y * res;
 }
 
 function render(data, i) {
-    if (!i) {
-        let p = new Player(data.name, window.innerWidth / 2, window.innerHeight / 2, gridSpace / 2 * res);
-        p.draw(false);
-    } else {
-        let p = new Player(data.name, calculateRelPos(data.x, "x"), calculateRelPos(data.y, "y"), gridSpace / 2 * res);
-        p.draw(true);
-    }
     data.petals.forEach(p => {
         ctx.beginPath();
         switch (p.id) {
@@ -317,6 +307,13 @@ function render(data, i) {
         }
         ctx.closePath()
     });
+    if (!i) {
+        let p = new Player(data.name, window.innerWidth / 2, window.innerHeight / 2, gridSpace / 2 * res);
+        p.draw(false);
+    } else {
+        let p = new Player(data.name, calculateRelPos(data.x, "x"), calculateRelPos(data.y, "y"), gridSpace / 2 * res);
+        p.draw(true);
+    }
 }
 
 // Event Listeners
@@ -455,9 +452,7 @@ window.addEventListener("resize", () => {
     if (title.hidden) {
         drawMap();
         drawGrid();
-        allPlayers.forEach((data, i) => {
-            render(data, i);
-        });
+        allPlayers.forEach((data, i) => render(data, i));
         drawHelper();
 
         mms = (me.roomInfo.x > me.roomInfo.y) ? [me.roomInfo.y / me.roomInfo.x, "x"] : [me.roomInfo.x / me.roomInfo.y, "y"];

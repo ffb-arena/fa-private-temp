@@ -60,7 +60,7 @@ const diag = 1 / Math.SQRT2;
 const wasdSmooth = 0.038;
 const petalLag = 0.35;
 const petalSmooth = 2;
-const normal = 60, attack = 80, defend = 40; // petal positions
+const normal = 70, attack = 100, defend = 38; // petal positions
 const names = [
     "John",
     "Milk&Cookies",
