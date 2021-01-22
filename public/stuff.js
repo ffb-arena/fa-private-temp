@@ -160,7 +160,7 @@ function performing() {
 
 function drawGrid() {
     ctx.strokeStyle = "#000000";
-    ctx.globalAlpha = 0.2;
+    ctx.globalAlpha = 0.15;
     ctx.lineWidth = 0.5;
     let bruh = gridSpace * res;
 
@@ -460,8 +460,8 @@ window.addEventListener("resize", () => {
         mmHeight = (mms[1] === "y") ? 260 * res : mms[0] * 260 * res;
         circleRadius = Math.max((mmWidth > mmHeight) ? mmHeight / 15 : mmWidth / 15, 5);
         circlePlane = {
-            x: Math.max(mmWidth - (circleRadius << 1), 2),
-            y: Math.max(mmHeight - (circleRadius << 1), 2)
+            x: Math.max(mmWidth - (circleRadius * 2), 2),
+            y: Math.max(mmHeight - (circleRadius * 2), 2)
         }
         drawMinimap();
     }
@@ -495,8 +495,8 @@ ws.onmessage = message => {
                         mmHeight = (mms[1] === "y") ? 260 * res : mms[0] * 260 * res;
                         circleRadius = Math.max((mmWidth > mmHeight) ? mmHeight / 15 : mmWidth / 15, 5);
                         circlePlane = {
-                            x: mmWidth - (circleRadius << 1),
-                            y: mmHeight - (circleRadius << 1)
+                            x: mmWidth - (circleRadius * 2),
+                            y: mmHeight - (circleRadius * 2)
                         }
                         if (circlePlane.x < 2) circlePlane.x = 2;
                         if (circlePlane.y < 2) circlePlane.y = 2;
@@ -543,8 +543,8 @@ ws.onmessage = message => {
                         mmHeight = (mms[1] === "y") ? 260 * res : mms[0] * 260 * res;
                         circleRadius = Math.max((mmWidth > mmHeight) ? mmHeight / 15 : mmWidth / 15, 5);
                         circlePlane = {
-                            x: mmWidth - (circleRadius << 1),
-                            y: mmHeight - (circleRadius << 1)
+                            x: mmWidth - (circleRadius * 2),
+                            y: mmHeight - (circleRadius * 2)
                         }
                         if (circlePlane.x < 2) circlePlane.x = 2;
                         if (circlePlane.y < 2) circlePlane.y = 2;

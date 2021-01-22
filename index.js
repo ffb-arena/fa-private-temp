@@ -51,13 +51,13 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 const time = {};
 const rooms = {};
-const frame = 1000 / 50;
-const friction = 2.5;
+const frame = 1000 / 25;
+const friction = 5;
 const acc = {
     flower: 2.5
 };
 const diag = 1 / Math.SQRT2;
-const wasdSmooth = 0.038;
+const wasdSmooth = 0.076;
 const petalLag = 0.35;
 const petalSmooth = 2;
 const normal = 70, attack = 100, defend = 38; // petal positions
@@ -392,103 +392,27 @@ function mainloop() {
                     rooms[room].players[p].privInfo.movement.direction.y /= distance;
                 } else {
                     rooms[room].players[p].privInfo.movement.speed = acc.flower * friction * mul;
-
                     // Updating acceleration
 
                     // Up
-                    directions.forEach(d => {
+                    directions.forEach((d, i) => {
                         if (rooms[room].players[p].privInfo.keys[`${d}Down`]) {
-                            
-                        } else if (rooms[room].players[p].privInfo.movement.acc[d]) {
-                            rooms[room].players[p].privInfo.movement.acc[d] = Math.max(0, rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul)
+                            if (rooms[room].players[p].privInfo.keys[`${directions[(i + 2) % 4]}Down`]) {
+                                rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, 0);
+                            } else if (rooms[room].players[p].privInfo.keys[`${directions[(i + 1) % 4]}Down`] !== rooms[room].players[p].privInfo.keys[`${directions[(i + 3) % 4]}Down`]) {
+                                if (rooms[room].players[p].privInfo.movement.acc[d] > diag) {
+                                    rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, diag);
+                                } else {
+                                    rooms[room].players[p].privInfo.movement.acc[d] = Math.min(rooms[room].players[p].privInfo.movement.acc[d] + wasdSmooth * mul, diag);
+                                }
+                            } else {
+                                rooms[room].players[p].privInfo.movement.acc[d] = Math.min(rooms[room].players[p].privInfo.movement.acc[d] + wasdSmooth * mul, 1);
+                            }
+                        } else {
+                            rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, 0);
                         }
                     });
-                    if (rooms[room].players[p].privInfo.keys.upDown) {
-                        if (rooms[room].players[p].privInfo.keys.downDown) {
-                            rooms[room].players[p].privInfo.movement.acc.up -= wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.up < 0) rooms[room].players[p].privInfo.movement.acc.up = 0;
-                        } else if (rooms[room].players[p].privInfo.keys.rightDown !== rooms[room].players[p].privInfo.keys.leftDown) {
-                            if (rooms[room].players[p].privInfo.movement.acc.up > diag) {
-                                rooms[room].players[p].privInfo.movement.acc.up -= wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.up < diag) rooms[room].players[p].privInfo.movement.acc.up = diag;
-                            } else {
-                                rooms[room].players[p].privInfo.movement.acc.up += wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.up > diag) rooms[room].players[p].privInfo.movement.acc.up = diag;
-                            }
-                        } else {
-                            rooms[room].players[p].privInfo.movement.acc.up += wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.up > 1) rooms[room].players[p].privInfo.movement.acc.up = 1;
-                        } 
-                    } else if (rooms[room].players[p].privInfo.movement.acc.up) {
-                        rooms[room].players[p].privInfo.movement.acc.up -= wasdSmooth * mul;
-                        if (rooms[room].players[p].privInfo.movement.acc.up < 0) rooms[room].players[p].privInfo.movement.acc.up = 0;
-                    }
 
-                    // Down
-                    if (rooms[room].players[p].privInfo.keys.downDown) {
-                        if (rooms[room].players[p].privInfo.keys.upDown) {
-                            rooms[room].players[p].privInfo.movement.acc.down -= wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.down < 0) rooms[room].players[p].privInfo.movement.acc.down = 0;
-                        } else if (rooms[room].players[p].privInfo.keys.rightDown !== rooms[room].players[p].privInfo.keys.leftDown) {
-                            if (rooms[room].players[p].privInfo.movement.acc.down > diag) {
-                                rooms[room].players[p].privInfo.movement.acc.down -= wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.down < diag) rooms[room].players[p].privInfo.movement.acc.down = diag;
-                            } else {
-                                rooms[room].players[p].privInfo.movement.acc.down += wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.down > diag) rooms[room].players[p].privInfo.movement.acc.down = diag;
-                            }
-                        } else {
-                            rooms[room].players[p].privInfo.movement.acc.down += wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.down > 1) rooms[room].players[p].privInfo.movement.acc.down = 1;
-                        } 
-                    } else if (rooms[room].players[p].privInfo.movement.acc.down) {
-                        rooms[room].players[p].privInfo.movement.acc.down -= wasdSmooth * mul;
-                        if (rooms[room].players[p].privInfo.movement.acc.down < 0) rooms[room].players[p].privInfo.movement.acc.down = 0;
-                    }
-
-                    // Left
-                    if (rooms[room].players[p].privInfo.keys.leftDown) {
-                        if (rooms[room].players[p].privInfo.keys.rightDown) {
-                            rooms[room].players[p].privInfo.movement.acc.left -= wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.left < 0) rooms[room].players[p].privInfo.movement.acc.left = 0;
-                        } else if (rooms[room].players[p].privInfo.keys.upDown !== rooms[room].players[p].privInfo.keys.downDown) {
-                            if (rooms[room].players[p].privInfo.movement.acc.left > diag) {
-                                rooms[room].players[p].privInfo.movement.acc.left -= wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.left < diag) rooms[room].players[p].privInfo.movement.acc.left = diag;
-                            } else {
-                                rooms[room].players[p].privInfo.movement.acc.left += wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.left > diag) rooms[room].players[p].privInfo.movement.acc.left = diag;
-                            }
-                        } else {
-                            rooms[room].players[p].privInfo.movement.acc.left += wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.left > 1) rooms[room].players[p].privInfo.movement.acc.left = 1;
-                        } 
-                    } else if (rooms[room].players[p].privInfo.movement.acc.left) {
-                        rooms[room].players[p].privInfo.movement.acc.left -= wasdSmooth * mul;
-                        if (rooms[room].players[p].privInfo.movement.acc.left < 0) rooms[room].players[p].privInfo.movement.acc.left = 0;
-                    }
-
-                    // Right
-                    if (rooms[room].players[p].privInfo.keys.rightDown) {
-                        if (rooms[room].players[p].privInfo.keys.leftDown) {
-                            rooms[room].players[p].privInfo.movement.acc.right -= wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.right < 0) rooms[room].players[p].privInfo.movement.acc.right = 0;
-                        } else if (rooms[room].players[p].privInfo.keys.upDown !== rooms[room].players[p].privInfo.keys.downDown) {
-                            if (rooms[room].players[p].privInfo.movement.acc.right > diag) {
-                                rooms[room].players[p].privInfo.movement.acc.right -= wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.right < diag) rooms[room].players[p].privInfo.movement.acc.right = diag;
-                            } else {
-                                rooms[room].players[p].privInfo.movement.acc.right += wasdSmooth * mul;
-                                if (rooms[room].players[p].privInfo.movement.acc.right > diag) rooms[room].players[p].privInfo.movement.acc.right = diag;
-                            }
-                        } else {
-                            rooms[room].players[p].privInfo.movement.acc.right += wasdSmooth * mul;
-                            if (rooms[room].players[p].privInfo.movement.acc.right > 1) rooms[room].players[p].privInfo.movement.acc.right = 1;
-                        } 
-                    } else if (rooms[room].players[p].privInfo.movement.acc.right) {
-                        rooms[room].players[p].privInfo.movement.acc.right -= wasdSmooth * mul;
-                        if (rooms[room].players[p].privInfo.movement.acc.right < 0) rooms[room].players[p].privInfo.movement.acc.right = 0;
-                    }
                     rooms[room].players[p].privInfo.movement.direction.x = rooms[room].players[p].privInfo.movement.acc.right - rooms[room].players[p].privInfo.movement.acc.left;
                     rooms[room].players[p].privInfo.movement.direction.y = rooms[room].players[p].privInfo.movement.acc.up - rooms[room].players[p].privInfo.movement.acc.down;
                 }
