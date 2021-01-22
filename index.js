@@ -59,7 +59,7 @@ const acc = {
 const diag = 1 / Math.SQRT2;
 const wasdSmooth = 0.076;
 const petalLag = 0.35;
-const petalSmooth = 2;
+const petalSmooth = 3.5;
 const normal = 70, attack = 100, defend = 38; // petal positions
 const names = [
     "John",
@@ -91,9 +91,9 @@ class Petal {
         this.id = id;
         this.degree = degree;
         this.coordR = coordR;
-        this.x = centre.x + Math.sin(degree * Math.PI / 180) * this.coordR;
-        this.y = centre.y + Math.cos(degree * Math.PI / 180) * this.coordR;
-        this.change = (2.5 * (180 / Math.PI)) / 50;
+        this.x = centre.x + Math.sin(degree) * this.coordR;
+        this.y = centre.y + Math.cos(degree) * this.coordR;
+        this.change = 2.5 / (1000 / frame);
         switch (this.id) {
             case 1: 
                 this.radius = 10;
@@ -103,8 +103,8 @@ class Petal {
 
     update(centre, degree) {
         this.degree = degree;
-        this.x = centre.x + Math.sin(degree * Math.PI / 180) * this.coordR;
-        this.y = centre.y + Math.cos(degree * Math.PI / 180) * this.coordR;
+        this.x = centre.x + Math.sin(degree) * this.coordR;
+        this.y = centre.y + Math.cos(degree) * this.coordR;
     }
 }
 
@@ -232,10 +232,10 @@ wss.on('connection', function connection(ws) {
                         health: 100,
                         petals: [
                             new Petal(1, 0, normal, { x: x, y: y }),
-                            new Petal(1, 360 / n, normal, { x: x, y: y }),
-                            new Petal(1, 360 / n * 2, normal, { x: x, y: y }),
-                            new Petal(1, 360 / n * 3, normal, { x: x, y: y }),
-                            new Petal(1, 360 / n * 4, normal, { x: x, y: y })
+                            new Petal(1, 2 * Math.PI / n, normal, { x: x, y: y }),
+                            new Petal(1, 2 * Math.PI / n * 2, normal, { x: x, y: y }),
+                            new Petal(1, 2 * Math.PI / n * 3, normal, { x: x, y: y }),
+                            new Petal(1, 2 * Math.PI / n * 4, normal, { x: x, y: y })
                         ],
                         face: 0
                     },
@@ -412,7 +412,6 @@ function mainloop() {
                             rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, 0);
                         }
                     });
-
                     rooms[room].players[p].privInfo.movement.direction.x = rooms[room].players[p].privInfo.movement.acc.right - rooms[room].players[p].privInfo.movement.acc.left;
                     rooms[room].players[p].privInfo.movement.direction.y = rooms[room].players[p].privInfo.movement.acc.up - rooms[room].players[p].privInfo.movement.acc.down;
                 }
@@ -456,7 +455,7 @@ function mainloop() {
                     petal.update({
                         x: rooms[room].players[p].privInfo.petalCentre.x,
                         y: rooms[room].players[p].privInfo.petalCentre.y
-                    }, (petal.degree + change > 359) ? (petal.degree + change) % 360 : petal.degree + change);
+                    }, (petal.degree + change > 2 * Math.PI) ? (petal.degree + change) % 360 : petal.degree + change);
                 });
             }
 

@@ -9,8 +9,6 @@
     -death
     -level
 
-
-ask people
--movement good?
--collisions?
--petal lag ok?
+-mechanics to fix 
+    -petal lag is elliptical
+    -wasd movement
