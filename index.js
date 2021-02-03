@@ -221,8 +221,8 @@ wss.on('connection', function connection(ws) {
             case "b":
                 if (myID !== undefined) return;
                 let newID = getID(rooms[myRoom].players);
-                let x = Math.random() * 100;
-                let y = Math.random() * 100;
+                let x = Math.random() * rooms[myRoom].info.x;
+                let y = Math.random() * rooms[myRoom].info.y;
                 let n = 5;
                 if (!myName) myName = names[Math.abs(Math.round(Math.random() * names.length) - 1)];
                 rooms[myRoom].players[newID] = {
