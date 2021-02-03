@@ -532,8 +532,8 @@ ws.onmessage = message => {
                         mmHeight = (mms[1] === "y") ? 260 * res : mms[0] * 260 * res;
                         circleRadius = Math.max((mmWidth > mmHeight) ? mmHeight / 15 : mmWidth / 15, 5);
                         circlePlane = {
-                            x: mmWidth - (circleRadius * 2),
-                            y: mmHeight - (circleRadius * 2)
+                            x: mmWidth - circleRadius * 2,
+                            y: mmHeight - circleRadius * 2
                         }
                         if (circlePlane.x < 2) circlePlane.x = 2;
                         if (circlePlane.y < 2) circlePlane.y = 2;

@@ -277,6 +277,7 @@ wss.on('connection', function connection(ws) {
                         y: y
                     },
                     distances: new Map(),
+                    petalDist: normal,
                     client: ws
                 };
                 for (const p in rooms[myRoom].players) {
@@ -469,11 +470,18 @@ function mainloop() {
 
                 rooms[room].players[p].pubInfo.petals.forEach(petal => {
                     if (rooms[room].players[p].keys.spaceDown 
-                        || rooms[room].players[p].keys.leftMouse) petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
+                        || rooms[room].players[p].keys.leftMouse) {
+                            rooms[room].players[p].petalDist = attack;
+                            petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
+                        }
                     else if (rooms[room].players[p].keys.shiftLeft 
                         || rooms[room].players[p].keys.shiftRight 
-                        || rooms[room].players[p].keys.rightMouse) petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
+                        || rooms[room].players[p].keys.rightMouse) {
+                            rooms[room].players[p].petalDist = defend;
+                            petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
+                        }
                     else {
+                        rooms[room].players[p].petalDist = normal;
                         (petal.coordR < normal)
                             ? petal.coordR = Math.min(normal, petal.coordR + petalSmooth * mul)
                             : petal.coordR = Math.max(normal, petal.coordR - petalSmooth * mul);
@@ -499,10 +507,10 @@ function mainloop() {
                         reciever = players[index].distances;
                         send.push(players[index].pubInfo);
                     } else if (
-                        // maximum is 1920 x 1080 (add attack for players partially on screen)
-                        (Math.abs(reciever.get(players[index].id).x) <= 1920 / 2 + attack)
+                        // maximum is 1920 x 1080 (add petal distance for players partially on screen)
+                        (Math.abs(reciever.get(players[index].id).x) <= 1920 / 2 + players[index].petalDist)
                         &&
-                        (Math.abs(reciever.get(players[index].id).y) <= 1080 / 2 + attack)
+                        (Math.abs(reciever.get(players[index].id).y) <= 1080 / 2 + players[index].petalDist)
                     ) send.push(players[index].pubInfo);
                 }
                 player.client.send(JSON.stringify(["b", send]));
