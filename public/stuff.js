@@ -459,10 +459,7 @@ window.addEventListener("resize", () => {
     }
 });
 
-ws.onopen = () => {
-    console.log("Websocket Sucessfully Opened");
-}
-
+ws.onopen = () => console.log("Websocket Sucessfully Opened");
 
 // When messages are recieved
 ws.onmessage = message => {
