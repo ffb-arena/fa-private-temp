@@ -1,5 +1,3 @@
--basics
-    -FIX PLAYER RENDERING
 -health
     -collision detection
     -petal stats

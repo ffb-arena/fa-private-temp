@@ -132,6 +132,9 @@ wss.on('connection', function connection(ws) {
             myName = undefined;
             if (myID !== undefined) {
                 rooms[myRoom].inGame--;
+                for (const p in rooms[myRoom].players) {
+                    rooms[myRoom].players[p].distances.delete(myID);
+                }
                 delete rooms[myRoom].players[myID];
                 myID = undefined;
             }
@@ -500,10 +503,7 @@ function mainloop() {
                         (Math.abs(reciever.get(players[index].id).x) <= 1920 / 2 + attack)
                         &&
                         (Math.abs(reciever.get(players[index].id).y) <= 1080 / 2 + attack)
-                    ) {
-                        console.log('a')
-                        send.push(players[index].pubInfo);
-                    }
+                    ) send.push(players[index].pubInfo);
                 }
                 player.client.send(JSON.stringify(["b", send]));
             });
