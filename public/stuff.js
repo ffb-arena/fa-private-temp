@@ -58,7 +58,7 @@ units.hidden = true;
 inputX.value = 20;
 inputY.value = 20;
 
-window.onbeforeunload = confirmExit;
+window.onbeforeunload = () => { return "Are you sure you want to leave this page?" };
 ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
@@ -134,10 +134,6 @@ class Player {
 }
 
 // Functions
-function confirmExit() {
-    return "Are you sure you want to leave this page?";
-}
-
 // ~~Stole~~ borrowed this from stackoverflow.
 // Thanks
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
@@ -425,19 +421,15 @@ document.addEventListener("keydown", (key) => {
         }
     }
 });
-document.addEventListener("keyup", (key)  => {
-    ws.send(JSON.stringify(`cb${key.code}`));
-});
+document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
 window.addEventListener("contextmenu", c => {
     c.preventDefault();
 });
 window.addEventListener("mousedown", click => {
     if (click.button === 1) click.preventDefault();
-    ws.send(JSON.stringify(`ca${click.button.toString(10)}`));
+    ws.send(JSON.stringify(`ca${click.button}`));
 });
-window.addEventListener("mouseup", click => {
-    ws.send(JSON.stringify(`cb${click.button.toString(10)}`));
-});
+window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
 document.addEventListener("mousemove", (pos) => {
     if (title.hidden) ws.send(JSON.stringify(["c", "d", pos.x - window.innerWidth / 2, window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     me.info.mouseX = pos.x;

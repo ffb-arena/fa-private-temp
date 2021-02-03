@@ -53,9 +53,7 @@ const time = {};
 const rooms = {};
 const frame = 1000 / 25;
 const friction = 5;
-const acc = {
-    flower: 2.5
-};
+const acc = { flower: 2.5 };
 const diag = 1 / Math.SQRT2;
 const wasdSmooth = 0.076;
 const petalLag = 0.35;
@@ -239,46 +237,63 @@ wss.on('connection', function connection(ws) {
                         ],
                         face: 0
                     },
-                    privInfo: {
-                        petalNum: n,
-                        id: newID,
-                        res: undefined,
-                        keyboard: bruh,
-                        mouse: {
-                            mouseX: undefined,
-                            mouseY: undefined
-                        },
-                        keys: {
-                            upDown: false,
-                            downDown: false,
-                            rightDown: false,
-                            leftDown: false,
-                            space: false,
-                            shiftLeft: false,
-                            shiftRight: false,
-                            leftMouse: false,
-                            rightMouse: false
-                        },
-                        movement: {
-                            direction: {
-                                x: 0,
-                                y: 0
-                            },
-                            acc: {
-                                up: 0,
-                                down: 0,
-                                right: 0,
-                                left: 0
-                            },
-                            speed: undefined
-                        },
-                        petalCentre: {
-                            x: x, 
-                            y: y
-                        }
+                    petalNum: n,
+                    id: newID,
+                    res: undefined,
+                    keyboard: bruh,
+                    mouse: {
+                        mouseX: undefined,
+                        mouseY: undefined
                     },
+                    keys: {
+                        upDown: false,
+                        downDown: false,
+                        rightDown: false,
+                        leftDown: false,
+                        space: false,
+                        shiftLeft: false,
+                        shiftRight: false,
+                        leftMouse: false,
+                        rightMouse: false
+                    },
+                    movement: {
+                        direction: {
+                            x: 0,
+                            y: 0
+                        },
+                        acc: {
+                            up: 0,
+                            down: 0,
+                            right: 0,
+                            left: 0
+                        },
+                        speed: undefined
+                    },
+                    petalCentre: {
+                        x: x, 
+                        y: y
+                    },
+                    distances: new Map(),
                     client: ws
                 };
+                for (const p in rooms[myRoom].players) {
+                    if (rooms[myRoom].players[p].id !== newID) {
+                        rooms[myRoom].players[newID].distances.set(
+                            rooms[myRoom].players[p].id, 
+                            { 
+                                x: rooms[myRoom].players[p].pubInfo.x - x, 
+                                y: rooms[myRoom].players[p].pubInfo.y - y, 
+                            }
+                        );
+                        rooms[myRoom].players[p].distances.set(
+                            newID, 
+                            { 
+                                x: x - rooms[myRoom].players[p].pubInfo.x, 
+                                y: y - rooms[myRoom].players[p].pubInfo.y, 
+                            }
+                        );
+                    }
+                }
                 myID = newID;
                 rooms[myRoom].inGame++;
                 break;
@@ -291,31 +306,31 @@ wss.on('connection', function connection(ws) {
                         if (myID === undefined) return;
                         switch (msg.slice(2, msg.length)) {
                             case "KeyW":
-                                rooms[myRoom].players[myID].privInfo.keys.upDown = true;
+                                rooms[myRoom].players[myID].keys.upDown = true;
                                 break;
                             case "KeyS":
-                                rooms[myRoom].players[myID].privInfo.keys.downDown = true;  
+                                rooms[myRoom].players[myID].keys.downDown = true;  
                                 break;
                             case "KeyD":
-                                rooms[myRoom].players[myID].privInfo.keys.rightDown = true;
+                                rooms[myRoom].players[myID].keys.rightDown = true;
                                 break;
                             case "KeyA":
-                                rooms[myRoom].players[myID].privInfo.keys.leftDown = true;
+                                rooms[myRoom].players[myID].keys.leftDown = true;
                                 break;
                             case "Space":
-                                rooms[myRoom].players[myID].privInfo.keys.spaceDown = true;
+                                rooms[myRoom].players[myID].keys.spaceDown = true;
                                 break;
                             case "ShiftLeft":
-                                rooms[myRoom].players[myID].privInfo.keys.shiftLeft = true;
+                                rooms[myRoom].players[myID].keys.shiftLeft = true;
                                 break;
                             case "ShiftRight":
-                                rooms[myRoom].players[myID].privInfo.keys.shiftRight = true;
+                                rooms[myRoom].players[myID].keys.shiftRight = true;
                                 break;
                             case "0": 
-                                rooms[myRoom].players[myID].privInfo.keys.leftMouse = true;
+                                rooms[myRoom].players[myID].keys.leftMouse = true;
                                 break;
                             case "2": 
-                                rooms[myRoom].players[myID].privInfo.keys.rightMouse = true;
+                                rooms[myRoom].players[myID].keys.rightMouse = true;
                                 break;
                         }
                         break;
@@ -323,43 +338,43 @@ wss.on('connection', function connection(ws) {
                         if (myID === undefined) return;
                         switch (msg.slice(2, msg.length)) {
                             case "KeyW":
-                                rooms[myRoom].players[myID].privInfo.keys.upDown = false;
+                                rooms[myRoom].players[myID].keys.upDown = false;
                                 break;
                             case "KeyS":
-                                rooms[myRoom].players[myID].privInfo.keys.downDown = false;
+                                rooms[myRoom].players[myID].keys.downDown = false;
                                 break;
                             case "KeyD":
-                                rooms[myRoom].players[myID].privInfo.keys.rightDown = false;
+                                rooms[myRoom].players[myID].keys.rightDown = false;
                                 break;
                             case "KeyA":
-                                rooms[myRoom].players[myID].privInfo.keys.leftDown = false;
+                                rooms[myRoom].players[myID].keys.leftDown = false;
                                 break;
                             case "Space":
-                                rooms[myRoom].players[myID].privInfo.keys.spaceDown = false;
+                                rooms[myRoom].players[myID].keys.spaceDown = false;
                                 break;
                             case "ShiftLeft":
-                                rooms[myRoom].players[myID].privInfo.keys.shiftLeft = false;
+                                rooms[myRoom].players[myID].keys.shiftLeft = false;
                                 break;
                             case "ShiftRight":
-                                rooms[myRoom].players[myID].privInfo.keys.shiftRight = false;
+                                rooms[myRoom].players[myID].keys.shiftRight = false;
                                 break;
                             case "0": 
-                                rooms[myRoom].players[myID].privInfo.keys.leftMouse = false;
+                                rooms[myRoom].players[myID].keys.leftMouse = false;
                                 break;
                             case "2": 
-                                rooms[myRoom].players[myID].privInfo.keys.rightMouse = false;
+                                rooms[myRoom].players[myID].keys.rightMouse = false;
                                 break;
                         }
                         break;
                     case "c":
                         bruh = !bruh;
-                        if (myID !== undefined) rooms[myRoom].players[myID].privInfo.keyboard = !rooms[myRoom].players[myID].privInfo.keyboard;
+                        if (myID !== undefined) rooms[myRoom].players[myID].keyboard = !rooms[myRoom].players[myID].keyboard;
                         break;
                     case "d":
                         if (myID === undefined) return;
-                        rooms[myRoom].players[myID].privInfo.mouse.mouseX = msg[2];
-                        rooms[myRoom].players[myID].privInfo.mouse.mouseY = msg[3];
-                        rooms[myRoom].players[myID].privInfo.res = msg[4];
+                        rooms[myRoom].players[myID].mouse.mouseX = msg[2];
+                        rooms[myRoom].players[myID].mouse.mouseY = msg[3];
+                        rooms[myRoom].players[myID].res = msg[4];
                 }
                 break;
 
@@ -380,72 +395,81 @@ function mainloop() {
 
             // Updating positions
             for (const p in rooms[room].players) {
-                if (!rooms[room].players[p].privInfo.keyboard && (rooms[room].players[p].privInfo.mouse.mouseX || rooms[room].players[p].privInfo.mouseY)) {
-                    let totalDistance = Math.sqrt(Math.pow(rooms[room].players[p].privInfo.mouse.mouseX, 2) + Math.pow(rooms[room].players[p].privInfo.mouse.mouseY, 2));
-                    rooms[room].players[p].privInfo.movement.speed = ((totalDistance / rooms[room].players[p].privInfo.res / 200 > 1) ? 1 : totalDistance / rooms[room].players[p].privInfo.res / 200);
-                    rooms[room].players[p].privInfo.movement.speed *= acc.flower * friction * mul;
-                    rooms[room].players[p].privInfo.movement.direction.x = rooms[room].players[p].privInfo.mouse.mouseX;
-                    rooms[room].players[p].privInfo.movement.direction.y = rooms[room].players[p].privInfo.mouse.mouseY;
+                if (!rooms[room].players[p].keyboard && (rooms[room].players[p].mouse.mouseX || rooms[room].players[p].mouseY)) {
+                    let totalDistance = Math.sqrt(Math.pow(rooms[room].players[p].mouse.mouseX, 2) + Math.pow(rooms[room].players[p].mouse.mouseY, 2));
+                    rooms[room].players[p].movement.speed = ((totalDistance / rooms[room].players[p].res / 200 > 1) ? 1 : totalDistance / rooms[room].players[p].res / 200);
+                    rooms[room].players[p].movement.speed *= acc.flower * friction * mul;
+                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].mouse.mouseX;
+                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].mouse.mouseY;
 
-                    let distance = Math.sqrt(Math.pow(rooms[room].players[p].privInfo.movement.direction.x, 2) + Math.pow(rooms[room].players[p].privInfo.movement.direction.y, 2));
-                    rooms[room].players[p].privInfo.movement.direction.x /= distance;
-                    rooms[room].players[p].privInfo.movement.direction.y /= distance;
+                    let distance = Math.sqrt(Math.pow(rooms[room].players[p].movement.direction.x, 2) + Math.pow(rooms[room].players[p].movement.direction.y, 2));
+                    rooms[room].players[p].movement.direction.x /= distance;
+                    rooms[room].players[p].movement.direction.y /= distance;
                 } else {
-                    rooms[room].players[p].privInfo.movement.speed = acc.flower * friction * mul;
-                    // Updating acceleration
+                    rooms[room].players[p].movement.speed = acc.flower * friction * mul;
 
-                    // Up
+                    // Updating acceleration
                     directions.forEach((d, i) => {
-                        if (rooms[room].players[p].privInfo.keys[`${d}Down`]) {
-                            if (rooms[room].players[p].privInfo.keys[`${directions[(i + 2) % 4]}Down`]) {
-                                rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, 0);
-                            } else if (rooms[room].players[p].privInfo.keys[`${directions[(i + 1) % 4]}Down`] !== rooms[room].players[p].privInfo.keys[`${directions[(i + 3) % 4]}Down`]) {
-                                if (rooms[room].players[p].privInfo.movement.acc[d] > diag) {
-                                    rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, diag);
+                        if (rooms[room].players[p].keys[`${d}Down`]) {
+                            if (rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Down`]) {
+                                rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, 0);
+                            } else if (rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Down`] !== rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Down`]) {
+                                if (rooms[room].players[p].movement.acc[d] > diag) {
+                                    rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, diag);
                                 } else {
-                                    rooms[room].players[p].privInfo.movement.acc[d] = Math.min(rooms[room].players[p].privInfo.movement.acc[d] + wasdSmooth * mul, diag);
+                                    rooms[room].players[p].movement.acc[d] = Math.min(rooms[room].players[p].movement.acc[d] + wasdSmooth * mul, diag);
                                 }
                             } else {
-                                rooms[room].players[p].privInfo.movement.acc[d] = Math.min(rooms[room].players[p].privInfo.movement.acc[d] + wasdSmooth * mul, 1);
+                                rooms[room].players[p].movement.acc[d] = Math.min(rooms[room].players[p].movement.acc[d] + wasdSmooth * mul, 1);
                             }
                         } else {
-                            rooms[room].players[p].privInfo.movement.acc[d] = Math.max(rooms[room].players[p].privInfo.movement.acc[d] - wasdSmooth * mul, 0);
+                            rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, 0);
                         }
                     });
-                    rooms[room].players[p].privInfo.movement.direction.x = rooms[room].players[p].privInfo.movement.acc.right - rooms[room].players[p].privInfo.movement.acc.left;
-                    rooms[room].players[p].privInfo.movement.direction.y = rooms[room].players[p].privInfo.movement.acc.up - rooms[room].players[p].privInfo.movement.acc.down;
+                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].movement.acc.right - rooms[room].players[p].movement.acc.left;
+                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].movement.acc.up - rooms[room].players[p].movement.acc.down;
                 }
 
-                if (rooms[room].players[p].privInfo.movement.speed) {
-                    rooms[room].players[p].pubInfo.x = Math.max(
+                if (rooms[room].players[p].movement.speed) {
+                    const xToAdd = Math.max(
                         Math.min(
-                            rooms[room].players[p].pubInfo.x + rooms[room].players[p].privInfo.movement.direction.x * rooms[room].players[p].privInfo.movement.speed,
+                            rooms[room].players[p].pubInfo.x + rooms[room].players[p].movement.direction.x * rooms[room].players[p].movement.speed,
                             rooms[room].info.x
                         ),
                         0
-                    );
-                    rooms[room].players[p].pubInfo.y = Math.max(
+                    ) - rooms[room].players[p].pubInfo.x;
+                    const yToAdd = Math.max(
                         Math.min(
-                            rooms[room].players[p].pubInfo.y + rooms[room].players[p].privInfo.movement.direction.y * rooms[room].players[p].privInfo.movement.speed,
+                            rooms[room].players[p].pubInfo.y + rooms[room].players[p].movement.direction.y * rooms[room].players[p].movement.speed,
                             rooms[room].info.y
                         ),
                         0
-                    );
+                    ) - rooms[room].players[p].pubInfo.y;
+                    rooms[room].players[p].pubInfo.x += xToAdd;
+                    rooms[room].players[p].pubInfo.y += yToAdd;
+                    for (const n in rooms[room].players) {
+                        if (rooms[room].players[n].id !== rooms[room].players[p].id) {
+                            rooms[room].players[n].distances.get(rooms[room].players[p].id).x += xToAdd;
+                            rooms[room].players[n].distances.get(rooms[room].players[p].id).y += yToAdd;
+                            rooms[room].players[p].distances.get(rooms[room].players[n].id).x -= xToAdd;
+                            rooms[room].players[p].distances.get(rooms[room].players[n].id).y -= yToAdd;
+                        }
+                    }
                 }
 
-                rooms[room].players[p].privInfo.movement.direction.x = 0;
-                rooms[room].players[p].privInfo.movement.direction.y = 0;
-                rooms[room].players[p].privInfo.movement.speed = 0;
+                rooms[room].players[p].movement.direction.x = 0;
+                rooms[room].players[p].movement.direction.y = 0;
+                rooms[room].players[p].movement.speed = 0;
 
-                rooms[room].players[p].privInfo.petalCentre.x += petalLag * (rooms[room].players[p].pubInfo.x - rooms[room].players[p].privInfo.petalCentre.x);
-                rooms[room].players[p].privInfo.petalCentre.y += petalLag * (rooms[room].players[p].pubInfo.y - rooms[room].players[p].privInfo.petalCentre.y);
+                rooms[room].players[p].petalCentre.x += petalLag * (rooms[room].players[p].pubInfo.x - rooms[room].players[p].petalCentre.x);
+                rooms[room].players[p].petalCentre.y += petalLag * (rooms[room].players[p].pubInfo.y - rooms[room].players[p].petalCentre.y);
 
                 rooms[room].players[p].pubInfo.petals.forEach(petal => {
-                    if (rooms[room].players[p].privInfo.keys.spaceDown 
-                        || rooms[room].players[p].privInfo.keys.leftMouse) petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
-                    else if (rooms[room].players[p].privInfo.keys.shiftLeft 
-                        || rooms[room].players[p].privInfo.keys.shiftRight 
-                        || rooms[room].players[p].privInfo.keys.rightMouse) petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
+                    if (rooms[room].players[p].keys.spaceDown 
+                        || rooms[room].players[p].keys.leftMouse) petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
+                    else if (rooms[room].players[p].keys.shiftLeft 
+                        || rooms[room].players[p].keys.shiftRight 
+                        || rooms[room].players[p].keys.rightMouse) petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
                     else {
                         (petal.coordR < normal)
                             ? petal.coordR = Math.min(normal, petal.coordR + petalSmooth * mul)
@@ -453,8 +477,8 @@ function mainloop() {
                     }
                     let change = petal.change * mul;
                     petal.update({
-                        x: rooms[room].players[p].privInfo.petalCentre.x,
-                        y: rooms[room].players[p].privInfo.petalCentre.y
+                        x: rooms[room].players[p].petalCentre.x,
+                        y: rooms[room].players[p].petalCentre.y
                     }, (petal.degree + change > 2 * Math.PI) ? (petal.degree + change) % 360 : petal.degree + change);
                 });
             }
@@ -463,23 +487,23 @@ function mainloop() {
             // Sending data
             const players = Object.values(rooms[room].players);
             players.forEach((player, i) => {
-                let reciever, send, done;
-                done = false;
+                let reciever, send;
                 send = [];
                 reciever = {};
                 for (let n = 0; n < players.length; n++) {
                     let index = (n + i) % players.length;
-                    if (!done) {
-                        reciever.x = players[index].pubInfo.x;
-                        reciever.y = players[index].pubInfo.y;
+                    if (!n) {
+                        reciever = players[index].distances;
                         send.push(players[index].pubInfo);
-                        done = true;
                     } else if (
-                        // maximum is 1920 x 1080 (add/minus 49 for players partially on screen)
-                        (((reciever.x - 911) < players[index].pubInfo.x) && (players[index].pubInfo.x < (reciever.x + 1009)))
+                        // maximum is 1920 x 1080 (add attack for players partially on screen)
+                        (Math.abs(reciever.get(players[index].id).x) <= 1920 / 2 + attack)
                         &&
-                        (((reciever.y - 491) < players[index].pubInfo.y) && (players[index].pubInfo.y < (reciever.y + 591)))
-                    ) send.push(players[index].pubInfo);
+                        (Math.abs(reciever.get(players[index].id).y) <= 1080 / 2 + attack)
+                    ) {
+                        console.log('a')
+                        send.push(players[index].pubInfo);
+                    }
                 }
                 player.client.send(JSON.stringify(["b", send]));
             });
