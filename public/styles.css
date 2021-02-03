@@ -1,4 +1,10 @@
 /* My CSS is very bad also, you might lose braincells trying to read this */
+
+.florrfont {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1.2px;
+    -webkit-text-stroke-color: black;
+}
 body {
     margin: 0;
     overflow: hidden;
@@ -48,23 +54,23 @@ input[type=number] {
     bottom: 11.5vh;
 
     cursor: pointer;
-    background-color: #ffffff;
+    background-color: #5a9fdb;
 
     width: 80px;
     height: 40px;
     font-size: 20px;
 
-    border: 5px solid #000000;
+    border: 5px solid #4981b1;
     border-radius: 6px;
 }
 #back:hover {
-    background-color: #e1e1e1;
+    background-color: #5a9fdb;
 }
 
 /* First thing you see */
 #join {
     cursor: pointer;
-    background-color: #ffffff;
+    background-color: #5a9fdb;
 
     width: 200px;
     height: 50px;
@@ -76,15 +82,15 @@ input[type=number] {
 
     margin-top: 52vh;
 
-    border: 5px solid #000000;
+    border: 5px solid #4981b1;
     border-radius: 6px;
 }
 #join:hover {
-    background-color: #e1e1e1;
+    background-color: #5a9fdb;
 }
 #make {
     cursor: pointer;
-    background-color: #ffffff;
+    background-color: #5a9fdb;
 
     width: 200px;
     height: 50px;
@@ -96,11 +102,11 @@ input[type=number] {
 
     margin-top: 5vh;
 
-    border: 5px solid #000000;
+    border: 5px solid #4981b1;
     border-radius: 6px;
 }
 #make:hover {
-    background-color: #e1e1e1;
+    background-color: #5a9fdb;
 }
 
 /* Back button */
@@ -130,7 +136,7 @@ input[type=number] {
 }
 #join-submit {
     cursor: pointer;
-    background-color: #ffffff;
+    background-color: #5a9fdb;
 
     width: 200px;
     height: 50px;
@@ -142,11 +148,11 @@ input[type=number] {
 
     margin-top: 5vh;
 
-    border: 5px solid #000000;
+    border: 5px solid #4981b1;
     border-radius: 6px;
 }
 #join-submit:hover {
-    background-color: #e1e1e1;
+    background-color: #5a9fdb;
 }
 
 /* Creating games */
@@ -168,7 +174,7 @@ input[type=number] {
 }
 #create-submit {
     cursor: pointer;
-    background-color: #ffffff;
+    background-color: #5a9fdb;
 
     width: 200px;
     height: 50px;
@@ -180,11 +186,11 @@ input[type=number] {
 
     margin-top: 5vh;
 
-    border: 5px solid #000000;
+    border: 5px solid #4981b1;
     border-radius: 6px;
 }
 #create-submit:hover {
-    background-color: #e1e1e1;
+    background-color: #5a9fdb;
 }
 
 /* Name/join menu */
