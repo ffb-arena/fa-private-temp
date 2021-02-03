@@ -8,6 +8,23 @@ const path = require("path");
 const fs = require("fs");
 const WebSocket = require("ws");
 
+// minifying
+const minify = false;
+
+if (minify) {
+    console.log("Minifying code...");
+    const file = path.join(
+        __dirname,
+        "public",
+        "stuff.js"
+    );
+    const es5Code = require("@babel/core").transform(fs.readFileSync(file, "utf-8"), {
+        presets: ["@babel/preset-env"],
+    }).code
+    var minifiedScript = require("uglify-js").minify(es5Code).code;
+    console.log("Minification complete!");
+}
+
 // Server
 const server = http.createServer((req, res) => {
     let contentType;
@@ -41,6 +58,7 @@ const server = http.createServer((req, res) => {
                     contentType = "img/png";
                     break;
             }
+            if (minify && req.url === "/stuff.js") content = minifiedScript;
             res.writeHead(200, { "Content-Type": contentType });
             res.end(content);
         }
@@ -490,7 +508,7 @@ function mainloop() {
                     petal.update({
                         x: rooms[room].players[p].petalCentre.x,
                         y: rooms[room].players[p].petalCentre.y
-                    }, (petal.degree + change > 2 * Math.PI) ? (petal.degree + change) % 360 : petal.degree + change);
+                    }, (petal.degree + change > 2 * Math.PI) ? (petal.degree + change) % (2 * Math.PI) : petal.degree + change);
                 });
             }
 
@@ -524,6 +542,4 @@ time.old = Date.now();
 setInterval(mainloop, frame);
 
 const PORT = process.env.PORT || 9700;
-server.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
