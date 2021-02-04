@@ -559,18 +559,12 @@ function mainloop() {
                 players.forEach((p, n) => {
                     if (n <= i) return;
                     let d = player.distances.get(p.id);
-                    // console.log(
-                    //     d.x, 
-                    //     Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2), 
-                    //     Math.pow(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 2)
-                    // );
                     if (
                         Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2)
                         <=
-                        Math.pow(Math.max(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 90), 2)
+                        (Math.pow(Math.max(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist + 20, 90), 2))
                     ) {
-                        console.log(`${p.id} and ${player.id} collide`);
-                        console.log("-");
+                        // p.id and player.id collide
                     }
                 });
             });

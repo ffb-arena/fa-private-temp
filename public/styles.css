@@ -179,6 +179,7 @@ input[type=number] {
     margin-left : 5px;
     position: fixed;
     bottom: 0;
+    letter-spacing: -1px;
 }
 #changelog-btn {
     position: absolute;
@@ -193,6 +194,7 @@ input[type=number] {
     margin-left : 110px;
     position: fixed;
     bottom: 0;
+    letter-spacing: -1px;
 }
 
 /* Back button */
