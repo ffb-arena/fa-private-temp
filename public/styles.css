@@ -55,6 +55,16 @@ input[type=number] {
 
     top: 11vh;
 }
+#subtitle {
+    position: absolute;
+    height: 200px;
+
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
+    top: 30vh;
+}
 
 /* Back button */
 #back {
