@@ -122,6 +122,9 @@ input[type=number] {
     height: 50px;
     font-size: 30px;
 
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
 
     margin-top: 52vh;
 
@@ -139,6 +142,10 @@ input[type=number] {
     height: 50px;
     font-size: 30px;
 
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
+
     margin-top: 5vh;
 
     border: 5px solid #4981b1;
@@ -146,14 +153,6 @@ input[type=number] {
 }
 #make:hover {
     background-color: #5a9fdb;
-}
-
-/* Back button */
-#back {
-    position: relative;
-
-    margin-left: 33vw;
-    margin-bottom: 10vh;
 }
 
 /* Joining games */
