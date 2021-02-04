@@ -275,15 +275,17 @@ wss.on('connection', function connection(ws) {
                         downDown: false,
                         rightDown: false,
                         leftDown: false,
+
+                        upArrow: false,
+                        downArrow: false,
+                        rightArrow: false,
+                        leftArrow: false,
+
                         space: false,
                         shiftLeft: false,
                         shiftRight: false,
                         leftMouse: false,
-                        rightMouse: false,
-                        upArrow: false,
-                        downArrow: false,
-                        rightArrow: false,
-                        leftArrow: false
+                        rightMouse: false
                     },
                     movement: {
                         direction: {
@@ -565,7 +567,7 @@ function mainloop() {
                     if (
                         Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2)
                         <=
-                        Math.pow(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 2)
+                        Math.pow(Math.max(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 90), 2)
                     ) {
                         console.log(`${p.id} and ${player.id} collide`);
                         console.log("-");
@@ -585,9 +587,9 @@ function mainloop() {
                         send.push(players[index].pubInfo);
                     } else if (
                         // maximum is 1920 x 1080 (add petal distance for players partially on screen)
-                        (Math.abs(reciever.get(players[index].id).x) <= 960 + players[index].petalDist)
+                        (Math.abs(reciever.get(players[index].id).x) <= 960 + Math.max(players[index].petalDist, 45))
                         &&
-                        (Math.abs(reciever.get(players[index].id).y) <= 540 + players[index].petalDist)
+                        (Math.abs(reciever.get(players[index].id).y) <= 540 + Math.max(players[index].petalDist, 45))
                     ) send.push(players[index].pubInfo);
                 }
                 player.client.send(JSON.stringify(["b", send]));
