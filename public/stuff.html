@@ -28,22 +28,14 @@
         <script>
             function settingsfunc() {
               var x = document.getElementById("settings-container");
-              if (x.style.display === "none") {
-                x.style.display = "block";
-              } else {
-                x.style.display = "none";
-              }
+              x.style.display = x.style.display !== "block" ? "block" : "none";
             }
             </script>
 
         <script>
             function changelogfunc() {
-            var x = document.getElementById("changelog-container");
-            if (x.style.display === "none") {
-                x.style.display = "block";
-            } else {
-                x.style.display = "none";
-            }
+                var x = document.getElementById("changelog-container");
+                x.style.display = x.style.display !== "block" ? "block" : "none";
             }
             </script>
 
