@@ -5,6 +5,14 @@
     -webkit-text-stroke-width: 1.2px;
     -webkit-text-stroke-color: black;
 }
+
+.florrtitle {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 3.7px;
+    -webkit-text-stroke-color: black;
+    font-family: "Ubuntu";
+    font-size: 100px;
+}
 body {
     margin: 0;
     overflow: hidden;
