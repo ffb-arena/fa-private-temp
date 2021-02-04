@@ -21,7 +21,12 @@ if (minify) {
     const es5Code = require("@babel/core").transform(fs.readFileSync(file, "utf-8"), {
         presets: ["@babel/preset-env"],
     }).code
-    var minifiedScript = require("uglify-js").minify(es5Code).code;
+    var minifiedScript = require("uglify-js").minify(es5Code, {
+        mangle: {
+            toplevel: true,
+        },
+        keep_fnames: false
+    }).code;
     console.log("Minification complete!");
 }
 
@@ -75,7 +80,7 @@ const acc = { flower: 2.5 };
 const diag = 1 / Math.SQRT2;
 const wasdSmooth = 0.076;
 const petalLag = 0.35;
-const petalSmooth = 3.5;
+const petalSmooth = 1.5;
 const normal = 70, attack = 100, defend = 38; // petal positions
 const names = [
     "John",
@@ -106,9 +111,8 @@ class Petal {
     constructor(id, degree, coordR, centre) {
         this.id = id;
         this.degree = degree;
-        this.coordR = coordR;
-        this.x = centre.x + Math.sin(degree) * this.coordR;
-        this.y = centre.y + Math.cos(degree) * this.coordR;
+        this.x = centre.x + Math.sin(degree) * coordR;
+        this.y = centre.y + Math.cos(degree) * coordR;
         this.change = 2.5 / (1000 / frame);
         switch (this.id) {
             case 1: 
@@ -117,10 +121,10 @@ class Petal {
         }
     }
 
-    update(centre, degree) {
+    update(centre, degree, distance) {
         this.degree = degree;
-        this.x = centre.x + Math.sin(degree) * this.coordR;
-        this.y = centre.y + Math.cos(degree) * this.coordR;
+        this.x = centre.x + Math.sin(degree) * distance;
+        this.y = centre.y + Math.cos(degree) * distance;
     }
 }
 
@@ -275,7 +279,11 @@ wss.on('connection', function connection(ws) {
                         shiftLeft: false,
                         shiftRight: false,
                         leftMouse: false,
-                        rightMouse: false
+                        rightMouse: false,
+                        upArrow: false,
+                        downArrow: false,
+                        rightArrow: false,
+                        leftArrow: false
                     },
                     movement: {
                         direction: {
@@ -339,6 +347,20 @@ wss.on('connection', function connection(ws) {
                             case "KeyA":
                                 rooms[myRoom].players[myID].keys.leftDown = true;
                                 break;
+
+                            case "ArrowUp":
+                                rooms[myRoom].players[myID].keys.upArrow = true;
+                                break;
+                            case "ArrowDown":
+                                rooms[myRoom].players[myID].keys.downArrow = true;
+                                break;
+                            case "ArrowLeft":
+                                rooms[myRoom].players[myID].keys.leftArrow = true;
+                                break;
+                            case "ArrowRight":
+                                rooms[myRoom].players[myID].keys.rightArrow = true;
+                                break;
+
                             case "Space":
                                 rooms[myRoom].players[myID].keys.spaceDown = true;
                                 break;
@@ -371,6 +393,20 @@ wss.on('connection', function connection(ws) {
                             case "KeyA":
                                 rooms[myRoom].players[myID].keys.leftDown = false;
                                 break;
+
+                            case "ArrowUp":
+                                rooms[myRoom].players[myID].keys.upArrow = false;
+                                break;
+                            case "ArrowDown":
+                                rooms[myRoom].players[myID].keys.downArrow = false;
+                                break;
+                            case "ArrowLeft":
+                                rooms[myRoom].players[myID].keys.leftArrow = false;
+                                break;
+                            case "ArrowRight":
+                                rooms[myRoom].players[myID].keys.rightArrow = false;
+                                break;
+
                             case "Space":
                                 rooms[myRoom].players[myID].keys.spaceDown = false;
                                 break;
@@ -432,10 +468,13 @@ function mainloop() {
 
                     // Updating acceleration
                     directions.forEach((d, i) => {
-                        if (rooms[room].players[p].keys[`${d}Down`]) {
-                            if (rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Down`]) {
+                        if (rooms[room].players[p].keys[`${d}Down`] || rooms[room].players[p].keys[`${d}Arrow`]) {
+                            if (rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Arrow`]) {
                                 rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, 0);
-                            } else if (rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Down`] !== rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Down`]) {
+                            } else if (
+                                (rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Arrow`])
+                                !== 
+                                (rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Arrow`])) {
                                 if (rooms[room].players[p].movement.acc[d] > diag) {
                                     rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, diag);
                                 } else {
@@ -489,32 +528,52 @@ function mainloop() {
                 rooms[room].players[p].pubInfo.petals.forEach(petal => {
                     if (rooms[room].players[p].keys.spaceDown 
                         || rooms[room].players[p].keys.leftMouse) {
-                            rooms[room].players[p].petalDist = attack;
-                            petal.coordR = Math.min(attack, petal.coordR + petalSmooth * mul);
+                            rooms[room].players[p].petalDist = Math.min(attack, rooms[room].players[p].petalDist + petalSmooth * mul);
                         }
                     else if (rooms[room].players[p].keys.shiftLeft 
                         || rooms[room].players[p].keys.shiftRight 
                         || rooms[room].players[p].keys.rightMouse) {
-                            rooms[room].players[p].petalDist = defend;
-                            petal.coordR = Math.max(defend, petal.coordR - petalSmooth * mul);
+                            rooms[room].players[p].petalDist = Math.max(defend, rooms[room].players[p].petalDist - petalSmooth * mul);
                         }
                     else {
-                        rooms[room].players[p].petalDist = normal;
-                        (petal.coordR < normal)
-                            ? petal.coordR = Math.min(normal, petal.coordR + petalSmooth * mul)
-                            : petal.coordR = Math.max(normal, petal.coordR - petalSmooth * mul);
+                        (rooms[room].players[p].petalDist < normal)
+                            ? rooms[room].players[p].petalDist = Math.min(rooms[room].players[p].petalDist + petalSmooth * mul)
+                            : rooms[room].players[p].petalDist = Math.max(normal, rooms[room].players[p].petalDist - petalSmooth * mul);
                     }
                     let change = petal.change * mul;
+                    let nextPetalDegree = petal.degree + change;
+                    if (nextPetalDegree > 2 * Math.PI) nextPetalDegree %= (2 * Math.PI);
                     petal.update({
                         x: rooms[room].players[p].petalCentre.x,
                         y: rooms[room].players[p].petalCentre.y
-                    }, (petal.degree + change > 2 * Math.PI) ? (petal.degree + change) % (2 * Math.PI) : petal.degree + change);
+                    }, nextPetalDegree, rooms[room].players[p].petalDist
+                    );
                 });
             }
 
+            // Checking collisions
+            const players = Object.values(rooms[room].players);
+            players.forEach((player, i) => {
+                players.forEach((p, n) => {
+                    if (n <= i) return;
+                    let d = player.distances.get(p.id);
+                    // console.log(
+                    //     d.x, 
+                    //     Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2), 
+                    //     Math.pow(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 2)
+                    // );
+                    if (
+                        Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2)
+                        <=
+                        Math.pow(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist, 2)
+                    ) {
+                        console.log(`${p.id} and ${player.id} collide`);
+                        console.log("-");
+                    }
+                });
+            });
 
             // Sending data
-            const players = Object.values(rooms[room].players);
             players.forEach((player, i) => {
                 let reciever, send;
                 send = [];
@@ -526,9 +585,9 @@ function mainloop() {
                         send.push(players[index].pubInfo);
                     } else if (
                         // maximum is 1920 x 1080 (add petal distance for players partially on screen)
-                        (Math.abs(reciever.get(players[index].id).x) <= 1920 / 2 + players[index].petalDist)
+                        (Math.abs(reciever.get(players[index].id).x) <= 960 + players[index].petalDist)
                         &&
-                        (Math.abs(reciever.get(players[index].id).y) <= 1080 / 2 + players[index].petalDist)
+                        (Math.abs(reciever.get(players[index].id).y) <= 540 + players[index].petalDist)
                     ) send.push(players[index].pubInfo);
                 }
                 player.client.send(JSON.stringify(["b", send]));
