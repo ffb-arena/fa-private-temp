@@ -21,6 +21,10 @@
                                     supported by Chrome, Edge, Opera and Firefox */
   }
 
+  .pointer{
+    cursor: pointer;
+}
+
 body {
     margin: 0;
     overflow: hidden;
