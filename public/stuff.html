@@ -6,7 +6,7 @@
     <meta name="description" content="Increased competition in the garden has lead to ruthless combat...">
     <title>Fantasy Flower Builder</title>
     <link href="favicon.png" rel="icon">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
 </head>
 <div id="Discord" >
@@ -20,9 +20,33 @@
 </div>
 <body id="body">
     <div id="container">
-        <h1 class="florrtitle noselect" id="title">FFB</h1>
+        <h1 class="florrtitle noselect" id="title">ffb</h1>
         <h3 style="font-family:ubuntu;" id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         
+        <button id="settings-btn" class="florrfont" onclick="settingsfunc()">settings</button>
+        <button id="changelog-btn" class="florrfont" onclick="changelogfunc()">changelog</button>
+        <script>
+            function settingsfunc() {
+              var x = document.getElementById("settings-container");
+              if (x.style.display === "none") {
+                x.style.display = "block";
+              } else {
+                x.style.display = "none";
+              }
+            }
+            </script>
+
+        <script>
+            function changelogfunc() {
+            var x = document.getElementById("changelog-container");
+            if (x.style.display === "none") {
+                x.style.display = "block";
+            } else {
+                x.style.display = "none";
+            }
+            }
+            </script>
+
         <div id="start" >
             <button class="florrfont flex-child" id="join">join a room</button>
             <button class="florrfont flex-child" id="make">create room</button>
@@ -55,7 +79,22 @@
             <input id="x" type="number" min="2" max="300"> <p id="by">by</p> <input id="y" type="number" min="2" max="300"> <p id="units">units</p>
         </div>
 
-        <div id="settings-container">
+        <div id="changelog-container" class="changelog-scroll">
+            <div >
+                <p class="changelog-bg florrfont" style="height:50px">Update - 04.02.2021 Change tittle to ffb  added subtitle</p>
+            </div>
+            <div style="margin-top: 70px;">
+                <p class="changelog-bg florrfont" style="height: 40px;">Update - 04.02.2021 added Socials Icons</p>
+            </div>
+
+            <div style="margin-top: 130px;">
+                <p class="changelog-bg florrfont">Update - 04.02.2021</p>
+            </div>
+            
+         
+        </div>
+
+        <div id="settings-container" >
             <p id="settings">Settings</p>
             <div id="keyboard"></div>
             <p id="km">Keyboard movement</p>

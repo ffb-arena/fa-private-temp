@@ -26,6 +26,7 @@ const by = document.getElementById("by");
 const units = document.getElementById("units");
 
 const settingsContainer = document.getElementById("settings-container");
+const changelogContainer = document.getElementById("changelog-container");
 const keyboard = document.getElementById("keyboard");
 const helper = document.getElementById("helper");
 const perf = document.getElementById("performance");
@@ -55,6 +56,10 @@ roomContainer.hidden = true;
 perf.hidden = true;
 
 roomSettingsContainer.hidden = true;
+settingsContainer.hidden = true;
+changelogContainer.hidden = true;
+
+
 inputX.hidden = true;
 inputY.hidden = true;
 by.hidden = true;

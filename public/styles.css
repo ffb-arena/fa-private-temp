@@ -1,15 +1,19 @@
 .florrfont {
     -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 1.2px;
+    -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
 }
 
 .florrtitle {
     -webkit-text-fill-color: white;
-    -webkit-text-stroke-width: 3.7px;
+    -webkit-text-stroke-width: 4px;
     -webkit-text-stroke-color: black;
     font-family: "Ubuntu";
     font-size: 100px;
+}
+
+.changelog-text{
+    margin: 0px;
 }
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
@@ -41,6 +45,7 @@ body {
     display: -webkit-flex;
     display: flex;
 }
+
 
 h3 {
     text-align: center;
@@ -135,6 +140,8 @@ input[type=number] {
     border: 5px solid #4981b1;
     border-radius: 6px;
 }
+
+
 #join:hover {
     background-color: #5a9fdb;
 }
@@ -157,6 +164,35 @@ input[type=number] {
 }
 #make:hover {
     background-color: #5a9fdb;
+}
+
+#settings-btn {
+    position: absolute;
+    cursor: pointer;
+    background-color: #5a9fdb;
+    width: 100px;
+    height: 37px;
+    font-size: 20px;
+    border: 5px solid #4981b1;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-left : 5px;
+    position: fixed;
+    bottom: 0;
+}
+#changelog-btn {
+    position: absolute;
+    cursor: pointer;
+    background-color: #5a9fdb;
+    width: 120px;
+    height: 37px;
+    font-size: 20px;
+    border: 5px solid #4981b1;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-left : 110px;
+    position: fixed;
+    bottom: 0;
 }
 
 /* Back button */
@@ -324,7 +360,7 @@ input[type=number] {
 /* Settings */
 #settings-container {
     position: absolute;
-    bottom: 5px;
+    bottom: 45px;
     left: 5px;
     background-color: #5a9fdb;
     border: 5px solid #4981b1;
@@ -332,6 +368,31 @@ input[type=number] {
     width: 175px;
     height: 125px;
 }
+.changelog-scroll::-webkit-scrollbar{
+    display: none;
+}
+#changelog-container {
+    
+    position: absolute;
+    bottom: 45px;
+    left: 110px;
+    background-color: #5a9fdb;
+    border: 5px solid #4981b1;
+    border-radius: 3px;
+    width: 175px;
+    height: 125px;
+    overflow: auto;
+    
+}
+.changelog-bg {
+    position: absolute;
+    background-color: #8bc2f1;
+    border: 5px solid #8bc2f1;
+    border-radius: 3px;
+    width: 160px;
+    height: 20px;
+}
+    
 #settings {
     letter-spacing: -1px;
     bottom: 18px;
