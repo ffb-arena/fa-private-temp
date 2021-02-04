@@ -1,12 +1,17 @@
 // Constants
 const body = document.getElementById("body");
 const title = document.getElementById("title");
+const subtitle = document.getElementById("subtitle")
 const join = document.getElementById("join");
 const make = document.getElementById("make");
 const inputCreate = document.getElementById("input-create");
 const inputJoin = document.getElementById("input-join");
 const joinSubmit = document.getElementById("join-submit");
 const createSubmit = document.getElementById("create-submit");
+
+const discord = document.getElementById("Discord");
+const github = document.getElementById("Github");
+const florr = document.getElementById("Florr");
 
 const nname = document.getElementById("name");
 const back = document.getElementById("back");
@@ -346,13 +351,19 @@ joinSubmit.addEventListener("click", () => {
 
 nname.addEventListener("keydown", (key) => {
     if (key.code === "Enter") {
+
+        // You join game
         body.style.backgroundColor = "transparent";
         title.hidden = true;
+        subtitle.hidden = true;
         systemText.hidden = true;
         nname.hidden = true;
         back.hidden = true;
         nname.hidden = true;
         roomID.hidden = true;
+        discord.hidden = true;
+        github.hidden = true;
+        florr.hidden = true;
         ws.send(JSON.stringify(`b${nname.value}`));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
