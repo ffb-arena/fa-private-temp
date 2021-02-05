@@ -10,21 +10,23 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <div id="Discord" >
-    <img src="./discord.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer" onclick="window.open('https://discord.gg/nKZa6hPycs')"></button>
+    <img src="./discord.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://discord.gg/nKZa6hPycs')"></button>
 </div>
 <div id="Github">
-    <img src="./github.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer" onclick="window.open('https://github.com/Garklein/Florr-Arena')"></button>
+    <img src="./github.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://github.com/Garklein/Florr-Arena')"></button>
 </div>
 <div id="Florr">
-    <img src="./florr.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer" onclick="window.open('https://florr.io/')"></button>
+    <img src="./florr.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://florr.io/')"></button>
 </div>
 <body id="body">
     <div id="container">
         <h1 class="florrtitle noselect" id="title">ffb</h1>
         <h3 style="font-family:ubuntu;" id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         
-        <button id="settings-btn" class="florrfont" onclick="settingsfunc()">settings</button>
-        <button id="changelog-btn" class="florrfont" onclick="changelogfunc()">changelog</button>
+        <button id="settings-btn" class="florrfont noselect" onclick="settingsfunc()">settings</button>
+        <button id="changelog-btn" class="florrfont noselect" onclick="changelogfunc()">changelog</button>
+        <button id="gallery-btn" class="florrfont noselect" onclick="galleryfunc()">gallery</button>
+
         <script>
             function settingsfunc() {
               var x = document.getElementById("settings-container");
@@ -40,8 +42,8 @@
             </script>
 
         <div id="start" >
-            <button class="florrfont flex-child" id="join">join a room</button>
-            <button class="florrfont flex-child" id="make">create room</button>
+            <button class="florrfont noselect" id="join">join a room</button>
+            <button class="florrfont noselect" id="make">create room</button>
         </div>
         
         <div id="creating">
