@@ -9,17 +9,17 @@
     <link href="https://fonts.googleapis.com/css?family=Ubuntu:700" rel="stylesheet">
     <link href="styles.css" rel="stylesheet">
 </head>
-<div id="Discord" >
-    <img src="./discord.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://discord.gg/nKZa6hPycs')"></button>
-</div>
-<div id="Github">
-    <img src="./github.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://github.com/Garklein/Florr-Arena')"></button>
-</div>
-<div id="Florr">
-    <img src="./florr.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://florr.io/')"></button>
-</div>
 <body id="body">
     <div id="container">
+        <div id="Discord" >
+            <img src="./discord.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://discord.gg/nKZa6hPycs')"></button>
+        </div>
+        <div id="Github">
+            <img src="./github.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://github.com/Garklein/Florr-Arena')"></button>
+        </div>
+        <div id="Florr">
+            <img src="./florr.png" width="50" height="50" style="float: right; margin-right: 4px; margin-top: 4px;" class="pointer noselect" onclick="window.open('https://florr.io/')"></button>
+        </div>
         <h1 class="florrtitle noselect" id="title">FFB</h1>
         <h3 style="font-family:ubuntu;" id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         
@@ -29,17 +29,14 @@
 
         <script>
             function settingsfunc() {
-              var x = document.getElementById("settings-container");
+              const x = document.getElementById("settings-container");
               x.style.display = x.style.display !== "block" ? "block" : "none";
             }
-            </script>
-
-        <script>
             function changelogfunc() {
-                var x = document.getElementById("changelog-container");
+                const x = document.getElementById("changelog-container");
                 x.style.display = x.style.display !== "block" ? "block" : "none";
             }
-            </script>
+        </script>
 
         <div id="start" >
             <button class="florrfont noselect" id="join">join a room</button>
