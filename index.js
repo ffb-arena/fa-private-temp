@@ -298,7 +298,9 @@ wss.on('connection', function connection(ws) {
                             right: 0,
                             left: 0
                         },
-                        speed: undefined
+                        speed: undefined,
+                        xToAdd: undefined,
+                        yToAdd: undefined
                     },
                     petalCentre: {
                         x: x, 
@@ -494,28 +496,28 @@ function mainloop() {
                 }
 
                 if (rooms[room].players[p].movement.speed) {
-                    const xToAdd = Math.max(
+                    rooms[room].players[p].movement.xToAdd = Math.max(
                         Math.min(
                             rooms[room].players[p].pubInfo.x + rooms[room].players[p].movement.direction.x * rooms[room].players[p].movement.speed,
                             rooms[room].info.x
                         ),
                         0
                     ) - rooms[room].players[p].pubInfo.x;
-                    const yToAdd = Math.max(
+                    rooms[room].players[p].movement.yToAdd = Math.max(
                         Math.min(
                             rooms[room].players[p].pubInfo.y + rooms[room].players[p].movement.direction.y * rooms[room].players[p].movement.speed,
                             rooms[room].info.y
                         ),
                         0
                     ) - rooms[room].players[p].pubInfo.y;
-                    rooms[room].players[p].pubInfo.x += xToAdd;
-                    rooms[room].players[p].pubInfo.y += yToAdd;
+                    rooms[room].players[p].pubInfo.x += rooms[room].players[p].movement.xToAdd;
+                    rooms[room].players[p].pubInfo.y += rooms[room].players[p].movement.yToAdd;
                     for (const n in rooms[room].players) {
                         if (rooms[room].players[n].id !== rooms[room].players[p].id) {
-                            rooms[room].players[n].distances.get(rooms[room].players[p].id).x += xToAdd;
-                            rooms[room].players[n].distances.get(rooms[room].players[p].id).y += yToAdd;
-                            rooms[room].players[p].distances.get(rooms[room].players[n].id).x -= xToAdd;
-                            rooms[room].players[p].distances.get(rooms[room].players[n].id).y -= yToAdd;
+                            rooms[room].players[n].distances.get(rooms[room].players[p].id).x += rooms[room].players[p].movement.xToAdd;
+                            rooms[room].players[n].distances.get(rooms[room].players[p].id).y += rooms[room].players[p].movement.yToAdd;
+                            rooms[room].players[p].distances.get(rooms[room].players[n].id).x -= rooms[room].players[p].movement.xToAdd;
+                            rooms[room].players[p].distances.get(rooms[room].players[n].id).y -= rooms[room].players[p].movement.yToAdd;
                         }
                     }
                 }
@@ -565,6 +567,12 @@ function mainloop() {
                         (Math.pow(Math.max(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist + 20, 90), 2))
                     ) {
                         // p.id and player.id collide
+
+                        // checking if the bodies collide (2500 = 50^2)
+                        if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2) <= 2500) {
+                            console.log("body collision")
+                            console.log("-")
+                        }
                     }
                 });
             });
