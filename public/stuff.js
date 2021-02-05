@@ -8,6 +8,8 @@ const inputCreate = document.getElementById("input-create");
 const inputJoin = document.getElementById("input-join");
 const joinSubmit = document.getElementById("join-submit");
 const createSubmit = document.getElementById("create-submit");
+const changelog = document.getElementById("changelog-btn")
+const gallery = document.getElementById("gallery-btn")
 
 const discord = document.getElementById("Discord");
 const github = document.getElementById("Github");
@@ -369,6 +371,9 @@ nname.addEventListener("keydown", (key) => {
         discord.hidden = true;
         github.hidden = true;
         florr.hidden = true;
+        changelogContainer.hidden = true;
+        changelog.hidden = true;
+        gallery.hidden = true;
         ws.send(JSON.stringify(`b${nname.value}`));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
