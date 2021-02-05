@@ -108,7 +108,7 @@ input[type=number] {
     border-radius: 6px;
 }
 #back:hover {
-    background-color: #5a9fdb;
+    background-color: #77addd;
 }
 
 /* First thing you see */
@@ -130,7 +130,7 @@ input[type=number] {
 
 
 #join:hover {
-    background-color: #5a9fdb;
+    background-color: #77addd;
 }
 #make {
     cursor: pointer;
@@ -148,7 +148,7 @@ input[type=number] {
     letter-spacing: -1px;
 }
 #make:hover {
-    background-color: #5a9fdb;
+    background-color: #77addd;
 }
 /* UI buttons */
 #settings-btn {
@@ -166,6 +166,9 @@ input[type=number] {
     bottom: 0;
     letter-spacing: -1px;
 }
+#settings-btn:hover{
+    background-color: #77addd;
+}
 #changelog-btn {
     position: absolute;
     cursor: pointer;
@@ -180,6 +183,9 @@ input[type=number] {
     position: fixed;
     bottom: 0;
     letter-spacing: -1px;
+}
+#changelog-btn:hover{
+    background-color: #77addd;
 }
 
 #gallery-btn {
@@ -197,6 +203,10 @@ input[type=number] {
     bottom: 0;
     right: 0;
 }
+#gallery-btn:hover{
+    background-color: #77addd;
+}
+
 
 /* Back button */
 #back {
@@ -241,7 +251,7 @@ input[type=number] {
     border-radius: 6px;
 }
 #join-submit:hover {
-    background-color: #5a9fdb;
+    background-color: #77addd;
 }
 
 /* Creating games */
@@ -279,7 +289,7 @@ input[type=number] {
     border-radius: 6px;
 }
 #create-submit:hover {
-    background-color: #5a9fdb;
+    background-color: #77addd;
 }
 
 /* Name/join menu */
