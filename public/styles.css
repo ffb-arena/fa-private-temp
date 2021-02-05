@@ -1,9 +1,9 @@
+/* Florr.io font */
 .florrfont {
     -webkit-text-fill-color: white;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
 }
-
 .florrtitle {
     -webkit-text-fill-color: white;
     -webkit-text-stroke-width: 4px;
@@ -11,10 +11,11 @@
     font-family: "Ubuntu";
     font-size: 100px;
 }
-
+/* Changelog font settings */
 .changelog-text{
     margin: 0px;
 }
+/* Copied No select also needs to be applied everywhere to lazy right now */
 .noselect {
     -webkit-touch-callout: none; /* iOS Safari */
       -webkit-user-select: none; /* Safari */
@@ -24,7 +25,7 @@
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
   }
-
+/* Adds a pointer when overing the object */
   .pointer{
     cursor: pointer;
 }
@@ -38,25 +39,14 @@ body {
     width:100%;
     text-align: center;
 }
-.flex {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
-    display: flex;
-}
 
 
+/* sub-title config */
 h3 {
     text-align: center;
 }
 
-.flex-child {
-    -webkit-box-flex: 1 1 auto;
-    -moz-box-flex:  1 1 auto;
-    -webkit-flex:  1 1 auto;
-    -ms-flex:  1 1 auto;
-    flex:  1 1 auto;
+
 }
 #container {
     height: 100%;
@@ -159,7 +149,7 @@ input[type=number] {
 #make:hover {
     background-color: #5a9fdb;
 }
-
+/* UI buttons */
 #settings-btn {
     position: absolute;
     cursor: pointer;
@@ -381,6 +371,7 @@ input[type=number] {
 .changelog-scroll::-webkit-scrollbar{
     display: none;
 }
+/* Changelog */
 #changelog-container {
     
     position: absolute;
