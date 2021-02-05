@@ -132,11 +132,10 @@ input[type=number] {
     font-size: 18px;
     border: 5px solid #4981b1;
     border-radius: 6px;
-    margin-bottom: 5px;
-    margin-right: 5px;
+    margin-top: 5px;
+    margin-left: 5px;
     position: fixed;
-    bottom: 0;
-    right: 0;
+    left: 0;
 }
 
 
@@ -152,11 +151,10 @@ input[type=number] {
     font-size: 16px;
     border: 5px solid #4981b1;
     border-radius: 6px;
-    margin-bottom: 5px;
-    margin-right: 130px;
+    margin-top: 5px;
+    margin-left: 130px;
     position: fixed;
-    bottom: 0;
-    right: 0;
+    left: 0;
 }
 #make:hover {
     background-color: #5a9fdb;
@@ -201,9 +199,10 @@ input[type=number] {
     border: 5px solid #4981b1;
     border-radius: 6px;
     margin-bottom: 5px;
-    margin-left : 235px;
+    margin-right : 5px;
     position: fixed;
     bottom: 0;
+    right: 0;
 }
 
 /* Back button */
