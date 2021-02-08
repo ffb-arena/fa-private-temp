@@ -78,7 +78,7 @@ const frame = 1000 / 25;
 const friction = 5;
 const acc = { flower: 2.5 };
 const diag = 1 / Math.SQRT2;
-const wasdSmooth = 0.076;
+const wasdSmooth = 0.1;
 const petalLag = 0.35;
 const petalSmooth = 1.5;
 const normal = 70, attack = 100, defend = 38; // petal positions
@@ -99,12 +99,10 @@ const names = [
     "no mates :(((",
     "PUS ABOVE ALL"
 ];
-const directions = [
-    "up",
-    "right",
-    "down",
-    "left"
-];
+limit = {
+    "1": "min",
+    "-1": "max"
+}
 
 // Classes
 class Petal {
@@ -293,10 +291,8 @@ wss.on('connection', function connection(ws) {
                             y: 0
                         },
                         acc: {
-                            up: 0,
-                            down: 0,
-                            right: 0,
-                            left: 0
+                            x: 0,
+                            y: 0
                         },
                         speed: undefined,
                         xToAdd: undefined,
@@ -470,29 +466,57 @@ function mainloop() {
                 } else {
                     rooms[room].players[p].movement.speed = acc.flower * friction * mul;
 
+                    const up = rooms[room].players[p].keys.upDown || rooms[room].players[p].keys.upArrow;
+                    const down = rooms[room].players[p].keys.downDown || rooms[room].players[p].keys.downArrow;
+                    const left = rooms[room].players[p].keys.leftDown || rooms[room].players[p].keys.leftArrow;
+                    const right = rooms[room].players[p].keys.rightDown || rooms[room].players[p].keys.rightArrow;
+
                     // Updating acceleration
-                    directions.forEach((d, i) => {
-                        if (rooms[room].players[p].keys[`${d}Down`] || rooms[room].players[p].keys[`${d}Arrow`]) {
-                            if (rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 2) % 4]}Arrow`]) {
-                                rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, 0);
-                            } else if (
-                                (rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 1) % 4]}Arrow`])
-                                !== 
-                                (rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Down`] || rooms[room].players[p].keys[`${directions[(i + 3) % 4]}Arrow`])) {
-                                if (rooms[room].players[p].movement.acc[d] > diag) {
-                                    rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, diag);
-                                } else {
-                                    rooms[room].players[p].movement.acc[d] = Math.min(rooms[room].players[p].movement.acc[d] + wasdSmooth * mul, diag);
-                                }
+                    
+                    // x axis
+                    if (right !== left) {
+                        const sign = right ? 1 : -1;
+                        if (up !== down) {
+                            // diagonal
+                            if (rooms[room].players[p].movement.acc.x > diag * sign) {
+                                rooms[room].players[p].movement.acc.x -= wasdSmooth * mul;
                             } else {
-                                rooms[room].players[p].movement.acc[d] = Math.min(rooms[room].players[p].movement.acc[d] + wasdSmooth * mul, 1);
+                                rooms[room].players[p].movement.acc.x += wasdSmooth * mul;
                             }
                         } else {
-                            rooms[room].players[p].movement.acc[d] = Math.max(rooms[room].players[p].movement.acc[d] - wasdSmooth * mul, 0);
+                            rooms[room].players[p].movement.acc.x = Math[limit[sign]](rooms[room].players[p].movement.acc.x + wasdSmooth * mul * sign, 1 * sign);
                         }
-                    });
-                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].movement.acc.right - rooms[room].players[p].movement.acc.left;
-                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].movement.acc.up - rooms[room].players[p].movement.acc.down;
+                    } else if (rooms[room].players[p].movement.acc.x) {
+                        const oldAccel = rooms[room].players[p].movement.acc.x;
+                        rooms[room].players[p].movement.acc.x -= wasdSmooth * mul * (oldAccel / Math.abs(oldAccel));
+                        if (oldAccel && ((oldAccel <= 0) !== (rooms[room].players[p].movement.acc.x <= 0))) {
+                            rooms[room].players[p].movement.acc.x = 0;
+                        }
+                    }
+
+                    // y axis
+                    if (up !== down) {
+                        const sign = up ? 1 : -1;
+                        if (right !== left) {
+                            // diagonal
+                            if (rooms[room].players[p].movement.acc.y > diag * sign) {
+                                rooms[room].players[p].movement.acc.y -= wasdSmooth * mul;
+                            } else {
+                                rooms[room].players[p].movement.acc.y += wasdSmooth * mul;
+                            }
+                        } else {
+                            rooms[room].players[p].movement.acc.y = Math[limit[sign]](rooms[room].players[p].movement.acc.y + wasdSmooth * mul * sign, 1 * sign);
+                        }
+                    } else if (rooms[room].players[p].movement.acc.y) {
+                        const oldAccel = rooms[room].players[p].movement.acc.y;
+                        rooms[room].players[p].movement.acc.y -= wasdSmooth * mul * (oldAccel / Math.abs(oldAccel));
+                        if (oldAccel && ((oldAccel <= 0) !== (rooms[room].players[p].movement.acc.y <= 0))) {
+                            rooms[room].players[p].movement.acc.y = 0;
+                        }
+                    }
+
+                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].movement.acc.x;
+                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].movement.acc.y;
                 }
 
                 if (rooms[room].players[p].movement.speed) {
