@@ -115,24 +115,24 @@ let rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
 let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin yang"];
 let legPetals = ["tringer"];
 let textures = {};
-for (let name of commonPetals){
+for (const name of commonPetals) {
     textures[name] = loadImage(name);
 }
-for (let name of uncommonPetals){
+for (const name of uncommonPetals) {
     textures[name] = loadImage(name);
 }
-for (let name of rarePetals){
+for (const name of rarePetals) {
     textures[name] = loadImage(name);
 }
-for (let name of epicPetals){
+for (const name of epicPetals) {
     textures[name] = loadImage(name);
 }
-for (let name of legPetals){
+for (const name of legPetals) {
     textures[name] = loadImage(name);
 }
 
-Array.prototype.random = function () {
-  return this[Math.floor((Math.random()*this.length))];
+Array.prototype.random = () => {
+    return this[Math.floor((Math.random() * this.length))];
 }
 
 class PetalBackground{

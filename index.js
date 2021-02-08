@@ -62,6 +62,9 @@ const server = http.createServer((req, res) => {
                 case ".png":
                     contentType = "img/png";
                     break;
+                case ".svg":
+                    contentType = "image/svg+xml";
+                    break;
             }
             if (minify && req.url === "/stuff.js") content = minifiedScript;
             res.writeHead(200, { "Content-Type": contentType });
