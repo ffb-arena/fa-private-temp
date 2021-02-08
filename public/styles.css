@@ -10,6 +10,7 @@
     -webkit-text-stroke-color: black;
     font-family: "Ubuntu";
     font-size: 100px;
+    letter-spacing: -6px;
 }
 /* Changelog font settings */
 .changelog-text{
@@ -94,9 +95,7 @@ input[type=number] {
 
 /* Back button */
 #back {
-    position: absolute;
-    bottom: 11.5vh;
-
+    position: fixed;
     cursor: pointer;
     background-color: #5a9fdb;
 
@@ -107,6 +106,8 @@ input[type=number] {
     border: 5px solid #4981b1;
     border-radius: 6px;
 }
+
+
 #back:hover {
     background-color: #77addd;
 }

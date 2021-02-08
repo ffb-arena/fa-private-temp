@@ -35,6 +35,10 @@ const perf = document.getElementById("performance");
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
+const backgroundCanvas = document.getElementById("petalBackground");
+const ctx2 = backgroundCanvas.getContext("2d");
+
 const ws = new WebSocket(`ws://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`);
 
 const gridSpace = 50;
@@ -42,6 +46,8 @@ const performance = {
     pingCalc: undefined,
     ping: undefined
 };
+
+let playerInGame = false;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -95,6 +101,100 @@ me = {
 };
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 extraInfo = false;
+
+function loadImage(src) {
+    let image = new Image();
+    image.src = `petals/${src}.svg`;
+    return image;
+}
+
+let petalBackgrounds = [];
+let commonPetals = ["basic", "fast", "heavy"]
+let uncommonPetals = ["iris", "leaf", "rose", "stinger"]
+let rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
+let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin yang"];
+let legPetals = ["tringer"];
+let textures = {};
+for (let name of commonPetals){
+    textures[name] = loadImage(name);
+}
+for (let name of uncommonPetals){
+    textures[name] = loadImage(name);
+}
+for (let name of rarePetals){
+    textures[name] = loadImage(name);
+}
+for (let name of epicPetals){
+    textures[name] = loadImage(name);
+}
+for (let name of legPetals){
+    textures[name] = loadImage(name);
+}
+
+Array.prototype.random = function () {
+  return this[Math.floor((Math.random()*this.length))];
+}
+
+class PetalBackground{
+    constructor(){
+        this.x = -100;
+        this.y = Math.random() * backgroundCanvas.height;
+        this.velDirection = 0 + (Math.random()-0.5)/10;
+        this.velX = Math.cos(this.velDirection);
+        this.velY = Math.sin(this.velDirection);
+        const randomNumber = Math.random();
+        let selectArray = [];
+        if (randomNumber < 0.4){
+            selectArray = JSON.parse(JSON.stringify(commonPetals));
+        }
+        else if (randomNumber < 0.7){
+            selectArray = JSON.parse(JSON.stringify(uncommonPetals));
+        }
+        else if (randomNumber < 0.85){
+            selectArray = JSON.parse(JSON.stringify(rarePetals));
+        }
+        else if (randomNumber < 0.95){
+            selectArray = JSON.parse(JSON.stringify(epicPetals));
+        }
+        else{
+            selectArray = JSON.parse(JSON.stringify(legPetals));
+        }
+        this.type = selectArray.random();
+    }
+    update(){
+        this.x += this.velX;
+        this.y += this.velY;
+        if (this.x > backgroundCanvas.width + 30){
+            this.delete = true;
+        }
+    }
+    draw(){
+        ctx.drawImage(textures[this.type], this.x, this.y);
+    }
+}
+
+let petalSpawnCooldown = 10;
+
+function drawBackground(){
+    ctx2.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    petalSpawnCooldown --;
+    while (petalSpawnCooldown < 0){
+        petalSpawnCooldown += 10;
+        petalBackgrounds.push(new PetalBackground());
+    }
+    if (!playerInGame){
+        for(let i of petalBackgrounds){
+            i.update();
+            i.draw();
+            if (i.delete === true){
+                petalBackgrounds.splice(petalBackgrounds.indexOf(i), 1);
+            }
+        }
+    }
+    requestAnimationFrame(drawBackground);
+}
+requestAnimationFrame(drawBackground);
+
 
 // Classes
 class Player {
@@ -460,6 +560,8 @@ document.addEventListener("mousemove", (pos) => {
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    canvas2.width = window.innerWidth;
+    canvas2.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
     ctx.textAlign = "center";
     if (title.hidden) {
@@ -586,7 +688,7 @@ ws.onmessage = message => {
 
         // Game data
         case "b":
-
+            playerInGame = true;
             // Clearing canvas
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
