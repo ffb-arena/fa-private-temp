@@ -35,6 +35,10 @@ const perf = document.getElementById("performance");
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
+
+const backgroundCanvas = document.getElementById("petalBackground");
+const ctx2 = backgroundCanvas.getContext("2d");
+
 const ws = new WebSocket(`ws://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`);
 
 const gridSpace = 50;
