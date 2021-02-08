@@ -47,6 +47,8 @@ const performance = {
     ping: undefined
 };
 
+let playerInGame = false;
+
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 ctx.textAlign = "center";
@@ -99,6 +101,51 @@ me = {
 };
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 extraInfo = false;
+
+function loadImage(src) {
+    let image = new Image();
+    image.src = `petals/${src}.svg`;
+    return image;
+}
+
+let petalBackgrounds = [];
+let commonPetals = ["basic", "fast", "heavy"]
+let uncommonPetals = ["iris", "leaf", "rose", "stinger"]
+let rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
+let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin yang"];
+let legPetals = ["tringer"];
+let textures = [];
+for (let name of commonPetals){
+    textures.push(loadImage(name));
+}
+for (let name of uncommonPetals){
+    textures.push(loadImage(name));
+}
+
+class PetalBackground{
+    constructor(){
+        this.x = -100;
+        this.y = Math.random() * backgroundCanvas.height;
+        
+    }
+    update(){
+    }
+    draw(){
+    }
+}
+
+function drawBackground(){
+    ctx2.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    if (!playerInGame){
+        for(let i of petalBackgrounds){
+            i.update();
+            i.draw();
+        }
+    }
+    requestAnimationFrame(drawBackground);
+}
+requestAnimationFrame(drawBackground);
+
 
 // Classes
 class Player {
@@ -464,6 +511,8 @@ document.addEventListener("mousemove", (pos) => {
 window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+    canvas2.width = window.innerWidth;
+    canvas2.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
     ctx.textAlign = "center";
     if (title.hidden) {
@@ -590,7 +639,7 @@ ws.onmessage = message => {
 
         // Game data
         case "b":
-
+            playerInGame = true;
             // Clearing canvas
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
