@@ -24,18 +24,14 @@
         <h1 class="florrtitle noselect" id="title">FFB</h1>
         <h3 style="font-family:ubuntu;" id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         
-        <button id="settings-btn" class="florrfont noselect" onclick="settingsfunc()">settings</button>
-        <button id="changelog-btn" class="florrfont noselect" onclick="changelogfunc()">changelog</button>
+        <button id="settings-btn" class="florrfont noselect" onclick="toggleFunc('settings-container')">settings</button>
+        <button id="changelog-btn" class="florrfont noselect" onclick="toggleFunc('changelog-container')">changelog</button>
         <button id="gallery-btn" class="florrfont noselect" onclick="galleryfunc()">gallery</button>
 
         <script>
-            function settingsfunc() {
-              const x = document.getElementById("settings-container");
+            function toggleFunc(element) {
+              const x = document.getElementById(element);
               x.style.display = x.style.display !== "block" ? "block" : "none";
-            }
-            function changelogfunc() {
-                const x = document.getElementById("changelog-container");
-                x.style.display = x.style.display !== "block" ? "block" : "none";
             }
         </script>
 
@@ -83,7 +79,6 @@
                 <p class="changelog-bg florrfont">Update - 04.02.2021</p>
             </div>
             
-         
         </div>
         
 

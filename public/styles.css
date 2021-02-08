@@ -1,3 +1,14 @@
+/* fixing weird top error */
+p {
+    margin: 0;
+}
+
+/* put all unaligned <p> here */
+#settings, #km, #mh, #room-settings, #by, #units {
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+
 /* Florr.io font */
 .florrfont {
     -webkit-text-fill-color: white;
