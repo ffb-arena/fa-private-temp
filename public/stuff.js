@@ -39,7 +39,7 @@ const ctx = canvas.getContext("2d");
 const backgroundCanvas = document.getElementById("petalBackground");
 const ctx2 = backgroundCanvas.getContext("2d");
 
-const ws = new WebSocket(`ws://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`);
+const ws = new WebSocket(`ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`);
 
 const gridSpace = 50;
 const performance = {
@@ -51,6 +51,8 @@ let playerInGame = false;
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
+backgroundCanvas.width = (window.innerWidth);
+backgroundCanvas.height = (window.innerHeight);
 ctx.textAlign = "center";
 
 inputCreate.hidden = true;
@@ -112,7 +114,7 @@ let petalBackgrounds = [];
 let commonPetals = ["basic", "fast", "heavy"]
 let uncommonPetals = ["iris", "leaf", "rose", "stinger"]
 let rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
-let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin yang"];
+let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yinyang"];
 let legPetals = ["tringer"];
 let textures = {};
 for (const name of commonPetals) {
@@ -131,17 +133,17 @@ for (const name of legPetals) {
     textures[name] = loadImage(name);
 }
 
-Array.prototype.random = () => {
-    return this[Math.floor((Math.random() * this.length))];
-}
+
+
 
 class PetalBackground{
     constructor(){
         this.x = -100;
         this.y = Math.random() * backgroundCanvas.height;
-        this.velDirection = 0 + (Math.random()-0.5)/10;
-        this.velX = Math.cos(this.velDirection);
-        this.velY = Math.sin(this.velDirection);
+        this.velDirection = 0 + (Math.random()-0.5)/5;
+        this.size = Math.random() * 30 + 30
+        this.velX = Math.cos(this.velDirection) * 1/this.size * 120;
+        this.velY = Math.sin(this.velDirection) * 1/this.size * 120;
         const randomNumber = Math.random();
         let selectArray = [];
         if (randomNumber < 0.4){
@@ -159,7 +161,7 @@ class PetalBackground{
         else{
             selectArray = JSON.parse(JSON.stringify(legPetals));
         }
-        this.type = selectArray.random();
+        this.type = selectArray[Math.floor((Math.random() * selectArray.length))];
     }
     update(){
         this.x += this.velX;
@@ -169,14 +171,19 @@ class PetalBackground{
         }
     }
     draw(){
-        ctx.drawImage(textures[this.type], this.x, this.y);
+      try{
+      ctx2.drawImage(textures[this.type], this.x, this.y, this.size, this.size);
+      }
+      catch{
+        console.log(this.type)
+      }
     }
 }
 
 let petalSpawnCooldown = 10;
 
 function drawBackground(){
-    ctx2.clearRect(0, 0, backgroundCanvas.width, backgroundCanvas.height);
+    ctx2.clearRect(0, 0, 900000, 900000);
     petalSpawnCooldown --;
     while (petalSpawnCooldown < 0){
         petalSpawnCooldown += 10;
@@ -186,10 +193,8 @@ function drawBackground(){
         for(let i of petalBackgrounds){
             i.update();
             i.draw();
-            if (i.delete === true){
-                petalBackgrounds.splice(petalBackgrounds.indexOf(i), 1);
-            }
         }
+        petalBackgrounds = petalBackgrounds.filter((e) => e.delete != true)
     }
     requestAnimationFrame(drawBackground);
 }
@@ -558,10 +563,10 @@ document.addEventListener("mousemove", (pos) => {
 });
 
 window.addEventListener("resize", () => {
+    backgroundCanvas.width = window.innerWidth;
+    backgroundCanvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
-    canvas2.width = window.innerWidth;
-    canvas2.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
     ctx.textAlign = "center";
     if (title.hidden) {
