@@ -337,10 +337,11 @@ input[type=number] {
 
 #room-container {
     position: absolute;
-    height: 100px;
-    width: 200px;
-    left: 63vw;
-    bottom: 30vh;
+    width: 345px;
+    bottom: 30px;
+    margin-left: 50%;
+    margin-right: 50%;
+    transform: translate(-50%, 0);
 }
 #room-ID {
     color: #ffffff;

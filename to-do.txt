@@ -9,4 +9,4 @@
 -mechanics to fix 
     -petal lag is elliptical???
     -petal lag in general
-    -wasd moveme
+    -wasd movement
