@@ -30,8 +30,8 @@
 
         <script>
             function toggleFunc(element) {
-              const x = document.getElementById(element);
-              x.style.display = x.style.display !== "block" ? "block" : "none";
+                const x = document.getElementById(element);
+                x.style.display = x.style.display !== "block" ? "block" : "none";
             }
         </script>
 
@@ -41,25 +41,25 @@
         </div>
         
         <div id="creating">
-            <input id="input-join" placeholder="room id" autocomplete="off">
-            <button class="florrfont" id="join-submit">join room</button>
+            <input id="input-join" placeholder="room id" autocomplete="off" hidden="true">
+            <button class="florrfont" id="join-submit" hidden="true">join room</button>
         </div>
 
         <div id="joining">
-            <input id="input-create" placeholder="room id" autocomplete="off">
-            <button class="florrfont" id="create-submit">create room</button>
+            <input id="input-create" placeholder="room id" autocomplete="off" hidden="true">
+            <button class="florrfont" id="create-submit" hidden="true">create room</button>
         </div>
 
-        <button class="florrfont" id="back">back</button>
+        <button class="florrfont" id="back" hidden="true">back</button>
 
         <div id="ready">
-            <input id="name" placeholder="change this" autocomplete="off">
+            <input id="name" placeholder="change this" autocomplete="off" hidden="true">
         </div>
 
         <p id="system-text"></p>
 
-        <div id="room-container">
-            <p id="room-ID" class="noselect">current room: "" (communal garden)</p>
+        <div id="room-container" hidden="true">
+            <p id="room-ID">current room: "" (communal garden)</p>
         </div>
 
         <div id="room-settings-container">
@@ -89,7 +89,7 @@
             <div id="helper"></div>
             <p id="mh">Movement helper</p>
         </div>
-        <p id="performance">test</p>
+        <p id="performance" hidden="true">test</p>
     </div>
     <canvas id="canvas"></canvas>
     <script src="stuff.js"></script>
