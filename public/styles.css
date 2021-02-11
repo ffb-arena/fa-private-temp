@@ -327,9 +327,8 @@ input[type=number] {
     color: #ffffff;
     font-size: 20px;
     -webkit-text-stroke: 1px black;
-    position: relative;
-    width: 160px;
-    bottom: 28.5vh;
+    position: absolute;
+    bottom: 35px;
     margin-left: 50%;
     margin-right: 50%;
     transform: translate(-50%, 0);

@@ -601,6 +601,12 @@
                             roomContainer.style.width = `${ctx.measureText(text).width}px`
                             roomID.innerHTML = text;
 
+                            if (!msg[5]) {
+                                text = `room "${msgRoom}" successfully created`
+                                systemText.style.width = `${ctx.measureText(text).width}px`
+                                systemText.innerHTML = text;
+                            }
+
                             me.roomInfo = msg[4];
                             mms = (msg[4].x > msg[4].y) ? [msg[4].y / msg[4].x, "x"] : [msg[4].x / msg[4].y, "y"];
                             mmWidth = (mms[1] === "x") ? 260 * res : mms[0] * 260 * res;
@@ -616,16 +622,13 @@
                             systemText.hidden = false;
                             roomID.hidden = false;
                             roomContainer.hidden = false;
-
-                            systemText.style.bottom = "14vh";
-                            systemText.style.width = "140px";
                         } else {
                             back.hidden = true;
 
-                            systemText.innerHTML = `room ${msgRoom} already exists`;
-                            systemText.hidden = false;
-                            systemText.style.bottom = "11vh";
-                            systemText.style.width = "200px";
+                            const text = `error: room "${msgRoom}" already exists`
+                            ctx.font = "20px Ubuntu";
+                            systemText.style.width = `${ctx.measureText(text).width}px`
+                            systemText.innerHTML = text;
                         }
                         break;
 
@@ -638,6 +641,12 @@
                             ctx.font = "20px Ubuntu";
                             roomContainer.style.width = `${ctx.measureText(text).width}px`
                             roomID.innerHTML = text;
+
+                            if (!msg[5]) {
+                                text = `room "${msgRoom}" successfully joined`
+                                systemText.style.width = `${ctx.measureText(text).width}px`
+                                systemText.innerHTML = text;
+                            }
 
                             me.roomInfo = msg[4];
                             mms = (msg[4].x > msg[4].y) ? [msg[4].y / msg[4].x, "x"] : [msg[4].x / msg[4].y, "y"];
@@ -658,19 +667,16 @@
                             systemText.hidden = false;
                             roomID.hidden = false;
                             roomContainer.hidden = false;
-
-                            systemText.style.bottom = "14vh";
-                            systemText.style.width = "140px";
                         } else {
                             back.hidden = true;
 
                             inputJoin.hidden = true;
                             joinSubmit.hidden = true;
 
-                            systemText.innerHTML = `room ${msgRoom} does not exist`;
-                            systemText.hidden = false;
-                            systemText.style.bottom = "11vh";
-                            systemText.style.width = "200px";
+                            const text = `error: room "${msgRoom}" does not exist`
+                            ctx.font = "20px Ubuntu";
+                            systemText.style.width = `${ctx.measureText(text).width}px`
+                            systemText.innerHTML = text;
                         }
                         break;
                 }

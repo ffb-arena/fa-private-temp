@@ -161,7 +161,7 @@ wss.on('connection', function connection(ws) {
     bruh = false;
 
     rooms[""].connected++;
-    ws.send(JSON.stringify(["a", "b", "a", "", rooms[""].info]));
+    ws.send(JSON.stringify(["a", "b", "a", "", rooms[""].info, true]));
 
     // Closed tab or reloading
     ws.on("close", () => {
