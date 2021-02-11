@@ -76,7 +76,18 @@ const server = http.createServer((req, res) => {
 // More constants
 const wss = new WebSocket.Server({ server });
 const time = {};
-const rooms = {};
+const rooms = {
+    "": {
+        info: {
+            // 200x200 units (unit = 50px)
+            x: 10000,
+            y: 10000
+        },
+        connected: 0,
+        inGame: 0,
+        players: {}
+    }
+};
 const frame = 1000 / 25;
 const friction = 5;
 const acc = { flower: 2.5 };
@@ -144,27 +155,28 @@ wss.on('connection', function connection(ws) {
     ws.on('error', console.error);
 
     let myID;
-    let myRoom;
+    let myRoom = "";
     let bruh;
     let myName;
     bruh = false;
 
+    rooms[""].connected++;
+    ws.send(JSON.stringify(["a", "b", "a", "", rooms[""].info]));
+
     // Closed tab or reloading
     ws.on("close", () => {
-        if (myRoom !== undefined) {
-            myName = undefined;
-            if (myID !== undefined) {
-                rooms[myRoom].inGame--;
-                for (const p in rooms[myRoom].players) {
-                    rooms[myRoom].players[p].distances.delete(myID);
-                }
-                delete rooms[myRoom].players[myID];
-                myID = undefined;
+        myName = undefined;
+        if (myID !== undefined) {
+            rooms[myRoom].inGame--;
+            for (const p in rooms[myRoom].players) {
+                rooms[myRoom].players[p].distances.delete(myID);
             }
-            rooms[myRoom].connected--;
-            if (!rooms[myRoom].connected) delete rooms[myRoom];
-            myRoom = undefined;
+            delete rooms[myRoom].players[myID];
+            myID = undefined;
         }
+        rooms[myRoom].connected--;
+        if (!rooms[myRoom].connected && myRoom !== "") delete rooms[myRoom];
+        myRoom = undefined;
     });
 
     // Messages being received from that socket
@@ -181,10 +193,21 @@ wss.on('connection', function connection(ws) {
 
                     // Creating a room
                     case "a":
-                        if (myRoom !== undefined) return;
                         for (const prop in rooms) if (prop === msg[2]) exists = true;
                         if (exists)  ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
                         else {
+
+                            if (myID !== undefined) {
+                                rooms[myRoom].inGame--;
+                                for (const p in rooms[myRoom].players) {
+                                    rooms[myRoom].players[p].distances.delete(myID);
+                                }
+                                delete rooms[myRoom].players[myID];
+                                myID = undefined;
+                            }
+                            rooms[myRoom].connected--;
+                            if (!rooms[myRoom].connected && myRoom !== "") delete rooms[myRoom];
+
                             let roomX, roomY;
                             roomX = Math.min(
                                 299, 
@@ -216,26 +239,24 @@ wss.on('connection', function connection(ws) {
 
                     // Joining a room
                     case "b":
-                        if (myRoom !== undefined) return;
                         for (const prop in rooms) if (prop === msg[2]) exists = true;
                         if (exists) {
+
+                            if (myID !== undefined) {
+                                rooms[myRoom].inGame--;
+                                for (const p in rooms[myRoom].players) {
+                                    rooms[myRoom].players[p].distances.delete(myID);
+                                }
+                                delete rooms[myRoom].players[myID];
+                                myID = undefined;
+                            }
+                            rooms[myRoom].connected--;
+                            if (!rooms[myRoom].connected && myRoom !== "") delete rooms[myRoom];
+
                             ws.send(JSON.stringify(["a", "b", "a", msg[2], rooms[msg[2]].info]));
                             myRoom = msg[2];
                             rooms[msg[2]].connected++;
                         } else ws.send(JSON.stringify(["a", "b", "b", msg[2]]));
-                        break;
-
-                    // Disconnecting from room
-                    case "c":
-                        if (myRoom === undefined) return;
-                        if (myID !== undefined) {
-                            delete rooms[myRoom].players[myID];
-                            myID = undefined;
-                            rooms[myRoom].inGame--;
-                        }
-                        rooms[myRoom].connected--;
-                        if (!rooms[myRoom].connected) delete rooms[myRoom];
-                        myRoom = undefined;
                         break;
                 }
                 break;

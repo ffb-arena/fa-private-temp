@@ -461,7 +461,6 @@
             systemText.hidden = true;
             nname.hidden = true;
             back.hidden = true;
-            nname.hidden = true;
             roomID.hidden = true;
             discord.hidden = true;
             github.hidden = true;
@@ -469,6 +468,8 @@
             changelogContainer.hidden = true;
             changelog.hidden = true;
             gallery.hidden = true;
+            make.hidden = true;
+            join.hidden = true;
             ws.send(JSON.stringify(`b${nname.value}`));
             ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
         }
@@ -476,20 +477,8 @@
 
     back.addEventListener("click", () => {
         systemText.hidden = true;
-        if (!nname.hidden) {
-            nname.hidden = true;
-            roomID.hidden = true;
-            roomContainer.hidden = true;
-            back.style.top = "auto";
-            back.style.bottom = "11.5vh";
-            back.style.right = "auto";
-            back.style.width = "80px";
-            back.innerHTML = "back";
-            ws.send(JSON.stringify("ac"));
-        }
         systemText.style.bottom = "28.5vh";
         systemText.style.width = "160px";
-        back.hidden = true;
         inputCreate.hidden = true;
         createSubmit.hidden = true;
         inputJoin.hidden = true;
@@ -500,6 +489,7 @@
         inputY.hidden = true;
         by.hidden = true;
         units.hidden = true;
+        back.hidden = true;
 
         join.hidden = false;
         make.hidden = false;
@@ -592,8 +582,21 @@
 
                     // Creating rooms
                     case "a":
+                        roomSettingsContainer.hidden = true;
+                        inputX.hidden = true;
+                        inputY.hidden = true;
+                        by.hidden = true;
+                        units.hidden = true;
+                        back.hidden = true;
+
+                        inputCreate.hidden = true;
+                        createSubmit.hidden = true;
+
+                        join.hidden = false;
+                        make.hidden = false;
+
                         if (msg[2] === "a") {
-                            let text = `current room: "${msgRoom}"`;
+                            let text = `current room: "${msgRoom === "" ? `${msgRoom} (community garden)` : msgRoom}"`;
                             ctx.font = "20px Ubuntu";
                             roomContainer.style.width = `${ctx.measureText(text).width}px`
                             roomID.innerHTML = text;
@@ -610,29 +613,15 @@
                             if (circlePlane.x < 2) circlePlane.x = 2;
                             if (circlePlane.y < 2) circlePlane.y = 2;
 
-                            inputCreate.hidden = true;
-                            createSubmit.hidden = true;
-
-                            roomSettingsContainer.hidden = true;
-                            inputX.hidden = true;
-                            inputY.hidden = true;
-                            by.hidden = true;
-                            units.hidden = true;
-
-                            nname.hidden = false;
                             systemText.hidden = false;
                             roomID.hidden = false;
                             roomContainer.hidden = false;
 
-                            back.style.bottom = "0vh";
-                            back.style.top = "59.3vh";
-                            back.innerHTML = "leave room"
-                            back.style.width = "140px";
-                            back.style.right = "10vh";
-
                             systemText.style.bottom = "14vh";
                             systemText.style.width = "140px";
                         } else {
+                            back.hidden = true;
+
                             systemText.innerHTML = `room ${msgRoom} already exists`;
                             systemText.hidden = false;
                             systemText.style.bottom = "11vh";
@@ -642,8 +631,10 @@
 
                     // Joining rooms    
                     case "b":
+                        join.hidden = false;
+                        make.hidden = false;
                         if (msg[2] === "a") {
-                            let text = `current room: "${msgRoom}"`;
+                            let text = `current room: ${msgRoom === "" ? `"${msgRoom}" (community garden)` : `"${msgRoom}"`}`;
                             ctx.font = "20px Ubuntu";
                             roomContainer.style.width = `${ctx.measureText(text).width}px`
                             roomID.innerHTML = text;
@@ -659,23 +650,23 @@
                             }
                             if (circlePlane.x < 2) circlePlane.x = 2;
                             if (circlePlane.y < 2) circlePlane.y = 2;
+
+                            back.hidden = true;
                             
                             inputJoin.hidden = true;
                             joinSubmit.hidden = true;
-                            nname.hidden = false;
                             systemText.hidden = false;
                             roomID.hidden = false;
                             roomContainer.hidden = false;
 
-                            back.style.bottom = "0vh";
-                            back.style.top = "59.3vh";
-                            back.innerHTML = "leave room"
-                            back.style.width = "140px";
-                            back.style.right = "10vh";
-
                             systemText.style.bottom = "14vh";
                             systemText.style.width = "140px";
                         } else {
+                            back.hidden = true;
+
+                            inputJoin.hidden = true;
+                            joinSubmit.hidden = true;
+
                             systemText.innerHTML = `room ${msgRoom} does not exist`;
                             systemText.hidden = false;
                             systemText.style.bottom = "11vh";
