@@ -11,6 +11,7 @@
     const createSubmit = document.getElementById("create-submit");
     const changelog = document.getElementById("changelog-btn")
     const gallery = document.getElementById("gallery-btn")
+    const howto = document.getElementById("noobs")
 
     const discord = document.getElementById("Discord");
     const github = document.getElementById("Github");
@@ -458,6 +459,7 @@
             body.style.backgroundColor = "transparent";
             title.hidden = true;
             subtitle.hidden = true;
+            howto.hidden = true;
             systemText.hidden = true;
             nname.hidden = true;
             back.hidden = true;
