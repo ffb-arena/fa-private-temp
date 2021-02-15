@@ -310,10 +310,6 @@ wss.on('connection', function connection(ws) {
                         rightMouse: false
                     },
                     movement: {
-                        direction: {
-                            x: 0,
-                            y: 0
-                        },
                         acc: {
                             x: 0,
                             y: 0
@@ -481,12 +477,12 @@ function mainloop() {
                     let totalDistance = Math.sqrt(Math.pow(rooms[room].players[p].mouse.mouseX, 2) + Math.pow(rooms[room].players[p].mouse.mouseY, 2));
                     rooms[room].players[p].movement.speed = ((totalDistance / rooms[room].players[p].res / 200 > 1) ? 1 : totalDistance / rooms[room].players[p].res / 200);
                     rooms[room].players[p].movement.speed *= acc.flower * friction * mul;
-                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].mouse.mouseX;
-                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].mouse.mouseY;
+                    rooms[room].players[p].movement.acc.x = rooms[room].players[p].mouse.mouseX;
+                    rooms[room].players[p].movement.acc.y = rooms[room].players[p].mouse.mouseY;
 
-                    let distance = Math.sqrt(Math.pow(rooms[room].players[p].movement.direction.x, 2) + Math.pow(rooms[room].players[p].movement.direction.y, 2));
-                    rooms[room].players[p].movement.direction.x /= distance;
-                    rooms[room].players[p].movement.direction.y /= distance;
+                    let distance = Math.sqrt(Math.pow(rooms[room].players[p].movement.acc.x, 2) + Math.pow(rooms[room].players[p].movement.acc.y, 2));
+                    rooms[room].players[p].movement.acc.x /= distance;
+                    rooms[room].players[p].movement.acc.y /= distance;
                 } else {
                     rooms[room].players[p].movement.speed = acc.flower * friction * mul;
 
@@ -538,22 +534,19 @@ function mainloop() {
                             rooms[room].players[p].movement.acc.y = 0;
                         }
                     }
-
-                    rooms[room].players[p].movement.direction.x = rooms[room].players[p].movement.acc.x;
-                    rooms[room].players[p].movement.direction.y = rooms[room].players[p].movement.acc.y;
                 }
 
                 if (rooms[room].players[p].movement.speed) {
                     rooms[room].players[p].movement.xToAdd = Math.max(
                         Math.min(
-                            rooms[room].players[p].pubInfo.x + rooms[room].players[p].movement.direction.x * rooms[room].players[p].movement.speed,
+                            rooms[room].players[p].pubInfo.x + rooms[room].players[p].movement.acc.x * rooms[room].players[p].movement.speed,
                             rooms[room].info.x
                         ),
                         0
                     ) - rooms[room].players[p].pubInfo.x;
                     rooms[room].players[p].movement.yToAdd = Math.max(
                         Math.min(
-                            rooms[room].players[p].pubInfo.y + rooms[room].players[p].movement.direction.y * rooms[room].players[p].movement.speed,
+                            rooms[room].players[p].pubInfo.y + rooms[room].players[p].movement.acc.y * rooms[room].players[p].movement.speed,
                             rooms[room].info.y
                         ),
                         0
@@ -570,8 +563,6 @@ function mainloop() {
                     }
                 }
 
-                rooms[room].players[p].movement.direction.x = 0;
-                rooms[room].players[p].movement.direction.y = 0;
                 rooms[room].players[p].movement.speed = 0;
 
                 rooms[room].players[p].petalCentre.x += petalLag * (rooms[room].players[p].pubInfo.x - rooms[room].players[p].petalCentre.x);
@@ -595,10 +586,13 @@ function mainloop() {
                     let change = petal.change * mul;
                     let nextPetalDegree = petal.degree + change;
                     if (nextPetalDegree > 2 * Math.PI) nextPetalDegree %= (2 * Math.PI);
-                    petal.update({
-                        x: rooms[room].players[p].petalCentre.x,
-                        y: rooms[room].players[p].petalCentre.y
-                    }, nextPetalDegree, rooms[room].players[p].petalDist
+                    petal.update(
+                        {
+                            x: rooms[room].players[p].petalCentre.x,
+                            y: rooms[room].players[p].petalCentre.y
+                        }, 
+                        nextPetalDegree, 
+                        rooms[room].players[p].petalDist
                     );
                 });
             }
