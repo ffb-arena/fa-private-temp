@@ -101,11 +101,11 @@ const names = [
 ];
 
 // Functions
-function getID(array) {
+function getID(map) {
     let ID;
     do {
         ID = Math.round(Math.random() * 10);
-    } while (array[ID] !== undefined);
+    } while (map.has(ID));
     return ID;
 }
 
@@ -127,11 +127,8 @@ wss.on('connection', function connection(ws) {
     ws.on("close", () => {
         myName = undefined;
         if (myID !== undefined) {
-            rooms[myRoom].inGame--;
-            for (const p in rooms[myRoom].players) {
-                rooms[myRoom].players[p].distances.delete(myID);
-            }
-            delete rooms[myRoom].players[myID];
+            rooms[myRoom].players.forEach(p => p.distances.delete(myID));
+            rooms[myRoom].players.delete(myID);
             myID = undefined;
         }
         rooms[myRoom].connected--;
@@ -157,11 +154,8 @@ wss.on('connection', function connection(ws) {
                         if (exists)  ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
                         else {
                             if (myID !== undefined) {
-                                rooms[myRoom].inGame--;
-                                for (const p in rooms[myRoom].players) {
-                                    rooms[myRoom].players[p].distances.delete(myID);
-                                }
-                                delete rooms[myRoom].players[myID];
+                                rooms[myRoom].players.forEach(p => p.distances.delete(myID));
+                                rooms[myRoom].players.delete(myID);
                                 myID = undefined;
                             }
                             rooms[myRoom].connected--;
@@ -181,11 +175,8 @@ wss.on('connection', function connection(ws) {
                         if (exists) {
 
                             if (myID !== undefined) {
-                                rooms[myRoom].inGame--;
-                                for (const p in rooms[myRoom].players) {
-                                    rooms[myRoom].players[p].distances.delete(myID);
-                                }
-                                delete rooms[myRoom].players[myID];
+                                rooms[myRoom].players.forEach(p => p.distances.delete(myID));
+                                rooms[myRoom].players.delete(myID);
                                 myID = undefined;
                             }
                             rooms[myRoom].connected--;
@@ -208,27 +199,25 @@ wss.on('connection', function connection(ws) {
                 const n = 5;
                 if (!myName) myName = names[Math.abs(Math.round(Math.random() * names.length) - 1)];
                 const name = msg.slice(1, 21) || myName;
-                rooms[myRoom].players[newID] = new Flower(newID, x, y, n, name, bruh, ws);
-                for (const p in rooms[myRoom].players) {
-                    if (rooms[myRoom].players[p].id !== newID) {
-                        rooms[myRoom].players[newID].distances.set(
-                            rooms[myRoom].players[p].id, 
-                            { 
-                                x: rooms[myRoom].players[p].pubInfo.x - x, 
-                                y: rooms[myRoom].players[p].pubInfo.y - y, 
-                            }
-                        );
-                        rooms[myRoom].players[p].distances.set(
-                            newID, 
-                            { 
-                                x: x - rooms[myRoom].players[p].pubInfo.x, 
-                                y: y - rooms[myRoom].players[p].pubInfo.y, 
-                            }
-                        );
-                    }
-                }
+                rooms[myRoom].players.set(newID, new Flower(newID, x, y, n, name, bruh, ws));
+                rooms[myRoom].players.forEach((p, id) => {
+                    if (p.id === id) return;
+                    rooms[myRoom].players.get(newID).distances.set(
+                        rooms[myRoom].players.get(id).id, 
+                        { 
+                            x: rooms[myRoom].players.get(id).pubInfo.x - x, 
+                            y: rooms[myRoom].players.get(id).pubInfo.y - y, 
+                        }
+                    );
+                    p.distances.set(
+                        newID,
+                        {
+                            x: x - rooms[myRoom].players.get(id).pubInfo.x, 
+                            y: y - rooms[myRoom].players.get(id).pubInfo.y, 
+                        }
+                    )
+                })
                 myID = newID;
-                rooms[myRoom].inGame++;
                 break;
 
 
@@ -237,21 +226,21 @@ wss.on('connection', function connection(ws) {
                 switch (msg[1]) {
                     case "a":
                         if (myID === undefined) return;
-                        rooms[myRoom].players[myID].keyDown(msg.slice(2, msg.length));
+                        rooms[myRoom].players.get(myID).keyDown(msg.slice(2, msg.length));
                         break;
                     case "b":
                         if (myID === undefined) return;
-                        rooms[myRoom].players[myID].keyUp(msg.slice(2, msg.length))
+                        rooms[myRoom].players.get(myID).keyUp(msg.slice(2, msg.length))
                         break;
                     case "c":
                         bruh = !bruh;
-                        if (myID !== undefined) rooms[myRoom].players[myID].keyboard = !rooms[myRoom].players[myID].keyboard;
+                        if (myID !== undefined) rooms[myRoom].players.get(myID).keyboard = !rooms[myRoom].players.get(myID).keyboard;
                         break;
                     case "d":
                         if (myID === undefined) return;
-                        rooms[myRoom].players[myID].mouse.mouseX = msg[2];
-                        rooms[myRoom].players[myID].mouse.mouseY = msg[3];
-                        rooms[myRoom].players[myID].res = msg[4];
+                        rooms[myRoom].players.get(myID).mouse.mouseX = msg[2];
+                        rooms[myRoom].players.get(myID).mouse.mouseY = msg[3];
+                        rooms[myRoom].players.get(myID).res = msg[4];
                 }
                 break;
 
@@ -266,40 +255,41 @@ wss.on('connection', function connection(ws) {
 // Main loop
 function mainloop() {
     time.last = Date.now() - time.old;
+    const mul = time.last / frame;
     for (const room in rooms) {
-        const mul = time.last / frame;
-        if (rooms[room].inGame) {
+        if (rooms[room].players.size) {
 
             // Updating positions
-            for (const p in rooms[room].players) {
-                rooms[room].players[p].update(mul, rooms[room].info.x, rooms[room].info.y);
-                for (const n in rooms[room].players) {
-                    if (rooms[room].players[n].id !== rooms[room].players[p].id) {
-                        rooms[room].players[n].distances.get(rooms[room].players[p].id).x += rooms[room].players[p].movement.xToAdd;
-                        rooms[room].players[n].distances.get(rooms[room].players[p].id).y += rooms[room].players[p].movement.yToAdd;
-                        rooms[room].players[p].distances.get(rooms[room].players[n].id).x -= rooms[room].players[p].movement.xToAdd;
-                        rooms[room].players[p].distances.get(rooms[room].players[n].id).y -= rooms[room].players[p].movement.yToAdd;
+            rooms[room].players.forEach(player => {
+                player.update(mul, rooms[room].info.x, rooms[room].info.y);
+            });
+            rooms[room].players.forEach((player, id) => {
+                rooms[room].players.forEach((p, otherID) => {
+                    if (id !== otherID) {
+                        p.distances.get(id).x += player.movement.xToAdd;
+                        p.distances.get(id).y += player.movement.yToAdd;
+                        player.distances.get(otherID).x -= player.movement.xToAdd;
+                        player.distances.get(otherID).y -= player.movement.yToAdd;
                     }
-                }
-            }
+                })
+            });
 
             // Checking collisions
-            const players = Object.values(rooms[room].players);
+            let players = [];
+            rooms[room].players.forEach(value => players.push(value));
             players.forEach((player, i) => {
                 players.forEach((p, n) => {
-                    if (n <= i) return;
-                    let d = player.distances.get(p.id);
-                    if (
-                        Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2)
-                        <=
-                        (Math.pow(Math.max(rooms[room].players[p.id].petalDist + rooms[room].players[player.id].petalDist + 20, 90), 2))
-                    ) {
-                        // p.id and player.id collide
-
-                        // checking if the bodies collide (2500 = 50^2)
-                        if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2) <= 2500) {
-                            console.log("body collision")
-                            console.log("-")
+                    if (!(n <= i)) {
+                        const d = player.distances.get(p.id);
+                        if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2)
+                            <=
+                            (Math.pow(Math.max(rooms[room].players.get(p.id).petalDist + rooms[room].players.get(p.id).petalDist + 20, 90), 2))) {
+                            // p.id and player.id collide
+                            // checking if the bodies collide (2500 = 50^2)
+                            if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2) <= 2500) {
+                                console.log("body collision");
+                                console.log("-");
+                            }
                         }
                     }
                 });
