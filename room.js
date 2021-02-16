@@ -17,7 +17,7 @@ class Room {
             ) * 50
         };
 
-        this.connected = 1;
+        this.connected = 0;
         this.players = new Map();
     }
 }
