@@ -9,7 +9,7 @@ const limit = {
     "1": "min",
     "-1": "max"
 }
-const Petal = require("./petals.js");
+const Petal = require("./petal.js");
 class Flower {
     constructor(id, x, y, n, name, bruh, ws) { // n is number of petals
         this.pubInfo = {
@@ -53,6 +53,10 @@ class Flower {
         };
         this.movement = {
             acc: {
+                x: 0,
+                y: 0
+            },
+            direction: {
                 x: 0,
                 y: 0
             },
@@ -163,20 +167,47 @@ class Flower {
 
     // updates position
     update(mul, maxX, maxY) {
-        // this.movement.acc is the acceleration on both axes
+        // this.movement.acc is the acceleration on both axes (between -1 and 1)
         // this.movement.speed is the speed
+        // this.movement.direction is accel * speed
 
         // updating the speeds and accelerations
-        if (!this.keyboard && (this.mouse.mouseX || this.mouseY)) {
-            let totalDistance = Math.sqrt(Math.pow(this.mouse.mouseX, 2) + Math.pow(this.mouse.mouseY, 2));
-            this.movement.speed = ((totalDistance / this.res / 200 > 1) ? 1 : totalDistance / this.res / 200);
-            this.movement.speed *= acc.flower * friction * mul;
-            this.movement.acc.x = this.mouse.mouseX;
-            this.movement.acc.y = this.mouse.mouseY;
+        if (!this.keyboard) {
 
-            let distance = Math.sqrt(Math.pow(this.movement.acc.x, 2) + Math.pow(this.movement.acc.y, 2));
-            this.movement.acc.x /= distance;
-            this.movement.acc.y /= distance;
+            if (this.mouse.mouseX || this.mouse.mouseY) {
+                let totalDistance = Math.sqrt(Math.pow(this.mouse.mouseX, 2) + Math.pow(this.mouse.mouseY, 2));
+                this.movement.speed = ((totalDistance / this.res / 200 > 1) ? 1 : totalDistance / this.res / 200);
+
+                this.movement.speed *= acc.flower * friction * mul;
+                this.movement.direction.x = this.mouse.mouseX;
+                this.movement.direction.y = this.mouse.mouseY;
+
+                let distance = Math.sqrt(Math.pow(this.movement.direction.x, 2) + Math.pow(this.movement.direction.y, 2));
+                this.movement.direction.x /= distance;
+                this.movement.direction.y /= distance;
+            }
+
+            // updating accelerations (this is only used with knockback)
+            if (this.movement.acc.x) {
+                const oldAccelX = this.movement.acc.x;
+                this.movement.acc.x -= wasdSmooth * mul * (oldAccelX / Math.abs(oldAccelX));
+                if (oldAccelX && ((oldAccelX <= 0) !== (this.movement.acc.x <= 0))) {
+                    this.movement.acc.x = 0;
+                }
+            }
+            if (this.movement.acc.y) {
+                const oldAccelY = this.movement.acc.y;
+                this.movement.acc.y -= wasdSmooth * mul * (oldAccelY / Math.abs(oldAccelY));
+                if (oldAccelY && ((oldAccelY <= 0) !== (this.movement.acc.y <= 0))) {
+                    this.movement.acc.y = 0;
+                }
+            }
+
+            this.movement.direction.x *= this.movement.speed;
+            this.movement.direction.y *= this.movement.speed;
+
+            this.movement.direction.x += this.movement.acc.x * acc.flower * friction * mul;
+            this.movement.direction.y += this.movement.acc.y * acc.flower * friction * mul;
         } else {
             this.movement.speed = acc.flower * friction * mul;
 
@@ -226,20 +257,23 @@ class Flower {
                     this.movement.acc.y = 0;
                 }
             }
+
+            this.movement.direction.x = this.movement.acc.x * this.movement.speed;
+            this.movement.direction.y = this.movement.acc.y * this.movement.speed;
         }
 
         // xToAdd and yToAdd are literally what they say they are
         if (this.movement.speed) {
             this.movement.xToAdd = Math.max(
                 Math.min(
-                    this.pubInfo.x + this.movement.acc.x * this.movement.speed,
+                    this.pubInfo.x + this.movement.direction.x,
                     maxX
                 ),
                 0
             ) - this.pubInfo.x;
             this.movement.yToAdd = Math.max(
                 Math.min(
-                    this.pubInfo.y + this.movement.acc.y * this.movement.speed,
+                    this.pubInfo.y + this.movement.direction.y,
                     maxY
                 ),
                 0

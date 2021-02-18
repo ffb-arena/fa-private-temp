@@ -79,7 +79,7 @@ const server = http.createServer((req, res) => {
 // More constants
 const wss = new WebSocket.Server({ server });
 const time = {};
-let rooms = new Map().set("", new Room(200, 200));
+let rooms = new Map().set("", new Room(20, 20));
 const frame = 1000 / 25;
 const names = [
     "John",
@@ -100,13 +100,30 @@ const names = [
 ];
 
 // Functions
+
 function getID(map) {
     let ID;
-    do {
-        ID = Math.round(Math.random() * 10);
-    } while (map.has(ID));
+
+    do ID = Math.round(Math.random() * 10);
+    while (map.has(ID));
+
     return ID;
 }
+
+// gives a coordinate from an angle
+function coord(angle, length) {
+    let initialObject = {
+        x: Math.sin(angle),
+        y: Math.cos(angle)
+    };
+    let distance = Math.sqrt(initialObject.x * initialObject.x + initialObject.y * initialObject.y);
+    initialObject.x /= distance;
+    initialObject.y /= distance;
+    initialObject.x *= length;
+    initialObject.y *= length;
+    return initialObject;
+}
+
 
 // When a websocket connects
 wss.on('connection', function connection(ws) {
@@ -222,18 +239,26 @@ wss.on('connection', function connection(ws) {
             // Button pressed or movement stuff
             case "c": 
                 switch (msg[1]) {
+
+                    // keyup
                     case "a":
                         if (myID === undefined) return;
                         rooms.get(myRoom).players.get(myID).keyDown(msg.slice(2, msg.length));
                         break;
+
+                    // keydown
                     case "b":
                         if (myID === undefined) return;
                         rooms.get(myRoom).players.get(myID).keyUp(msg.slice(2, msg.length))
                         break;
+
+                    // changing movement settings
                     case "c":
                         bruh = !bruh;
                         if (myID !== undefined) rooms.get(myRoom).players.get(myID).keyboard = !rooms.get(myRoom).players.get(myID).keyboard;
                         break;
+
+                    // moving mouse
                     case "d":
                         if (myID === undefined) return;
                         rooms.get(myRoom).players.get(myID).mouse.mouseX = msg[2];
@@ -284,13 +309,44 @@ function mainloop() {
                             // p.id and player.id collide
 
                             // checking if the bodies collide (2500 = 50^2)
-                            if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2) <= 2500) {
-                                console.log("body collision");
-                                console.log("-");
+                            if (Math.pow(Math.round(d.x * 100) / 100, 2) + Math.pow(Math.round(d.y * 100) / 100, 2) <= 2500) {  
+
+                                // knockback between 2 players
+                                const playerAcc = {
+                                    x: player.movement.xToAdd / 2.5 / 5 / mul,
+                                    y: player.movement.yToAdd / 2.5 / 5 / mul
+                                };
+                                const pAcc = {
+                                    x: p.movement.xToAdd / 2.5 / 5 / mul,
+                                    y: p.movement.yToAdd / 2.5 / 5 / mul
+                                };
+                                let notMoving;
+                                if (!playerAcc.y && !playerAcc.x) notMoving = player.id;
+                                else if (!pAcc.y && !pAcc.x) notMoving = p.id;
+
+                                const playerInitialAngle = Math.atan2(playerAcc.x, playerAcc.y);
+                                const pInitialAngle = Math.atan2(pAcc.x, pAcc.y);
+
+                                const avg = 2 * Math.PI - (playerInitialAngle + pInitialAngle) / 2;
+                                const playerAccToAdd = notMoving ? coord(notMoving === player.id ? pInitialAngle : playerInitialAngle + Math.PI, 1)
+                                    : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 1);
+                                const pAccToAdd = notMoving ? coord(notMoving === p.id ? playerInitialAngle : pInitialAngle + Math.PI, 1)
+                                    : coord(avg + (Math.PI * (playerInitialAngle < pInitialAngle)), 1);
+
+                                player.movement.acc.x += playerAccToAdd.x;
+                                player.movement.acc.y += playerAccToAdd.y;
+
+                                p.movement.acc.x += pAccToAdd.x;
+                                p.movement.acc.y += pAccToAdd.y;
                             }
                         }
                     }
                 });
+                // for if you need to log acceleration values
+                // if (player.pubInfo.name === "a" && (player.movement.acc.x || player.movement.acc.y)) console.log({
+                //     x: Math.round(player.movement.acc.x * 100) / 100,
+                //     y: Math.round(player.movement.acc.y * 100) / 100
+                // });
             });
 
             // Sending data
