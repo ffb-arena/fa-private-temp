@@ -96,7 +96,8 @@ const names = [
     "[MG]MasterOv",
     "GebitDiver",
     "no mates :(((",
-    "PUS ABOVE ALL"
+    "PUS ABOVE ALL",
+    "SaloonTerror"
 ];
 
 // Functions
@@ -214,7 +215,7 @@ wss.on('connection', function connection(ws) {
                 const n = 5;
                 if (!myName) myName = names[Math.abs(Math.round(Math.random() * names.length) - 1)];
                 const name = msg.slice(1, 21) || myName;
-                rooms.get(myRoom).players.set(newID, new Flower(newID, x, y, n, name, bruh, ws));
+                rooms.get(myRoom).players.set(newID, new Flower(newID, x, y, n, name, bruh, 1, ws));
                 rooms.get(myRoom).players.forEach((p, id) => {
                     if (p.id === newID) return;
                     rooms.get(myRoom).players.get(newID).distances.set(
@@ -313,31 +314,68 @@ function mainloop() {
 
                                 // knockback between 2 players
                                 const playerAcc = {
-                                    x: player.movement.xToAdd / 2.5 / 5 / mul,
-                                    y: player.movement.yToAdd / 2.5 / 5 / mul
+                                    x: -player.movement.acc.x,
+                                    y: -player.movement.acc.y
                                 };
                                 const pAcc = {
-                                    x: p.movement.xToAdd / 2.5 / 5 / mul,
-                                    y: p.movement.yToAdd / 2.5 / 5 / mul
+                                    x: -p.movement.acc.x,
+                                    y: -p.movement.acc.y
                                 };
                                 let notMoving;
-                                if (!playerAcc.y && !playerAcc.x) notMoving = player.id;
-                                else if (!pAcc.y && !pAcc.x) notMoving = p.id;
+                                if (!player.movement.xToAdd && !player.movement.yToAdd) notMoving = player.id;
+                                else if (!p.movement.xToAdd && !p.movement.yToAdd) notMoving = p.id;
 
                                 const playerInitialAngle = Math.atan2(playerAcc.x, playerAcc.y);
                                 const pInitialAngle = Math.atan2(pAcc.x, pAcc.y);
 
                                 const avg = 2 * Math.PI - (playerInitialAngle + pInitialAngle) / 2;
-                                const playerAccToAdd = notMoving ? coord(notMoving === player.id ? pInitialAngle : playerInitialAngle + Math.PI, 1)
-                                    : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 1);
-                                const pAccToAdd = notMoving ? coord(notMoving === p.id ? playerInitialAngle : pInitialAngle + Math.PI, 1)
-                                    : coord(avg + (Math.PI * (playerInitialAngle < pInitialAngle)), 1);
 
-                                player.movement.acc.x += playerAccToAdd.x;
-                                player.movement.acc.y += playerAccToAdd.y;
+                                const playerAccToAdd = notMoving ? coord(notMoving === player.id ? pInitialAngle + Math.PI : playerInitialAngle, 1)
+                                    : coord(avg + (Math.PI * (playerInitialAngle < pInitialAngle)), 0.5);
+                                const pAccToAdd = notMoving ? coord(notMoving === p.id ? playerInitialAngle + Math.PI : pInitialAngle, 1)
+                                    : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 0.5);
 
-                                p.movement.acc.x += pAccToAdd.x;
-                                p.movement.acc.y += pAccToAdd.y;
+                                const overlapX = Math.abs(player.pubInfo.x - p.pubInfo.x);
+                                const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y);
+                                
+                                const total = p.movement.xToAdd * p.movement.xToAdd
+                                    + p.movement.yToAdd * p.movement.yToAdd
+                                    + player.movement.xToAdd * player.movement.xToAdd
+                                    + player.movement.yToAdd * player.movement.yToAdd;
+                                const playerPart = (player.movement.xToAdd * player.movement.xToAdd
+                                    + player.movement.yToAdd * player.movement.yToAdd) / total;
+                                const pPart = 1 - playerPart;
+
+                                let x = overlapX * playerPart * -(playerAccToAdd.x / Math.abs(playerAccToAdd.x));
+                                let y = overlapY * playerPart * -(playerAccToAdd.y / Math.abs(playerAccToAdd.y));
+                                player.pubInfo.x -= x;
+                                player.pubInfo.y -= y;
+                                room.players.forEach((otherP, id) => {
+                                    if (id !== player.id) {
+                                        otherP.distances.get(player.id).x -= x;
+                                        otherP.distances.get(player.id).y -= y;
+                                        player.distances.get(otherP.id).x += x;
+                                        player.distances.get(otherP.id).y += y;
+                                    }
+                                });
+
+                                x = overlapX * pPart * -(pAccToAdd.x / Math.abs(pAccToAdd.x));
+                                y = overlapY * pPart * -(pAccToAdd.y / Math.abs(pAccToAdd.y));
+                                p.pubInfo.x -= x;
+                                p.pubInfo.y -= y;
+                                room.players.forEach((otherP, id) => {
+                                    if (id !== p.id) {
+                                        otherP.distances.get(p.id).x -= x;
+                                        otherP.distances.get(p.id).y -= y;
+                                        p.distances.get(otherP.id).x += x;
+                                        p.distances.get(otherP.id).y += y;
+                                    }
+                                });
+
+                                player.movement.accOffset.x += playerAccToAdd.x;
+                                player.movement.accOffset.y += playerAccToAdd.y;
+                                p.movement.accOffset.x += pAccToAdd.x;
+                                p.movement.accOffset.y += pAccToAdd.y;
                             }
                         }
                     }

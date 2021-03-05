@@ -11,7 +11,7 @@ const limit = {
 }
 const Petal = require("./petal.js");
 class Flower {
-    constructor(id, x, y, n, name, bruh, ws) { // n is number of petals
+    constructor(id, x, y, n, name, bruh, lvl, ws) { // n is number of petals
         this.pubInfo = {
             name: name,
             x: x,
@@ -26,6 +26,7 @@ class Flower {
             ],
             face: 0
         }
+        this.level = lvl;
         this.petalNum = n;
         this.id = id;
         this.res = undefined;
@@ -53,6 +54,10 @@ class Flower {
         };
         this.movement = {
             acc: {
+                x: 0,
+                y: 0
+            },
+            accOffset: {
                 x: 0,
                 y: 0
             },
@@ -187,27 +192,16 @@ class Flower {
                 this.movement.direction.y /= distance;
             }
 
-            // updating accelerations (this is only used with knockback)
-            if (this.movement.acc.x) {
-                const oldAccelX = this.movement.acc.x;
-                this.movement.acc.x -= wasdSmooth * mul * (oldAccelX / Math.abs(oldAccelX));
-                if (oldAccelX && ((oldAccelX <= 0) !== (this.movement.acc.x <= 0))) {
-                    this.movement.acc.x = 0;
-                }
-            }
-            if (this.movement.acc.y) {
-                const oldAccelY = this.movement.acc.y;
-                this.movement.acc.y -= wasdSmooth * mul * (oldAccelY / Math.abs(oldAccelY));
-                if (oldAccelY && ((oldAccelY <= 0) !== (this.movement.acc.y <= 0))) {
-                    this.movement.acc.y = 0;
-                }
-            }
+            this.movement.acc = {
+                x: this.movement.direction.x,
+                y: this.movement.direction.y
+            };
 
             this.movement.direction.x *= this.movement.speed;
             this.movement.direction.y *= this.movement.speed;
 
-            this.movement.direction.x += this.movement.acc.x * acc.flower * friction * mul;
-            this.movement.direction.y += this.movement.acc.y * acc.flower * friction * mul;
+            this.movement.direction.x += this.movement.accOffset.x * acc.flower * friction * mul;
+            this.movement.direction.y += this.movement.accOffset.y * acc.flower * friction * mul;
         } else {
             this.movement.speed = acc.flower * friction * mul;
 
@@ -261,6 +255,25 @@ class Flower {
             this.movement.direction.x = this.movement.acc.x * this.movement.speed;
             this.movement.direction.y = this.movement.acc.y * this.movement.speed;
         }
+
+        // updating acc offsets for knockback
+        if (this.movement.accOffset.x) {
+            const oldAccelX = this.movement.accOffset.x;
+            this.movement.accOffset.x -= wasdSmooth * mul * (oldAccelX / Math.abs(oldAccelX));
+            if (oldAccelX && ((oldAccelX <= 0) !== (this.movement.accOffset.x <= 0))) {
+                this.movement.accOffset.x = 0;
+            }
+        }
+        if (this.movement.accOffset.y) {
+            const oldAccelY = this.movement.accOffset.y;
+            this.movement.accOffset.y -= wasdSmooth * mul * (oldAccelY / Math.abs(oldAccelY));
+            if (oldAccelY && ((oldAccelY <= 0) !== (this.movement.accOffset.y <= 0))) {
+                this.movement.accOffset.y = 0;
+            }
+        }
+
+        this.movement.direction.x += this.movement.accOffset.x * acc.flower * friction * mul;
+        this.movement.direction.y += this.movement.accOffset.y * acc.flower * friction * mul;
 
         // xToAdd and yToAdd are literally what they say they are
         if (this.movement.speed) {
