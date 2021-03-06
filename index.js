@@ -359,8 +359,8 @@ function mainloop() {
                                     }
                                 });
 
-                                x = overlapX * pPart * -(pAccToAdd.x / Math.abs(pAccToAdd.x));
-                                y = overlapY * pPart * -(pAccToAdd.y / Math.abs(pAccToAdd.y));
+                                x = overlapX * pPart * (-(pAccToAdd.x / Math.abs(pAccToAdd.x) || 0));
+                                y = overlapY * pPart * (-(pAccToAdd.y / Math.abs(pAccToAdd.y) || 0));
                                 p.pubInfo.x -= x;
                                 p.pubInfo.y -= y;
                                 room.players.forEach((otherP, id) => {
