@@ -336,7 +336,7 @@ function mainloop() {
                                     : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 0.5);
 
                                 const overlapX = Math.abs(player.pubInfo.x - p.pubInfo.x) * 0.5; // actually half of overlap 
-                                const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y) * 0.5; // because makes it less bouncy
+                                const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y) * 0.5; // because makes it less "snappy"
                                 
                                 const total = p.movement.xToAdd * p.movement.xToAdd
                                     + p.movement.yToAdd * p.movement.yToAdd
