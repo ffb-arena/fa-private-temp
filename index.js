@@ -335,8 +335,8 @@ function mainloop() {
                                 const pAccToAdd = notMoving ? coord(notMoving === p.id ? playerInitialAngle + Math.PI : pInitialAngle, 1)
                                     : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 0.5);
 
-                                const overlapX = Math.abs(player.pubInfo.x - p.pubInfo.x);
-                                const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y);
+                                const overlapX = Math.abs(player.pubInfo.x - p.pubInfo.x) * 0.5; // actually half of overlap 
+                                const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y) * 0.5; // because makes it less bouncy
                                 
                                 const total = p.movement.xToAdd * p.movement.xToAdd
                                     + p.movement.yToAdd * p.movement.yToAdd
@@ -346,8 +346,8 @@ function mainloop() {
                                     + player.movement.yToAdd * player.movement.yToAdd) / total;
                                 const pPart = 1 - playerPart;
 
-                                let x = overlapX * playerPart * -(playerAccToAdd.x / Math.abs(playerAccToAdd.x));
-                                let y = overlapY * playerPart * -(playerAccToAdd.y / Math.abs(playerAccToAdd.y));
+                                let x = overlapX * playerPart * (-(playerAccToAdd.x / Math.abs(playerAccToAdd.x) || 0));
+                                let y = overlapY * playerPart * (-(playerAccToAdd.y / Math.abs(playerAccToAdd.y) || 0));
                                 player.pubInfo.x -= x;
                                 player.pubInfo.y -= y;
                                 room.players.forEach((otherP, id) => {
