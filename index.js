@@ -4,6 +4,7 @@
 
 // Constants
 const Room = require("./lib/room.js");
+const C = require("./lib/consts.js");
 
 const http = require("http");
 const path = require("path");
@@ -74,7 +75,6 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 const time = {};
 let rooms = new Map().set("", new Room(20, 20));
-const frame = 1000 / 25;
 
 // When a websocket connects
 wss.on('connection', function connection(ws) {
@@ -94,7 +94,9 @@ wss.on('connection', function connection(ws) {
     ws.on("close", () => {
         myName = undefined;
         if (myID !== undefined) {
-            rooms.get(myRoom).players.forEach(p => p.distances.delete(myID));
+            rooms.get(myRoom).players.forEach(p => {
+                p.distances.delete(myID);
+            });
             rooms.get(myRoom).players.delete(myID);
             myID = undefined;
         }
@@ -118,7 +120,9 @@ wss.on('connection', function connection(ws) {
                         if (rooms.has(msg[2])) ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
                         else {
                             if (myID !== undefined) {
-                                rooms.get(myRoom).players.forEach(p => p.distances.delete(myID));
+                                rooms.get(myRoom).players.forEach(p => {
+                                    p.distances.delete(myID);
+                                });
                                 rooms.get(myRoom).players.delete(myID);
                                 myID = undefined;
                             }
@@ -139,7 +143,9 @@ wss.on('connection', function connection(ws) {
                     case "b":
                         if (rooms.has(msg[2])) {
                             if (myID !== undefined) {
-                                rooms.get(myRoom).players.forEach(p => p.distances.delete(myID));
+                                rooms.get(myRoom).players.forEach(p => {
+                                    p.distances.delete(myID);
+                                });
                                 rooms.get(myRoom).players.delete(myID);
                                 myID = undefined;
                             }
@@ -204,7 +210,7 @@ wss.on('connection', function connection(ws) {
 // Main loop
 function mainloop() {
     time.last = Date.now() - time.old;
-    const mul = time.last / frame;
+    const mul = time.last / C.frame;
     rooms.forEach(room => {
         room.update(mul);
     });
@@ -212,7 +218,7 @@ function mainloop() {
 }
 
 time.old = Date.now();
-setInterval(mainloop, frame);
+setInterval(mainloop, C.frame);
 
 const PORT = process.env.PORT || 9700;
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(PORT, console.log(`Server running on port ${PORT}`));
