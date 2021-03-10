@@ -1,5 +1,13 @@
 -health
     -collision detection
+
+-client changes
+    -improve how ping works
+    -make ping check more frequently
+    -put client on loop
+    -lerp client
+
+-health pt 2
     -petal stats
     -ramming
     -hp bar
