@@ -3,8 +3,9 @@
 // ENTER AT YOUR OWN RISK
 
 // Constants
-const Flower = require("./flower.js");
-const Room = require("./room.js");
+const Flower = require("./lib/flower.js");
+const Room = require("./lib/room.js");
+const F = require("./lib/functions.js");
 
 const http = require("http");
 const path = require("path");
@@ -100,32 +101,6 @@ const names = [
     "SaloonTerror"
 ];
 
-// Functions
-
-function getID(map) {
-    let ID;
-
-    do ID = Math.round(Math.random() * 10);
-    while (map.has(ID));
-
-    return ID;
-}
-
-// gives a coordinate from an angle
-function coord(angle, length) {
-    let initialObject = {
-        x: Math.sin(angle),
-        y: Math.cos(angle)
-    };
-    let distance = Math.sqrt(initialObject.x * initialObject.x + initialObject.y * initialObject.y);
-    initialObject.x /= distance;
-    initialObject.y /= distance;
-    initialObject.x *= length;
-    initialObject.y *= length;
-    return initialObject;
-}
-
-
 // When a websocket connects
 wss.on('connection', function connection(ws) {
 
@@ -209,7 +184,7 @@ wss.on('connection', function connection(ws) {
             // Spawning
             case "b":
                 if (myID !== undefined) return;
-                const newID = getID(rooms.get(myRoom).players);
+                const newID = F.getID(rooms.get(myRoom).players);
                 const x = Math.random() * rooms.get(myRoom).info.x;
                 const y = Math.random() * rooms.get(myRoom).info.y;
                 const n = 5;
@@ -321,19 +296,20 @@ function mainloop() {
                                     x: -p.movement.acc.x,
                                     y: -p.movement.acc.y
                                 };
-                                let notMoving;
-                                if (!player.movement.xToAdd && !player.movement.yToAdd) notMoving = player.id;
-                                else if (!p.movement.xToAdd && !p.movement.yToAdd) notMoving = p.id;
 
-                                const playerInitialAngle = Math.atan2(playerAcc.x, playerAcc.y);
-                                const pInitialAngle = Math.atan2(pAcc.x, pAcc.y);
+                                const playerInitialAngle = Math.atan2(playerAcc.y, playerAcc.x);
+                                const pInitialAngle = Math.atan2(pAcc.y, pAcc.x);
 
                                 const avg = 2 * Math.PI - (playerInitialAngle + pInitialAngle) / 2;
 
-                                const playerAccToAdd = notMoving ? coord(notMoving === player.id ? pInitialAngle + Math.PI : playerInitialAngle, 1)
-                                    : coord(avg + (Math.PI * (playerInitialAngle < pInitialAngle)), 0.5);
-                                const pAccToAdd = notMoving ? coord(notMoving === p.id ? playerInitialAngle + Math.PI : pInitialAngle, 1)
-                                    : coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 0.5);
+
+                                const newPlayerAngle = avg + (Math.PI * (playerInitialAngle < pInitialAngle));
+                                const newPAngle = avg + (Math.PI * (playerInitialAngle > pInitialAngle));
+
+                                console.log(`drawCollisions(${playerInitialAngle % (2 * Math.PI)}, ${pInitialAngle % (2 * Math.PI)}, ${newPlayerAngle % (2 * Math.PI)}, ${newPAngle % (2 * Math.PI)});`);
+
+                                const playerAccToAdd = F.coord(avg + (Math.PI * (playerInitialAngle < pInitialAngle)), 0.5);
+                                const pAccToAdd = F.coord(avg + (Math.PI * (playerInitialAngle > pInitialAngle)), 0.5);
 
                                 const overlapX = Math.abs(player.pubInfo.x - p.pubInfo.x) * 0.5; // actually half of overlap 
                                 const overlapY = Math.abs(player.pubInfo.y - p.pubInfo.y) * 0.5; // because makes it less "snappy"
@@ -380,11 +356,6 @@ function mainloop() {
                         }
                     }
                 });
-                // for if you need to log acceleration values
-                // if (player.pubInfo.name === "a" && (player.movement.acc.x || player.movement.acc.y)) console.log({
-                //     x: Math.round(player.movement.acc.x * 100) / 100,
-                //     y: Math.round(player.movement.acc.y * 100) / 100
-                // });
             });
 
             // Sending data
