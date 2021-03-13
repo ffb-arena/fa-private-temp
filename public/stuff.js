@@ -41,7 +41,9 @@
     const backgroundCanvas = document.getElementById("petalBackground");
     const ctx2 = backgroundCanvas.getContext("2d");
 
-    const ws = new WebSocket(`ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`);
+    const wsUrl = `ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`;
+
+    const ws = new WebSocket(wsUrl === "ws://" ? "ws://localhost:9700" : wsUrl);
 
     const gridSpace = 50;
     const performance = {
@@ -128,7 +130,7 @@
 
     class PetalBackground{
         constructor(){
-            this.x = -100;
+            this.x = -200;
             this.y = Math.random() * 1080;
             this.velDirection = 0 + (Math.random()-0.5)/5;
             this.size = Math.random() * 30 + 30

@@ -71,7 +71,7 @@ const server = http.createServer((req, res) => {
     });
 });
 
-// More constants
+// variables
 const wss = new WebSocket.Server({ server });
 const time = {};
 let rooms = new Map().set("", new Room(20, 20));
@@ -163,9 +163,9 @@ wss.on('connection', function connection(ws) {
             // Spawning
             case "b":
                 if (myID !== undefined) return;
-                const array = rooms.get(myRoom).spawnPlayer(myName, msg.slice(1, 21), bruh, ws);
-                myID = array[0];
-                myName = array[1];
+                const spawnReturn = rooms.get(myRoom).spawnPlayer(myName, msg.slice(1, 21), bruh, ws);
+                myID = spawnReturn[0];
+                myName = spawnReturn[1];
                 break;
 
             // Button pressed or movement stuff
