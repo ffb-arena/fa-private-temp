@@ -2,9 +2,10 @@
     -collision detection
 
 -client changes
+    -refactor
     -improve how ping works
-    -make ping check more frequently
     -put client on loop
+    -make ping check more frequently
     -lerp client
 
 -health pt 2
