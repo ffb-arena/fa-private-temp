@@ -8,7 +8,7 @@ function createWindow() {
         }
     });
 
-    win.removeMenu();
+    // win.removeMenu();
     win.maximize();
 
     win.loadFile("../public/stuff.html"); // make this load actual link instead of file path

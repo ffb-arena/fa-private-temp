@@ -1,4 +1,4 @@
-(function() {
+{
     // Constants
     const body = document.getElementById("body");
     const title = document.getElementById("title");
@@ -715,4 +715,4 @@
                 break;
         }
     }
-})();
+}

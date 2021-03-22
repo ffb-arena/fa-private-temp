@@ -94,10 +94,7 @@ wss.on('connection', function connection(ws) {
     ws.on("close", () => {
         myName = undefined;
         if (myID !== undefined) {
-            rooms.get(myRoom).players.forEach(p => {
-                p.distances.delete(myID);
-            });
-            rooms.get(myRoom).players.delete(myID);
+            rooms.get(myRoom).players[myID] = undefined;
             myID = undefined;
         }
         rooms.get(myRoom).connected--;
@@ -120,10 +117,7 @@ wss.on('connection', function connection(ws) {
                         if (rooms.has(msg[2])) ws.send(JSON.stringify(["a", "a", "b", msg[2]]));
                         else {
                             if (myID !== undefined) {
-                                rooms.get(myRoom).players.forEach(p => {
-                                    p.distances.delete(myID);
-                                });
-                                rooms.get(myRoom).players.delete(myID);
+                                rooms.get(myRoom).players[myID] = undefined;
                                 myID = undefined;
                             }
                             rooms.get(myRoom).connected--;
@@ -143,10 +137,7 @@ wss.on('connection', function connection(ws) {
                     case "b":
                         if (rooms.has(msg[2])) {
                             if (myID !== undefined) {
-                                rooms.get(myRoom).players.forEach(p => {
-                                    p.distances.delete(myID);
-                                });
-                                rooms.get(myRoom).players.delete(myID);
+                                rooms.get(myRoom).players[myID] = undefined;
                                 myID = undefined;
                             }
                             rooms.get(myRoom).connected--;
@@ -175,27 +166,27 @@ wss.on('connection', function connection(ws) {
                     // keyup
                     case "a":
                         if (myID === undefined) return;
-                        rooms.get(myRoom).players.get(myID).keyDown(msg.slice(2, msg.length));
+                        rooms.get(myRoom).players[myID].keyDown(msg.slice(2, msg.length));
                         break;
 
                     // keydown
                     case "b":
                         if (myID === undefined) return;
-                        rooms.get(myRoom).players.get(myID).keyUp(msg.slice(2, msg.length))
+                        rooms.get(myRoom).players[myID].keyUp(msg.slice(2, msg.length))
                         break;
 
                     // changing movement settings
                     case "c":
                         bruh = !bruh;
-                        if (myID !== undefined) rooms.get(myRoom).players.get(myID).keyboard = !rooms.get(myRoom).players.get(myID).keyboard;
+                        if (myID !== undefined) rooms.get(myRoom).players[myID].keyboard = !rooms.get(myRoom).players[myID].keyboard;
                         break;
 
                     // moving mouse
                     case "d":
                         if (myID === undefined) return;
-                        rooms.get(myRoom).players.get(myID).mouse.mouseX = msg[2];
-                        rooms.get(myRoom).players.get(myID).mouse.mouseY = msg[3];
-                        rooms.get(myRoom).players.get(myID).res = msg[4];
+                        rooms.get(myRoom).players[myID].mouse.mouseX = msg[2];
+                        rooms.get(myRoom).players[myID].mouse.mouseY = msg[3];
+                        rooms.get(myRoom).players[myID].res = msg[4];
                 }
                 break;
 
