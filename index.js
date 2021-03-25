@@ -1,6 +1,6 @@
-// WARNING:
-// HORRIBLE MESSY CODE AHEAD
-// ENTER AT YOUR OWN RISK
+/*  WARNING:
+    HORRIBLE MESSY CODE AHEAD
+    ENTER AT YOUR OWN RISK */
 
 // Constants
 const Room = require("./lib/room.js");
