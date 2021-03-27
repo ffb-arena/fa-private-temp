@@ -2,6 +2,7 @@
     -collision detection
 
 -client changes
+    -loading screen
     -refactor
     -improve how ping works
     -put client on loop

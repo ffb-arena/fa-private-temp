@@ -99,7 +99,9 @@ wss.on('connection', function connection(ws) {
             myID = undefined;
         }
         rooms.get(myRoom).connected--;
-        if (!rooms.get(myRoom).connected && myRoom !== "") rooms.delete(myRoom);
+        if (rooms.get(myRoom).connected === 0 && myRoom !== "") {
+            rooms.delete(myRoom);
+        }
         myRoom = undefined;
     });
 
