@@ -20,5 +20,4 @@
     -petal lag is elliptical???
     -petal lag in general
     -wasd movement
-
--FIX BUG IN 1D COLLISIONS
+    -scuffed still knockback (not consistent)
