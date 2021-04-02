@@ -1,6 +1,6 @@
 -client changes
     -loading screen
-    -make ping check more frequently
+    -make ping check more frequently, add fps
     -lerp client
 
 -health pt 2
@@ -16,6 +16,3 @@
     -wasd movement
     -scuffed still knockback (not consistent)
     -bug where collision where both are still
-    -petals on petal background are random sizes
-    -petal background "pause" when join game (restart in same place later)
-    -slight white screen while allPlayers is undefined

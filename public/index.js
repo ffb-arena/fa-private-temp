@@ -36,6 +36,7 @@ me = {
     },
     face: 0
 };
+allPlayers = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 showPerformance = false;
 
@@ -79,7 +80,7 @@ window.addEventListener("resize", () => {
     if (title.hidden) {
         drawMap();
         drawGrid();
-        allPlayers.forEach((data, i) => render(data, i));
+        allPlayers.forEach((data, i) => renderPlayer(data, i));
         drawHelper();
 
         mms = (me.roomInfo.x > me.roomInfo.y) ? [me.roomInfo.y / me.roomInfo.x, "x"] : [me.roomInfo.x / me.roomInfo.y, "y"];
@@ -96,18 +97,16 @@ window.addEventListener("resize", () => {
 
 let loop;
 function mainLoop() {
-    if (allPlayers) {
-        // Clearing canvas
-        ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    // Clearing canvas
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-        drawMap();
-        drawGrid();
+    drawMap();
+    drawGrid();
 
-        // Drawing players
-        allPlayers.forEach((data, i) => render(data, i));
+    // Drawing players
+    allPlayers.forEach((data, i) => renderPlayer(data, i));
 
-        drawHelper();
-        drawMinimap();
-    }
+    drawHelper();
+    drawMinimap();
     loop = requestAnimationFrame(mainLoop);
 }

@@ -10,12 +10,11 @@ function loadImage(src) {
     return image;
 }
 
-let petalBackgrounds = [];
-let commonPetals = ["basic", "fast", "heavy"]
-let uncommonPetals = ["iris", "leaf", "rose", "stinger"]
-let rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
-let epicPetals = ["ecactus", "egg", "erose", "heaviest", "yinyang"];
-let legPetals = ["tringer"];
+const commonPetals = ["basic", "fast", "heavy"]
+const uncommonPetals = ["iris", "leaf", "rose", "stinger"]
+const rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
+const epicPetals = ["ecactus", "egg", "erose", "heaviest", "yinyang"];
+const legPetals = ["tringer"];
 let textures = {};
 for (const name of commonPetals) {
     textures[name] = loadImage(name);
@@ -81,6 +80,7 @@ class PetalBackground{
     }
 }
 
+let petalBackgrounds = [];
 let petalSpawnCooldown = 6;
 let background;
 function drawBackground(){

@@ -142,7 +142,7 @@ function drawMinimap() {
     ctx.globalAlpha = 1;
 }
 
-function render(data, i) {
+function renderPlayer(data, i) {
     if (!i) {
         let p = new Player(data.name, window.innerWidth / 2, window.innerHeight / 2, gridSpace / 2 * res, data.petals);
         p.draw(false);
