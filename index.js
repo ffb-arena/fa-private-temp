@@ -12,17 +12,35 @@ const path = require("path");
 const fs = require("fs");
 const WebSocket = require("ws");
 
+// list of all client files that need to be combined
+const files = [ // (in public folder already)
+    ["index.js"],
+    ["lib", "ws.js"],
+    ["lib", "menu.js"],
+    ["lib", "petal-background.js"],
+    ["lib", "player.js"]
+];
+
 // minifying
 const minify = false;
 
 if (minify) {
     console.log("Minifying code...");
-    const file = path.join(
-        __dirname,
-        "public",
-        "stuff.js"
-    );
-    var minifiedScript = require("@babel/core").transform(fs.readFileSync(file, "utf-8"), {
+    let jsFile = "{";
+    files.forEach(file => {
+        const filePath = path.join(
+            __dirname,
+            "public",
+            ...file
+        );
+        let fileCode = fs.readFileSync(filePath, "utf-8");
+        if (fileCode[fileCode.length - 1] !== ";") {
+            fileCode += ";";
+        }
+        jsFile += fileCode;
+    });
+    jsFile += "}";
+    var minifiedScript = require("@babel/core").transform(jsFile, {
         presets: ["minify"],
         comments: false 
     }).code
@@ -65,7 +83,26 @@ const server = http.createServer((req, res) => {
                     contentType = "image/svg+xml";
                     break;
             }
-            if (minify && req.url === "/stuff.js") content = minifiedScript;
+            if (req.url === "/index.js") {
+                if (minify) content = minifiedScript;
+                else {
+                    let jsFile = "{";
+                    files.forEach(file => {
+                        const filePath = path.join(
+                            __dirname,
+                            "public",
+                            ...file
+                        );
+                        let fileCode = fs.readFileSync(filePath, "utf-8");
+                        if (fileCode[fileCode.length - 1] !== ";") {
+                            fileCode += ";";
+                        }
+                        jsFile += fileCode;
+                    });
+                    jsFile += "}";
+                    content = jsFile;
+                }
+            }
             res.writeHead(200, { "Content-Type": contentType });
             res.end(content);
         }

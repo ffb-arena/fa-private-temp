@@ -1,8 +1,8 @@
-const { app, BrowserWindow, screen } = require("electron");
+const { app, BrowserWindow } = require("electron");
 
 function createWindow() {
     let win = new BrowserWindow({
-        icon: "../public/icons/favicon.png",
+        icon: "../public/images/icons/favicon.png",
         webPreferences: {
             nodeIntegration: true
         }
@@ -13,7 +13,7 @@ function createWindow() {
 
     win.loadFile("../public/stuff.html"); // make this load actual link instead of file path
     win.on('close', () => {               // in future
-        win.destroy();
+        win.destroy();                    // (doesn't work rn because of javascript)
     });
 }
 
