@@ -602,7 +602,7 @@
                         if (msg[2] === "a") {
                             let text = `current room: "${msgRoom === "" ? `${msgRoom} (community garden)` : msgRoom}"`;
                             ctx.font = "20px Ubuntu";
-                            roomContainer.style.width = `${ctx.measureText(text).width}px`
+                            roomContainer.style.width = `${ctx.measureText(text).width + 5}px`
                             roomID.innerHTML = text;
 
                             if (!msg[5]) {
