@@ -1,22 +1,49 @@
 class Player {
-    constructor(name, x, y, r) {
+    constructor(name, x, y, radius, petals) {
         this.name = name;
         this.x = x;
         this.y = y;
-        this.r = r;
+        this.radius = radius;
+        this.petals = petals;
     }
 
     draw(isntMe) {
-        
+
+        // Petals
+        this.petals.forEach(p => {
+            ctx.beginPath();
+            switch (p.id) {
+                case 1:
+                    ctx.fillStyle = "#afc3b6";
+                    ctx.arc(
+                        calculateRelPos(p.x, "x"),
+                        calculateRelPos(p.y, "y"),
+                        p.radius * res, 0, 2 * Math.PI
+                    );
+                    ctx.fill();
+                    ctx.closePath();
+    
+                    ctx.beginPath();
+                    ctx.fillStyle = "#ffffff";
+                    ctx.arc(
+                        calculateRelPos(p.x, "x"),
+                        calculateRelPos(p.y, "y"),
+                        (p.radius - 2) * res, 0, 2 * Math.PI
+                    );
+                    ctx.fill();
+            }
+            ctx.closePath()
+        });
+
         // Body
         ctx.fillStyle = "#beb951";
         ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI);
+        ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
         ctx.beginPath();
         ctx.fillStyle = "#ffe763";
-        ctx.arc(this.x, this.y, this.r - 3 * res, 0, 2 * Math.PI);
+        ctx.arc(this.x, this.y, this.radius - 3 * res, 0, 2 * Math.PI);
         ctx.fill();
         ctx.closePath();
         

@@ -1,5 +1,4 @@
 -client changes
-    -put client on loop
     -loading screen
     -make ping check more frequently
     -lerp client
@@ -19,3 +18,4 @@
     -bug where collision where both are still
     -petals on petal background are random sizes
     -petal background "pause" when join game (restart in same place later)
+    -slight white screen while allPlayers is undefined

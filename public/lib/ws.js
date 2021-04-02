@@ -119,21 +119,12 @@ ws.onmessage = message => {
 
         // Game data
         case "b":
-            // Clearing canvas
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
             // Getting your coordinates
             me.info.x = msg[1][0].x;
             me.info.y = msg[1][0].y;
 
-            drawMap();
-            drawGrid();
 
-            // Drawing players
             allPlayers = msg[1];
-            msg[1].forEach((data, i) => render(data, i));
-            drawHelper();
-            drawMinimap();
             break;
 
         // Ping
@@ -141,7 +132,7 @@ ws.onmessage = message => {
             if (msg === "pong") {
                 performance.ping = new Date().getTime() - performance.pingCalc;
                 perf.innerHTML = `${performance.ping} ms ping`;
-                if (extraInfo) window.setTimeout(performing, 300);
+                if (showPerformance) window.setTimeout(performing, 300);
             }
             break;
     }

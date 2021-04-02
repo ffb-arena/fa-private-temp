@@ -73,6 +73,7 @@ nname.addEventListener("keydown", (key) => {
 
         // You join game
         cancelAnimationFrame(background); // from lib/peatl-background.js
+        requestAnimationFrame(mainLoop); // from index.js
 
         document.getElementById("body").style.backgroundColor = "transparent";
         document.getElementById("title").hidden = true;

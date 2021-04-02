@@ -18,7 +18,8 @@ const files = [ // (in public folder already)
     ["lib", "ws.js"],
     ["lib", "menu.js"],
     ["lib", "petal-background.js"],
-    ["lib", "player.js"]
+    ["lib", "game", "rendering.js"],
+    ["lib", "game", "player.js"],
 ];
 
 // minifying
