@@ -1,5 +1,6 @@
 const backgroundCanvas = document.getElementById("petalBackground");
 const ctx2 = backgroundCanvas.getContext("2d");
+const oneOverSixty = 1/60 * 1000;
 
 backgroundCanvas.width = window.innerWidth;
 backgroundCanvas.height = window.innerHeight;
@@ -61,18 +62,20 @@ class PetalBackground{
             selectArray = JSON.parse(JSON.stringify(legPetals));
         }
         this.type = selectArray[Math.floor((Math.random() * selectArray.length))];
+        if (this.type === "tringer" || this.type === "stinger" || this.type === "wing") {
+            this.size *= 4;
+        }
     }
-    update(){
-        this.x += this.velX;
-        this.y += this.velY;
+    update(deltaTimeMul){
+        this.x += this.velX * deltaTimeMul;
+        this.y += this.velY * deltaTimeMul;
         if (this.x > backgroundCanvas.width + 30){
             this.delete = true;
         }
     }
     draw(){
         try{
-            let s = (this.type === "tringer" || this.type === "stinger" || this.type === "wing") ? this.size * 4 : this.size;
-            ctx2.drawImage(textures[this.type], this.x, this.y, s, s);
+            ctx2.drawImage(textures[this.type], this.x, this.y, this.size, this.size);
         }
         catch{
             console.log(this.type)
@@ -83,7 +86,13 @@ class PetalBackground{
 let petalBackgrounds = [];
 let petalSpawnCooldown = 6;
 let background;
+let oldTime = Date.now();
+let newTime;
+
 function drawBackground(){
+    newTime = Date.now();
+    const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
+    console.log(deltaTimeMul);
     ctx2.clearRect(0, 0, window.innerWidth, window.innerHeight);
     petalSpawnCooldown --;
     while (petalSpawnCooldown < 0){
@@ -91,10 +100,12 @@ function drawBackground(){
         petalBackgrounds.push(new PetalBackground());
     }
     for(let i of petalBackgrounds){
-        i.update();
+        i.update(deltaTimeMul);
         i.draw();
     }
     petalBackgrounds = petalBackgrounds.filter((e) => e.delete != true)
     background = requestAnimationFrame(drawBackground);
+
+    oldTime = newTime;
 }
 background = requestAnimationFrame(drawBackground);

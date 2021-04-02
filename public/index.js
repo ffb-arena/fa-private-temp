@@ -40,34 +40,10 @@ allPlayers = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 showPerformance = false;
 
+
 // Event Listeners
-document.addEventListener("keydown", (key) => {
-    ws.send(JSON.stringify(`ca${key.code}`));
-    if (key.code === "Semicolon") {
-        if (showPerformance) {
-            perf.hidden = true
-            showPerformance = false;
-            performance.ping = undefined;
-        } else {
-            perf.hidden = false;
-            showPerformance = true;
-            performing();
-        }
-    }
-});
-document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
 window.addEventListener("contextmenu", c => {
     c.preventDefault();
-});
-window.addEventListener("mousedown", click => {
-    if (click.button === 1) click.preventDefault();
-    ws.send(JSON.stringify(`ca${click.button}`));
-});
-window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
-document.addEventListener("mousemove", (pos) => {
-    if (title.hidden) ws.send(JSON.stringify(["c", "d", pos.x - window.innerWidth / 2, window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
-    me.info.mouseX = pos.x;
-    me.info.mouseY = pos.y;
 });
 
 window.addEventListener("resize", () => {
@@ -77,7 +53,7 @@ window.addEventListener("resize", () => {
     canvas.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
     ctx.textAlign = "center";
-    if (title.hidden) {
+    if (title.hidden) { // if in game
         drawMap();
         drawGrid();
         allPlayers.forEach((data, i) => renderPlayer(data, i));
@@ -94,6 +70,35 @@ window.addEventListener("resize", () => {
         drawMinimap();
     }
 });
+
+// event listeners only get added when ws opens
+function addEventListeners() {
+    document.addEventListener("keydown", (key) => {
+        ws.send(JSON.stringify(`ca${key.code}`));
+        if (key.code === "Semicolon") {
+            if (showPerformance) {
+                perf.hidden = true
+                showPerformance = false;
+                performance.ping = undefined;
+            } else {
+                perf.hidden = false;
+                showPerformance = true;
+                performing();
+            }
+        }
+    });
+    document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
+    window.addEventListener("mousedown", click => {
+        if (click.button === 1) click.preventDefault();
+        ws.send(JSON.stringify(`ca${click.button}`));
+    });
+    window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
+    document.addEventListener("mousemove", (pos) => {
+        if (title.hidden) ws.send(JSON.stringify(["c", "d", pos.x - window.innerWidth / 2, window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
+        me.info.mouseX = pos.x;
+        me.info.mouseY = pos.y;
+    });
+}
 
 let loop;
 function mainLoop() {

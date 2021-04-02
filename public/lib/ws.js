@@ -1,7 +1,9 @@
 const wsUrl = `ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`;
 const ws = new WebSocket(wsUrl === "ws://" ? "ws://localhost:9700" : wsUrl);
 ws.addEventListener("open", () => {
-    console.log("Websocket Sucessfully Opened")
+    console.log("Websocket Sucessfully Opened");
+    addEventListeners();
+    document.getElementById("loading").remove();
 });
 
 // When messages are recieved
