@@ -130,12 +130,11 @@ ws.onmessage = message => {
             break;
 
         // Ping
-        case "p":
-            if (msg === "pong") {
-                performance.ping = new Date().getTime() - performance.pingCalc;
-                perf.innerHTML = `${performance.ping} ms ping`;
-                if (showPerformance) window.setTimeout(performing, 300);
-            }
+        case "pong":
+            performance.ping.pings.push(Date.now() - msg[1]);
             break;
+
+        default:
+            console.log(`Unknown packet type: ${msg[0]}. Full packet is ${msg}`);
     }
 }

@@ -18,11 +18,6 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     return this;
 }
 
-function performing() {
-    ws.send(JSON.stringify("ping"));
-    performance.pingCalc = new Date().getTime();
-}
-
 function drawGrid() {
     ctx.strokeStyle = "#000000";
     ctx.globalAlpha = 0.15;
@@ -149,5 +144,24 @@ function renderPlayer(data, i) {
     } else {
         let p = new Player(data.name, calculateRelPos(data.x, "x"), calculateRelPos(data.y, "y"), gridSpace / 2 * res, data.petals);
         p.draw(true);
+    }
+}
+
+function drawPerformance() {
+    if (!performance.hidden) {
+        ctx.globalAlpha = 0.5;
+        ctx.font = `${15 * res}px Ubuntu`;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(
+            `Ping: ${Math.round(performance.ping.ping * 100) / 100} ms`, 
+            window.innerWidth * 29/30, 
+            window.innerHeight * 1/30
+        );
+        ctx.fillText(
+            `FPS: ${Math.round(performance.fps.fps * 100) / 100}`, 
+            window.innerWidth * 29/30, 
+            window.innerHeight * 1.8/30
+        );
+        ctx.globalAlpha = 1;
     }
 }

@@ -1,12 +1,22 @@
 // Constants
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const perf = document.getElementById("performance");
 
 const gridSpace = 50;
+const spaceBetweenPingUpdates = 1000; // ms
 const performance = {
-    pingCalc: undefined,
-    ping: undefined
+    ping: {
+        pings: [0],
+        ping: undefined,
+    },
+    lastChecked: Date.now() + spaceBetweenPingUpdates,
+    hidden: true,
+    fps: {
+        fpsArray: [],
+        fps: undefined,
+        oldTime: Date.now(),
+        newTime: undefined
+    }
 };
 
 canvas.width = window.innerWidth;
@@ -18,7 +28,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, showPerformance, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane;
 me = {
     roomInfo: {
         x: 0,
@@ -38,7 +48,6 @@ me = {
 };
 allPlayers = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
-showPerformance = false;
 
 
 // Event Listeners
@@ -76,15 +85,7 @@ function addEventListeners() {
     document.addEventListener("keydown", (key) => {
         ws.send(JSON.stringify(`ca${key.code}`));
         if (key.code === "Semicolon") {
-            if (showPerformance) {
-                perf.hidden = true
-                showPerformance = false;
-                performance.ping = undefined;
-            } else {
-                perf.hidden = false;
-                showPerformance = true;
-                performing();
-            }
+            performance.hidden = !performance.hidden;
         }
     });
     document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
@@ -102,8 +103,27 @@ function addEventListeners() {
 
 let loop;
 function mainLoop() {
+    performance.fps.newTime = Date.now();
+    performance.fps.fpsArray.push(1 / ((performance.fps.newTime - performance.fps.oldTime) / 1000));
+
     // Clearing canvas
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    // ping stuff
+    ws.send(JSON.stringify(["ping", Date.now()]));
+    if (performance.lastChecked < Date.now()) {
+        performance.lastChecked = Date.now() + spaceBetweenPingUpdates;
+
+        if (performance.ping.pings.length) {
+            performance.ping.ping = performance.ping.pings.reduce((a, b) => (a + b)) / performance.ping.pings.length;
+            performance.ping.pings = [];
+        } else {
+            performance.ping.ping = undefined;
+        }
+
+        performance.fps.fps = performance.fps.fpsArray.reduce((a, b) => (a + b)) / performance.fps.fpsArray.length;
+        performance.fps.fpsArray = [];
+    }
 
     drawMap();
     drawGrid();
@@ -113,5 +133,9 @@ function mainLoop() {
 
     drawHelper();
     drawMinimap();
+    drawPerformance();
+
+    performance.fps.oldTime = performance.fps.newTime;
+
     loop = requestAnimationFrame(mainLoop);
 }

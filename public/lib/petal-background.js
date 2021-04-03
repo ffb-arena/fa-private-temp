@@ -92,7 +92,6 @@ let newTime;
 function drawBackground(){
     newTime = Date.now();
     const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
-    console.log(deltaTimeMul);
     ctx2.clearRect(0, 0, window.innerWidth, window.innerHeight);
     petalSpawnCooldown --;
     while (petalSpawnCooldown < 0){

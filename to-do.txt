@@ -1,8 +1,3 @@
--client changes
-    -loading screen
-    -make ping check more frequently, add fps
-    -lerp client
-
 -health pt 2
     -petal stats
     -ramming
