@@ -12,15 +12,6 @@ const path = require("path");
 const fs = require("fs");
 const WebSocket = require("ws");
 
-// list of all client files that need to be combined
-const files = [ // (in public folder already)
-    ["index.js"],
-    ["lib", "ws.js"],
-    ["lib", "menu.js"],
-    ["lib", "petal-background.js"],
-    ["lib", "game", "rendering.js"],
-    ["lib", "game", "player.js"],
-];
 
 // minifying
 const minify = false;
@@ -28,7 +19,7 @@ const minify = false;
 if (minify) {
     console.log("Minifying code...");
     let jsFile = "{";
-    files.forEach(file => {
+    C.files.forEach(file => {
         const filePath = path.join(
             __dirname,
             "public",
@@ -88,7 +79,7 @@ const server = http.createServer((req, res) => {
                 if (minify) content = minifiedScript;
                 else {
                     let jsFile = "{";
-                    files.forEach(file => {
+                    C.files.forEach(file => {
                         const filePath = path.join(
                             __dirname,
                             "public",
