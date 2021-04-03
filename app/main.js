@@ -2,12 +2,37 @@ const { app, BrowserWindow } = require("electron");
 
 const fs = require("fs");
 const path = require("path");
-const C = require("../lib/consts.js");
+const files = require("../lib/files.js");
+
+
+function copyFolder(pathToFolder, outputPath) {
+    fs.mkdirSync(outputPath);
+    fs.readdirSync(pathToFolder).forEach(file => {
+        const filePath = path.join(
+            pathToFolder,
+            file
+        );
+        const pathToWrite = path.join(
+            outputPath,
+            file
+        );
+        let type = path.extname(filePath);
+        if (type) {
+            fs.writeFile(
+                pathToWrite, 
+                fs.readFileSync(filePath, "utf-8"),
+                err => { if (err) throw err; }
+            ); 
+        } else {
+            copyFolder(filePath, pathToWrite);
+        }
+    });
+}
 
 let jsFile = "{";
-C.files.forEach(file => {
+files.forEach(file => {
     const filePath = path.join(
-        process.cwd(),
+        __dirname,
         "..",
         "public",
         ...file
@@ -20,24 +45,20 @@ C.files.forEach(file => {
 });
 jsFile += "}";
 
-fs.writeFile(
-    "./src/test.html", 
-    fs.readFileSync("../public/stuff.html", "utf-8"),
-    err => { if (err) throw err; }
-); 
-fs.writeFile(
-    "./src/styles.css", 
-    fs.readFileSync("../public/styles.css", "utf-8"),
-    err => { if (err) throw err; }
-); 
+
+if (fs.existsSync("./src")) fs.rmdirSync("./src", { recursive: true });
+copyFolder(
+    path.join(__dirname, "..", "public"),
+    path.join(__dirname, "src")
+);
+fs.rmdirSync(path.join(__dirname, "src", "lib"), { recursive: true });
 fs.writeFile(
     "./src/index.js", 
     jsFile,
     err => { if (err) throw err; }
-); 
-fs.mkdirSync("./src/images");
+);
 
-
+// actual app stuff
 function createWindow() {
     let win = new BrowserWindow({
         icon: "../public/images/icons/favicon.png",
@@ -49,12 +70,12 @@ function createWindow() {
     // win.removeMenu();
     win.maximize();
 
-    win.loadFile("./src/test.html");
-    win.on('close', () => {  
-        fs.unlinkSync("./src/test.html");
-        fs.unlinkSync("./src/index.js");
-        fs.unlinkSync("./src/styles.css");
-        fs.rmdirSync("./src/images");
+    win.loadFile("./src/stuff.html");
+    win.on('close', () => {
+        fs.rmdirSync(path.join(
+            __dirname,
+            "src"
+        ), { recursive: true });
         win.destroy();
     });
 }

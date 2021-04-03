@@ -5,6 +5,7 @@
 // Constants
 const Room = require("./lib/room.js");
 const C = require("./lib/consts.js");
+const files = require("./lib/files.js");
 const ph = require("./lib/packet-handler.js");
 
 const http = require("http");
@@ -19,7 +20,7 @@ const minify = false;
 if (minify) {
     console.log("Minifying code...");
     let jsFile = "{";
-    C.files.forEach(file => {
+    files.forEach(file => {
         const filePath = path.join(
             __dirname,
             "public",
@@ -79,7 +80,7 @@ const server = http.createServer((req, res) => {
                 if (minify) content = minifiedScript;
                 else {
                     let jsFile = "{";
-                    C.files.forEach(file => {
+                    files.forEach(file => {
                         const filePath = path.join(
                             __dirname,
                             "public",
