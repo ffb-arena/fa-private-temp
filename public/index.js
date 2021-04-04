@@ -7,13 +7,13 @@ const spaceBetweenPingUpdates = 1000; // ms
 const performance = {
     ping: {
         pings: [0],
-        ping: undefined,
+        ping: [],
     },
     lastChecked: Date.now() + spaceBetweenPingUpdates,
     hidden: true,
     fps: {
         fpsArray: [],
-        fps: undefined,
+        fps: [],
         oldTime: Date.now(),
         newTime: undefined
     }
@@ -115,13 +115,17 @@ function mainLoop() {
         performance.lastChecked = Date.now() + spaceBetweenPingUpdates;
 
         if (performance.ping.pings.length) {
-            performance.ping.ping = performance.ping.pings.reduce((a, b) => (a + b)) / performance.ping.pings.length;
+            performance.ping.ping[0] = performance.ping.pings.reduce((a, b) => (a + b)) / performance.ping.pings.length;
+            performance.ping.ping[1] = Math.min(...performance.ping.pings);
+            performance.ping.ping[2] = Math.max(...performance.ping.pings);
             performance.ping.pings = [];
         } else {
             performance.ping.ping = undefined;
         }
 
-        performance.fps.fps = performance.fps.fpsArray.reduce((a, b) => (a + b)) / performance.fps.fpsArray.length;
+        performance.fps.fps[0] = performance.fps.fpsArray.reduce((a, b) => (a + b)) / performance.fps.fpsArray.length;
+        performance.fps.fps[1] = Math.min(...performance.fps.fpsArray);
+        performance.fps.fps[2] = Math.max(...performance.fps.fpsArray);
         performance.fps.fpsArray = [];
     }
 

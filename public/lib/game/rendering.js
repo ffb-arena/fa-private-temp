@@ -147,20 +147,30 @@ function renderPlayer(data, i) {
     }
 }
 
+function round(number, decimals) {
+    let mult = 10 * decimals;
+    return(Math.round(number * mult) / mult);
+}
+
 function drawPerformance() {
     if (!performance.hidden) {
-        ctx.globalAlpha = 0.5;
+        ctx.globalAlpha = 0.4;
         ctx.font = `${15 * res}px Ubuntu`;
         ctx.fillStyle = "#ffffff";
         ctx.fillText(
-            `Ping: ${Math.round(performance.ping.ping * 100) / 100} ms`, 
-            window.innerWidth * 29/30, 
+            "Min/Avg/max", 
+            window.innerWidth * 28.5/30, 
             window.innerHeight * 1/30
         );
         ctx.fillText(
-            `FPS: ${Math.round(performance.fps.fps * 100) / 100}`, 
-            window.innerWidth * 29/30, 
+            `Ping: ${round(performance.ping.ping[0], 2)}/${performance.ping.ping[1]}/${performance.ping.ping[2]}`, 
+            window.innerWidth * 28.5/30, 
             window.innerHeight * 1.8/30
+        );
+        ctx.fillText(
+            `FPS: ${round(performance.fps.fps[0], 1)}/${round(performance.fps.fps[1], 1)}/${round(performance.fps.fps[2], 1)}`, 
+            window.innerWidth * 28.5/30, 
+            window.innerHeight * 2.6/30
         );
         ctx.globalAlpha = 1;
     }
