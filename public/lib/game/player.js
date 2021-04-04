@@ -1,15 +1,40 @@
 class Player {
-    constructor(name, x, y, radius, petals) {
+    constructor(name, x, y, radius, petals, health, maxHealth) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.petals = petals;
+        this.health = health;
+        this.maxHealth = maxHealth;
     }
 
-    draw(isntMe) {
+    _drawHealthBar() {
+        const percent = this.health / this.maxHealth;
+        console.log(percent);
+        if (percent === 1) return;
 
-        // Petals
+        ctx.fillStyle = "#000000";
+        const width = 65 * res;
+        const height = 8 * res;
+        ctx.fillRect(
+            this.x - width / 2,
+            this.y + 40 * res,
+            width,
+            height
+        );
+
+        const border = 1.5 * res;
+        ctx.fillStyle = "#23d400";
+        ctx.fillRect(
+            this.x - (width / 2) + border,
+            this.y + (40 * res) + border,
+            (width - border * 2) * percent,
+            height - border * 2
+        );
+    }
+
+    _drawPetals() {
         this.petals.forEach(p => {
             ctx.beginPath();
             switch (p.id) {
@@ -34,7 +59,9 @@ class Player {
             }
             ctx.closePath()
         });
+    }
 
+    _drawFlower() {
         // Body
         ctx.fillStyle = "#beb951";
         ctx.beginPath();
@@ -62,14 +89,21 @@ class Player {
         ctx.beginPath();
         ctx.ellipse(this.x, this.y, 12 * res, 9 * res, 0.5 * Math.PI, 0.7, 2 * Math.PI - 0.7, true);
         ctx.stroke();
+    }
 
+    _drawName() {
         // Name
-        if (isntMe) {
-            ctx.lineWidth = 4 * res;
-            ctx.font = "18px Ubuntu"
-            ctx.strokeText(this.name, this.x, this.y - 35 * res);
-            ctx.fillStyle = "#ffffff";
-            ctx.fillText(this.name, this.x, this.y - 35 * res);
-        }
+        ctx.lineWidth = 4 * res;
+        ctx.font = "18px Ubuntu"
+        ctx.strokeText(this.name, this.x, this.y - 35 * res);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText(this.name, this.x, this.y - 35 * res);
+    }
+
+    draw() {
+        this._drawHealthBar();
+        this._drawPetals();
+        this._drawFlower();
+        this._drawName();
     }
 }

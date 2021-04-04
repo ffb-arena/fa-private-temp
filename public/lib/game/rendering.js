@@ -138,13 +138,20 @@ function drawMinimap() {
 }
 
 function renderPlayer(data, i) {
+    let p = new Player(
+        data.name, 
+        calculateRelPos(data.x, "x"), 
+        calculateRelPos(data.y, "y"), 
+        gridSpace / 2 * res, 
+        data.petals,
+        data.health,
+        data.maxHealth
+    );
     if (!i) {
-        let p = new Player(data.name, window.innerWidth / 2, window.innerHeight / 2, gridSpace / 2 * res, data.petals);
-        p.draw(false);
-    } else {
-        let p = new Player(data.name, calculateRelPos(data.x, "x"), calculateRelPos(data.y, "y"), gridSpace / 2 * res, data.petals);
-        p.draw(true);
+        p.x = window.innerWidth / 2;
+        p.y = window.innerHeight / 2;
     }
+    p.draw();
 }
 
 function round(number, decimals) {
