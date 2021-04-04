@@ -72,8 +72,10 @@ nname.addEventListener("keydown", (key) => {
     if (key.code === "Enter") {
 
         // You join game
-        cancelAnimationFrame(background); // from lib/peatl-background.js
+        cancelAnimationFrame(background); // from lib/petal-background.js
         requestAnimationFrame(mainLoop); // from index.js
+
+        canvas.hidden = false;
 
         document.getElementById("body").style.backgroundColor = "transparent";
         document.getElementById("title").hidden = true;
