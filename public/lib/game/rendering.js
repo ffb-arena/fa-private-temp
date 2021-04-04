@@ -158,7 +158,7 @@ function drawPerformance() {
         ctx.font = `${15 * res}px Ubuntu`;
         ctx.fillStyle = "#ffffff";
         ctx.fillText(
-            "Min/Avg/max", 
+            "Avg/Min/Max", 
             window.innerWidth * 28.5/30, 
             window.innerHeight * 1/30
         );
