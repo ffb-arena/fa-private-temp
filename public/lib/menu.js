@@ -81,7 +81,7 @@ nname.addEventListener("keydown", (key) => {
 
         // You join game
         cancelAnimationFrame(background); // from lib/petal-background.js
-        requestAnimationFrame(mainLoop); // from index.js
+        loop = requestAnimationFrame(mainLoop); // from index.js
 
         canvas.hidden = false;
         allPlayers = [];
@@ -149,6 +149,9 @@ helper.addEventListener("click", () => {
     me.settings.helper = !me.settings.helper;
 });
 
+
+
+// level selector stuff
 function setLevelText() {
     const level = levelInput.value;
     ctx.font = "1.5vw Ubuntu";
@@ -178,3 +181,33 @@ function setLevelText() {
 
 setLevelText();
 levelInput.addEventListener("change", setLevelText);
+
+
+
+
+
+// returning to menu stuff
+// returning to menu from death screen
+let onDeathScreen = false;
+function returnToMenu() {
+    background = requestAnimationFrame(drawBackground);
+    justUnpaused = true;
+    canvas.hidden = true;
+    document.getElementById("body").style.backgroundColor = "#1ea761";
+    document.getElementById("title").hidden = false;
+    document.getElementById("subtitle").hidden = false;
+    document.getElementById("noobs").hidden = false;
+    systemText.hidden = false;
+    nname.hidden = false;
+    roomID.hidden = false;
+
+    document.getElementById("Discord").hidden = false;
+    document.getElementById("Github").hidden = false;
+    document.getElementById("Florr").hidden = false;
+    changelog.hidden = false;
+    gallery.hidden = false;
+    make.hidden = false;
+    join.hidden = false;
+    document.getElementById("level").hidden = levelOn;
+    document.getElementById("level-btn").hidden = false;
+}

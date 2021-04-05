@@ -134,28 +134,7 @@ ws.onmessage = message => {
         // Death
         case "c":
             console.log("you died rip");
-            
-            canvas.hidden = true;
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            background = requestAnimationFrame(drawBackground);
-
-            document.getElementById("body").style.backgroundColor = "#1ea761";
-            document.getElementById("title").hidden = false;
-            document.getElementById("subtitle").hidden = false;
-            document.getElementById("noobs").hidden = false;
-            systemText.hidden = false;
-            nname.hidden = false;
-            roomID.hidden = false;
-
-            document.getElementById("Discord").hidden = false;
-            document.getElementById("Github").hidden = false;
-            document.getElementById("Florr").hidden = false;
-            changelog.hidden = false;
-            gallery.hidden = false;
-            make.hidden = false;
-            join.hidden = false;
-            document.getElementById("level").hidden = levelOn;
-            document.getElementById("level-btn").hidden = false;
+            onDeathScreen = true;
             break;
 
         // Ping

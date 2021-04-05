@@ -13,7 +13,7 @@ const gridSpace = 50;
 const spaceBetweenPingUpdates = 1000; // ms
 const performance = {
     ping: {
-        pings: [0],
+        pings: [],
         ping: [],
     },
     lastChecked: Date.now() + spaceBetweenPingUpdates,
@@ -89,10 +89,14 @@ window.addEventListener("resize", () => {
 
 // event listeners only get added when ws opens
 function addEventListeners() {
-    document.addEventListener("keydown", (key) => {
+    document.addEventListener("keydown", key => {
         ws.send(JSON.stringify(`ca${key.code}`));
         if (key.code === "Semicolon") {
             performance.hidden = !performance.hidden;
+        }
+        if (key.code === "Enter" && onDeathScreen) {
+            returnToMenu();
+            onDeathScreen = false;
         }
     });
     document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
@@ -126,8 +130,6 @@ function mainLoop() {
             performance.ping.ping[1] = Math.min(...performance.ping.pings);
             performance.ping.ping[2] = Math.max(...performance.ping.pings);
             performance.ping.pings = [];
-        } else {
-            performance.ping.ping = undefined;
         }
 
         performance.fps.fps[0] = performance.fps.fpsArray.reduce((a, b) => (a + b)) / performance.fps.fpsArray.length;
@@ -145,6 +147,27 @@ function mainLoop() {
     drawHelper();
     drawMinimap();
     drawPerformance();
+
+    if (onDeathScreen) {
+        ctx.globalAlpha = 0.5;
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        ctx.globalAlpha = 1;
+
+        ctx.lineWidth = 7 * res;
+        ctx.strokeStyle = "#000000";
+        ctx.font = "30px Ubuntu"
+        ctx.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+
+        ctx.lineWidth = 3 * res;
+        ctx.strokeStyle = "#000000";
+        ctx.font = "15px Ubuntu"
+        ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 6/10);
+        ctx.fillStyle = "#ffffff";
+        ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 6/10);
+    }
 
     performance.fps.oldTime = performance.fps.newTime;
 

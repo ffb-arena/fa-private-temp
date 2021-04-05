@@ -89,6 +89,7 @@ let background;
 let oldTime = Date.now();
 let newTime;
 
+let justUnpaused = false;
 function drawBackground(){
     newTime = Date.now();
     const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
@@ -99,9 +100,10 @@ function drawBackground(){
         petalBackgrounds.push(new PetalBackground());
     }
     for(let i of petalBackgrounds){
-        i.update(deltaTimeMul);
+        i.update(!!justUnpaused || deltaTimeMul);
         i.draw();
     }
+    if (justUnpaused) justUnpaused = false;
     petalBackgrounds = petalBackgrounds.filter((e) => e.delete != true)
     background = requestAnimationFrame(drawBackground);
 

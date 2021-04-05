@@ -1,5 +1,5 @@
 -health pt 2
-    -fix room and stuff ui
+    -fix background after dying
     -death screen
     -petal collisions
     -petal stats
@@ -11,6 +11,7 @@
     -wasd movement
     -scuffed still knockback (not consistent)
     -bug where collision where both are still
+    -collisions sometimes NaN positions
 
 -far future
     -tdm
