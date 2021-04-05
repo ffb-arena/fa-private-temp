@@ -7,7 +7,6 @@ function toggleFunc(element) {
     const x = document.getElementById(element);
     x.hidden = !x.hidden;
     if (element === "level") levelOn = !levelOn;
-    console.log(levelOn);
 }
 
 const gridSpace = 50;

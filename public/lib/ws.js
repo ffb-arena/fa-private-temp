@@ -31,6 +31,7 @@ ws.onmessage = message => {
 
                     join.hidden = false;
                     make.hidden = false;
+                    nname.hidden = false;
 
                     if (msg[2] === "a") {
                         let text = `current room: "${msgRoom === "" ? `${msgRoom} (community garden)` : msgRoom}"`;
@@ -73,6 +74,7 @@ ws.onmessage = message => {
                 case "b":
                     join.hidden = false;
                     make.hidden = false;
+                    nname.hidden = false;
                     if (msg[2] === "a") {
                         let text = `current room: ${msgRoom === "" ? `"${msgRoom}" (community garden)` : `"${msgRoom}"`}`;
                         ctx.font = "20px Ubuntu";
@@ -152,7 +154,7 @@ ws.onmessage = message => {
             gallery.hidden = false;
             make.hidden = false;
             join.hidden = false;
-            document.getElementById("level").hidden = !levelOn;
+            document.getElementById("level").hidden = levelOn;
             document.getElementById("level-btn").hidden = false;
             break;
 

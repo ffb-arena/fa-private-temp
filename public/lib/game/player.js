@@ -36,26 +36,7 @@ class Player {
     _drawPetals() {
         this.petals.forEach(p => {
             ctx.beginPath();
-            switch (p.id) {
-                case 1:
-                    ctx.fillStyle = "#afc3b6";
-                    ctx.arc(
-                        calculateRelPos(p.x, "x"),
-                        calculateRelPos(p.y, "y"),
-                        p.radius * res, 0, 2 * Math.PI
-                    );
-                    ctx.fill();
-                    ctx.closePath();
-    
-                    ctx.beginPath();
-                    ctx.fillStyle = "#ffffff";
-                    ctx.arc(
-                        calculateRelPos(p.x, "x"),
-                        calculateRelPos(p.y, "y"),
-                        (p.radius - 2) * res, 0, 2 * Math.PI
-                    );
-                    ctx.fill();
-            }
+            petals[p.id](p); // draws the petals
             ctx.closePath()
         });
     }

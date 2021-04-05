@@ -48,6 +48,7 @@ inputY.value = 20;
 make.addEventListener("click", () => {
     join.hidden = true;
     make.hidden = true;
+    nname.hidden = true;
     inputCreate.hidden = false;
     createSubmit.hidden = false;
     back.hidden = false;
@@ -66,6 +67,7 @@ createSubmit.addEventListener("click", () => {
 join.addEventListener("click", () => {
     join.hidden = true;
     make.hidden = true;
+    nname.hidden = true;
     inputJoin.hidden = false;
     joinSubmit.hidden = false;
     back.hidden = false;
@@ -126,6 +128,7 @@ back.addEventListener("click", () => {
 
     join.hidden = false;
     make.hidden = false;
+    nname.hidden = false;
 });
 
 keyboard.addEventListener("click", () => {
