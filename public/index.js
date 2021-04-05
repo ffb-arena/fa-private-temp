@@ -2,6 +2,14 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
+let levelOn = true;
+function toggleFunc(element) {
+    const x = document.getElementById(element);
+    x.hidden = !x.hidden;
+    if (element === "level") levelOn = !levelOn;
+    console.log(levelOn);
+}
+
 const gridSpace = 50;
 const spaceBetweenPingUpdates = 1000; // ms
 const performance = {

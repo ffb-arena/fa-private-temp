@@ -26,6 +26,12 @@ const changelogContainer = document.getElementById("changelog-container");
 const keyboard = document.getElementById("keyboard");
 const helper = document.getElementById("helper");
 
+const levelInput = document.getElementById("level-input");
+const levelText = document.getElementById("level-display");
+const health = document.getElementById("health");
+const bodyDamage = document.getElementById("body-damage");
+const petalNum = document.getElementById("petal-num");
+
 roomSettingsContainer.hidden = true;
 settingsContainer.hidden = true;
 changelogContainer.hidden = true;
@@ -76,6 +82,7 @@ nname.addEventListener("keydown", (key) => {
         requestAnimationFrame(mainLoop); // from index.js
 
         canvas.hidden = false;
+        allPlayers = [];
 
         document.getElementById("body").style.backgroundColor = "transparent";
         document.getElementById("title").hidden = true;
@@ -94,7 +101,9 @@ nname.addEventListener("keydown", (key) => {
         gallery.hidden = true;
         make.hidden = true;
         join.hidden = true;
-        ws.send(JSON.stringify(`b${nname.value}`));
+        document.getElementById("level").hidden = true;
+        document.getElementById("level-btn").hidden = true;
+        ws.send(JSON.stringify(["b", nname.value, levelInput.value]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
 });
@@ -136,3 +145,33 @@ helper.addEventListener("click", () => {
     }
     me.settings.helper = !me.settings.helper;
 });
+
+function setLevelText() {
+    const level = levelInput.value;
+    ctx.font = "1.5vw Ubuntu";
+
+    let text = `Level ${level}`;
+    let width = ctx.measureText(text).width;
+
+    levelText.innerHTML = text;
+    levelText.style.width = `${width}px`;
+
+    ctx.font = "1.1vw Ubuntu";
+    text = `# of petals: ${5 + Math.floor(level / 15)}`;
+    width = ctx.measureText(text).width + 1;
+    petalNum.innerHTML = text;
+    petalNum.style.width = `${width}px`;
+
+    text = `health: ${round(100 + (level - 1) * 50/44, 2)}`;
+    width = ctx.measureText(text).width + 1;
+    health.innerHTML = text;
+    health.style.width = `${width}px`;
+
+    text = `body damage: ${round(Math.max(0, Math.min(25, (level - 8) * 25/7)), 2)}`;
+    width = ctx.measureText(text).width + 1;
+    bodyDamage.innerHTML = text;
+    bodyDamage.style.width = `${width}px`;
+}
+
+setLevelText();
+levelInput.addEventListener("change", setLevelText);

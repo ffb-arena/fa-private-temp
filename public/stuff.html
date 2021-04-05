@@ -28,16 +28,10 @@
         
         <button id="settings-btn" class="florrfont noselect" onclick="toggleFunc('settings-container')">settings</button>
         <button id="changelog-btn" class="florrfont noselect" onclick="toggleFunc('changelog-container')">changelog</button>
+        <button id="level-btn" class="florrfont noselect" onclick="toggleFunc('level')">level</button>
         <button id="gallery-btn" class="florrfont noselect" onclick="galleryfunc()">gallery</button>
 
-        <script>
-            function toggleFunc(element) {
-                const x = document.getElementById(element);
-                x.style.display = x.style.display !== "block" ? "block" : "none";
-            }
-        </script>
-
-        <div id="start" >
+        <div id="start">
             <button class="florrfont noselect" id="join">join a room</button>
             <button class="florrfont noselect" id="make">create room</button>
         </div>
@@ -50,6 +44,15 @@
         <div id="joining">
             <input id="input-create" placeholder="room id" autocomplete="off" hidden="true">
             <button class="florrfont" id="create-submit" hidden="true">create room</button>
+        </div>
+
+        <div id="level" hidden="true">
+            <p id="level-display">Level 45</p>
+            <input id="level-input" type="range" min="1" max="45" value="45" orient="vertical">
+
+            <p id="health">health</p>
+            <p id="body-damage">body damage</p>
+            <p id="petal-num"># of petals</p>
         </div>
 
         <button class="florrfont" id="back" hidden="true">back</button>
@@ -70,10 +73,9 @@
         </div>
         <div id="noobs">
             <h2 class="florrfont centertext">How to Play: </h2>
-            <p class="florrfont centertext">use WASD or Mouse to Move </p>
-            <p class="florrfont centertext">Left Click or Space to Attack</p>
-            <p class="florrfont centertext">Right Click or Shift to Defend</p>
-
+            <p class="florrfont centertext">Use mouse cursor to move</p>
+            <p class="florrfont centertext">Left click or space to attack</p>
+            <p class="florrfont centertext">Right click or shift to defend</p>
         </div>
 
         <div id="changelog-container" class="changelog-scroll">

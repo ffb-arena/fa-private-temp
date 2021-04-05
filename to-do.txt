@@ -1,13 +1,16 @@
 -health pt 2
+    -fix room and stuff ui
+    -death screen
+    -petal collisions
     -petal stats
-    -ramming
-    -hp bar
-    -death
-    -level
 
 -mechanics to fix 
+    -random disconnects
     -petal lag is elliptical???
     -petal lag in general
     -wasd movement
     -scuffed still knockback (not consistent)
     -bug where collision where both are still
+
+-far future
+    -tdm

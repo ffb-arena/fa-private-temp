@@ -196,12 +196,48 @@ input[type=number] {
     border: 5px solid #4981b1;
     border-radius: 6px;
     margin-bottom: 5px;
-    margin-left : 110px;
+    margin-left : 128px;
     position: fixed;
     bottom: 0;
     letter-spacing: -1px;
 }
 #changelog-btn:hover{
+    background-color: #77addd;
+}
+#settings-btn {
+    position: absolute;
+    cursor: pointer;
+    background-color: #5a9fdb;
+    width: 120px;
+    height: 37px;
+    font-size: 20px;
+    border: 5px solid #4981b1;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-left : 5px;
+    position: fixed;
+    bottom: 0;
+    letter-spacing: -1px;
+}
+#settings-btn:hover{
+    background-color: #77addd;
+}
+#level-btn {
+    position: absolute;
+    cursor: pointer;
+    background-color: #5a9fdb;
+    width: 120px;
+    height: 37px;
+    font-size: 20px;
+    border: 5px solid #4981b1;
+    border-radius: 6px;
+    margin-bottom: 5px;
+    margin-left: 251px;
+    position: fixed;
+    bottom: 0;
+    letter-spacing: -1px;
+}
+#level-btn:hover{
     background-color: #77addd;
 }
 
@@ -315,11 +351,12 @@ input[type=number] {
     height: 38px;
     font-size: 30px;
 
-    margin-left: 50%;
-    margin-right: 50%;
-    transform: translate(-50%, 0);
+    position: absolute;
 
-    margin-top: 43vh;
+    top: 50%;
+    left: 50%;
+    right: 50%;
+    transform: translate(-50%, -50%);
 
     border: 5px solid #000000;
     border-radius: 6px;
@@ -481,4 +518,66 @@ input[type=number] {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+
+#noobs {
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+
+/* Stuff for level selector div */
+#level {
+    width: 16vw;
+    height: 70vh;
+
+    top: 50%;
+    left: 20%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+
+    background-color: #5a9fdb;
+    border: 5px solid #4981b1;
+    border-radius: 3px;
+}
+#level-input {
+    /* Making it vertical (firefox version in html) */
+    -webkit-appearance: slider-vertical; /* Chrome */
+    writing-mode: bt-lr; /* IE */
+
+    height: 58vh;
+
+    position: fixed;
+    top: 55%;
+    left: 15%;
+    transform: translate(-50%, -50%);
+}
+#level-display {
+    font-size: 1.5vw;
+    width: 6vw;
+    color: #ffffff;
+    -webkit-text-stroke: 1px black;
+    position: fixed;
+    top: 6%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#health, #body-damage, #petal-num {
+    font-size: 1.1vw;
+    -webkit-text-stroke: 0.5px black;
+    color: #ffffff;
+    transform: translate(-50%, -50%);
+    position: fixed;
+    left: 60%;
+}
+#health {
+    top: 27%;
+}
+#body-damage {
+    top: 52%;
+}
+#petal-num {
+    top: 77%;
 }

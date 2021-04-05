@@ -152,6 +152,8 @@ ws.onmessage = message => {
             gallery.hidden = false;
             make.hidden = false;
             join.hidden = false;
+            document.getElementById("level").hidden = !levelOn;
+            document.getElementById("level-btn").hidden = false;
             break;
 
         // Ping
