@@ -94,9 +94,9 @@ function addEventListeners() {
         if (key.code === "Semicolon") {
             performance.hidden = !performance.hidden;
         }
-        if (key.code === "Enter" && onDeathScreen) {
+        if (key.code === "Enter" && deathScreen.length) {
             returnToMenu();
-            onDeathScreen = false;
+            deathScreen = [];
         }
     });
     document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
@@ -113,6 +113,7 @@ function addEventListeners() {
 }
 
 let loop;
+let deathScreen = [];
 function mainLoop() {
     performance.fps.newTime = Date.now();
     performance.fps.fpsArray.push(1 / ((performance.fps.newTime - performance.fps.oldTime) / 1000));
@@ -148,7 +149,7 @@ function mainLoop() {
     drawMinimap();
     drawPerformance();
 
-    if (onDeathScreen) {
+    if (deathScreen.length) {
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
@@ -156,17 +157,23 @@ function mainLoop() {
 
         ctx.lineWidth = 7 * res;
         ctx.strokeStyle = "#000000";
+        ctx.fillStyle = "#ffffff";
         ctx.font = "30px Ubuntu"
         ctx.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-        ctx.fillStyle = "#ffffff";
         ctx.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
 
         ctx.lineWidth = 3 * res;
         ctx.strokeStyle = "#000000";
         ctx.font = "15px Ubuntu"
-        ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 6/10);
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 6/10);
+        
+        ctx.strokeText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+        ctx.fillText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+
+        ctx.strokeText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+        ctx.fillText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+
+        ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
+        ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
     }
 
     performance.fps.oldTime = performance.fps.newTime;

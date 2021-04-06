@@ -188,7 +188,6 @@ levelInput.addEventListener("change", setLevelText);
 
 // returning to menu stuff
 // returning to menu from death screen
-let onDeathScreen = false;
 function returnToMenu() {
     background = requestAnimationFrame(drawBackground);
     justUnpaused = true;

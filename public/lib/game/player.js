@@ -10,7 +10,7 @@ class Player {
     }
 
     _drawHealthBar() {
-        const percent = this.health / this.maxHealth;
+        const percent = Math.max(this.health / this.maxHealth, 0);
         if (percent === 1) return;
 
         ctx.fillStyle = "#000000";

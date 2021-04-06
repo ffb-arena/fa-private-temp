@@ -100,7 +100,7 @@ function drawBackground(){
         petalBackgrounds.push(new PetalBackground());
     }
     for(let i of petalBackgrounds){
-        i.update(!!justUnpaused || deltaTimeMul);
+        i.update(!justUnpaused * deltaTimeMul);
         i.draw();
     }
     if (justUnpaused) justUnpaused = false;

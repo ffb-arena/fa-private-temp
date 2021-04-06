@@ -1,5 +1,4 @@
 -health pt 2
-    -death screen
     -petal collisions
     -petal stats
 

@@ -133,8 +133,8 @@ ws.onmessage = message => {
         
         // Death
         case "c":
-            console.log("you died rip");
-            onDeathScreen = true;
+            deathScreen[0] = msg[1];
+            deathScreen[1] = msg[2];
             break;
 
         // Ping
