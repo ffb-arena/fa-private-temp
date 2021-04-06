@@ -106,7 +106,17 @@ function addEventListeners() {
     });
     window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
     document.addEventListener("mousemove", (pos) => {
-        if (title.hidden) ws.send(JSON.stringify(["c", "d", pos.x - window.innerWidth / 2, window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
+        if (title.hidden) {
+            ws.send(JSON.stringify([
+                "c", 
+                "d", 
+                pos.x - window.innerWidth / 2, 
+                window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, 
+                res
+            ]));
+        } else {
+            setLevelText(); // from lib/menu.js
+        }
         me.info.mouseX = pos.x;
         me.info.mouseY = pos.y;
     });

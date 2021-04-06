@@ -178,10 +178,7 @@ function setLevelText() {
     bodyDamage.innerHTML = text;
     bodyDamage.style.width = `${width}px`;
 }
-
 setLevelText();
-levelInput.addEventListener("change", setLevelText);
-
 
 
 
