@@ -1,10 +1,10 @@
 -health pt 2
-    -fix background after dying
     -death screen
     -petal collisions
     -petal stats
 
 -mechanics to fix 
+    -infinite fps bug
     -random disconnects
     -petal lag is elliptical???
     -petal lag in general
