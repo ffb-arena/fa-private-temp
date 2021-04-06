@@ -6,7 +6,17 @@ let levelOn = true;
 function toggleFunc(element) {
     const x = document.getElementById(element);
     x.hidden = !x.hidden;
-    if (element === "level") levelOn = !levelOn;
+    switch (element) {
+        case "level":
+            levelOn = !levelOn;
+            break;
+        case "settings-container":
+            changelogContainer.hidden = true;
+            break;
+        case "changelog-container":
+            settingsContainer.hidden = true;
+            break;
+    }
 }
 
 const gridSpace = 50;
