@@ -10,7 +10,7 @@
     -wasd movement
     -scuffed still knockback (not consistent)
     -bug where collision where both are still
-    -collisions sometimes NaN positions (black hole of death)
+    -collisions sometimes NaN positions
 
 -far future
     -tdm
