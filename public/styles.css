@@ -576,3 +576,11 @@ input[type=number] {
 #petal-num {
     top: 77%;
 }
+
+#version {
+    color: #ffffff;
+    left: 50%;
+    position: absolute;
+    -webkit-text-stroke: 0.5px black;
+    transform: translate(-50%, 0);
+}
