@@ -137,9 +137,8 @@ wss.on('connection', function connection(ws) {
 
     // Messages being received from that socket
     ws.on('message', function incoming(message) {
-        const msg = JSON.parse(message);
         // ph = packet handler
-        [myRoom, myID, myName, bruh] = ph(msg, myRoom, myID, myName, rooms, bruh, ws);
+        [myRoom, myID, myName, bruh] = ph(message, myRoom, myID, myName, rooms, bruh, ws);
     });
 });
 
