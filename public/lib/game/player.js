@@ -74,7 +74,7 @@ class Player {
     _drawName() {
         // Name
         ctx.lineWidth = 4 * res;
-        ctx.font = "18px Ubuntu"
+        ctx.font = `${22.5 * res}px Ubuntu`;
         ctx.strokeText(this.name, this.x, this.y - 35 * res);
         ctx.fillStyle = "#ffffff";
         ctx.fillText(this.name, this.x, this.y - 35 * res);
