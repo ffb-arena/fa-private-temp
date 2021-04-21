@@ -45,7 +45,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug;
 me = {
     roomInfo: {
         x: 0,
@@ -60,10 +60,10 @@ me = {
     settings: {
         keyboard: false,
         helper: false
-    },
-    face: 0
+    }
 };
 allPlayers = [];
+debug = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 
 
@@ -168,7 +168,10 @@ function mainLoop() {
     drawHelper();
     drawMinimap();
     drawPerformance();
+    drawDebug();
 
+
+    // drawing death screen
     if (deathScreen.length) {
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = "#000000";

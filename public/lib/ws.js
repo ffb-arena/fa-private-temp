@@ -137,6 +137,11 @@ ws.onmessage = message => {
             deathScreen[1] = msg[2];
             break;
 
+        // debug info
+        case "z":
+            debug = msg[1];
+            break;
+
         // Ping
         case "pong":
             performance.ping.pings.push(Date.now() - msg[1]);

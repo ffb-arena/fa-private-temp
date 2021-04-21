@@ -14,6 +14,9 @@ const fs = require("fs");
 const WebSocket = require("ws");
 
 
+// debug mode - shows hitboxes and stuff on client
+const debug = true;
+
 // minifying
 const minify = false;
 
@@ -105,7 +108,7 @@ const server = http.createServer((req, res) => {
 // variables
 const wss = new WebSocket.Server({ server });
 const time = {};
-let rooms = new Map().set("", new Room(20, 20));
+let rooms = new Map().set("", new Room(20, 20, debug));
 
 // When a websocket connects
 wss.on('connection', function connection(ws) {

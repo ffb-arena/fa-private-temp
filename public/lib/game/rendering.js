@@ -3,6 +3,7 @@ function calculateRelPos(pos, axis) {
     if (axis === "x") return window.innerWidth / 2 + pos * res - me.info.x * res;
     return window.innerHeight / 2 - pos * res + me.info.y * res;
 }
+
 // ~~Stole~~ borrowed this from stackoverflow.
 // Thanks
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
@@ -181,4 +182,24 @@ function drawPerformance() {
         );
         ctx.globalAlpha = 1;
     }
+}
+
+// draws debug info
+function drawDebug() {
+    debug.forEach(debugInfo => {
+        switch (debugInfo[0]) {
+
+            // circles
+            case "a":
+                const centre = {
+                    x: calculateRelPos(debugInfo[1].x, "x"),
+                    y: calculateRelPos(debugInfo[1].y, "y")
+                }
+                ctx.strokeStyle = "#ff0000";
+                ctx.beginPath();
+                ctx.arc(centre.x, centre.y, debugInfo[2] * res, 0, 2 * Math.PI);
+                ctx.stroke();
+                break;
+        }
+    });
 }
