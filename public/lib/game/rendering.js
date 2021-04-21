@@ -186,6 +186,8 @@ function drawPerformance() {
 
 // draws debug info
 function drawDebug() {
+    ctx.lineWidth = res;
+    ctx.strokeStyle = "#ff0000";
     debug.forEach(debugInfo => {
         switch (debugInfo[0]) {
 
@@ -195,9 +197,16 @@ function drawDebug() {
                     x: calculateRelPos(debugInfo[1].x, "x"),
                     y: calculateRelPos(debugInfo[1].y, "y")
                 }
-                ctx.strokeStyle = "#ff0000";
                 ctx.beginPath();
                 ctx.arc(centre.x, centre.y, debugInfo[2] * res, 0, 2 * Math.PI);
+                ctx.stroke();
+                break;
+
+            // lines
+            case "b":
+                ctx.beginPath();
+                ctx.moveTo(debugInfo[1].x, debugInfo[1].y);
+                ctx.lineTo(debugInfo[2].x, debugInfo[2].y);
                 ctx.stroke();
                 break;
         }
