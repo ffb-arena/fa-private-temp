@@ -186,7 +186,7 @@ function drawPerformance() {
 
 // draws debug info
 function drawDebug() {
-    ctx.lineWidth = res;
+    ctx.lineWidth = res * 2;
     ctx.strokeStyle = "#ff0000";
     debug.forEach(debugInfo => {
         switch (debugInfo[0]) {
