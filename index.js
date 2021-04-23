@@ -3,10 +3,10 @@
     ENTER AT YOUR OWN RISK */
 
 // Constants
-const Room = require("./lib/room.js");
-const C = require("./lib/consts.js");
-const files = require("./lib/files.js");
-const ph = require("./lib/packet-handler.js");
+const Room = require("./src/room.js");
+const C = require("./src/consts.js");
+const files = require("./src/files.js");
+const ph = require("./src/packet-handler.js");
 
 const http = require("http");
 const path = require("path");
@@ -49,7 +49,7 @@ const server = http.createServer((req, res) => {
     let file = path.join(
         __dirname,
         "public",
-        req.url === "/" ? "stuff.html" 
+        req.url === "/" ? "index.html" 
             : req.url === "/credits" ? "credits.html" 
             : req.url === "/changelog" ? "changelog.html"
             : req.url

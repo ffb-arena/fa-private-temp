@@ -212,32 +212,44 @@ function handleCollision(p1, p2, mul, debug) {
     }
 
     // angles from p1/2 to the intersect points
-    const p1angle1 = Math.atan2(intersect1.x - p1.petalCentre.x, intersect1.y - p1.petalCentre.y);
-    const p1angle2 = Math.atan2(intersect2.x - p1.petalCentre.x, intersect2.y - p1.petalCentre.y);
-    const p2angle1 = Math.atan2(intersect1.x - p2.petalCentre.x, intersect1.y - p2.petalCentre.y);
-    const p2angle2 = Math.atan2(intersect2.x - p2.petalCentre.x, intersect2.y - p2.petalCentre.y);
+    const p1angle1 = Math.atan2(intersect1.x - p1.petalCentre.x, intersect1.y - p1.petalCentre.y) - C.petalCollisionPadding;
+    const p1angle2 = Math.atan2(intersect2.x - p1.petalCentre.x, intersect2.y - p1.petalCentre.y) + C.petalCollisionPadding;
+    let p2angle1 = Math.atan2(intersect1.x - p2.petalCentre.x, intersect1.y - p2.petalCentre.y) - Math.PI + C.petalCollisionPadding;
+    let p2angle2 = Math.atan2(intersect2.x - p2.petalCentre.x, intersect2.y - p2.petalCentre.y) - Math.PI - C.petalCollisionPadding;
+    p2angle1 += (2 * Math.PI * (p2angle1 < -Math.PI));
+    p2angle2 += (2 * Math.PI * (p2angle2 < -Math.PI));
+
+    // checking which petals fall within the intersection area
+    let p1Petals = [], p2Petals = [];
     p1.pubInfo.petals.forEach(petal => {
-        const degree = petal.degree;
+        const degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
         if (p1angle1 < degree && degree < p1angle2) {
-            const data = [
-                "a",
-                { x: petal.x, y: petal.y },
-                petal.radius
-            ];
-            p1.debug.push(data);
-            p2.debug.push(data);
+            p1Petals.push(petal);
+            if (debug) {
+                const data = [
+                    "a",
+                    { x: petal.x, y: petal.y },
+                    petal.radius
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+            }
         }
     });
     p2.pubInfo.petals.forEach(petal => {
-        const degree = petal.degree;
-        if (p2angle1 < degree && degree < p2angle2) {
-            const data = [
-                "a",
-                { x: petal.x, y: petal.y },
-                petal.radius
-            ];
-            p1.debug.push(data);
-            p2.debug.push(data);
+        let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI)) - Math.PI;
+        degree += (2 * Math.PI * (degree < -Math.PI));
+        if (p2angle1 > degree && degree > p2angle2) {
+            p2Petals.push(petal);
+            if (debug) {
+                const data = [
+                    "a",
+                    { x: petal.x, y: petal.y },
+                    petal.radius
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+            }
         }
     });
 }

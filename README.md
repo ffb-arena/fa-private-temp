@@ -17,27 +17,27 @@ Go to localhost:9700
 * To do list
 * Includes bugs and mechanics to fix
 
-### [lib](/lib)
+### [src](/src)
 
 * The meat of the server logic
 
-#### [lib/consts.js](/lib/consts.js)
+#### [src/consts.js](/src/consts.js)
 
 * All game constants, used in other files
 
-#### [lib/files.js](/lib/files.js)
+#### [src/files.js](/src/files.js)
 
 * List of public JavaScript files that need to be combined
 
-#### [lib/functions.js](/lib/functions.js)
+#### [src/functions.js](/src/functions.js)
 
 * All game functions, used in other files
 
-#### [lib/packet-handler.js](/lib/packet-handler.js)
+#### [src/packet-handler.js](/src/packet-handler.js)
 
 * The server WebSocket packet handler (recieving messages from client)
 
-#### [lib/room.js](/lib/room.js)
+#### [src/room.js](/src/room.js)
 
 * The server Room class
 * Contains player spawning
@@ -45,29 +45,29 @@ Go to localhost:9700
 * Contains collision detection
 * Contains sending data of viewable players to players
 
-#### [lib/player](/lib/player)
+#### [src/player](/src/player)
 
 * All server files associated with the player
 
-##### [lib/player/flower.js](/lib/player/flower.js)
+##### [src/player/flower.js](/src/player/flower.js)
 
 * The server Player class
 * Handles movement, petal rotation, and petal lag
 
-##### [lib/player/petal.js](/lib/player/petal.js)
+##### [src/player/petal.js](/src/player/petal.js)
 
 * The server Petal class
 * Handles updating petals
 
-##### [lib/player/petal-stats.js](/lib/player/petal-stats.js)
+##### [src/player/petal-stats.js](/src/player/petal-stats.js)
 
 * All petal statistics
 
-##### [lib/player/collisions.js](/lib/player/collisions.js)
+##### [src/player/collisions.js](/src/player/collisions.js)
 
 * Player-player collision handling
 
-##### [lib/player/acc-offset.js](/lib/player/acc-offset.js)
+##### [src/player/acc-offset.js](/src/player/acc-offset.js)
 
 * The server AccOffset class
 * Applies acceleration offsets to players
@@ -77,7 +77,7 @@ Go to localhost:9700
 
 * All public files
 
-### [public/stuff.html](/public/stuff.html)
+### [public/index.html](/public/index.html)
 
 * The main game client HTML file
 
@@ -99,37 +99,37 @@ Go to localhost:9700
 * Sets all input event listeners
 * Has the main loop
 
-### [public/lib](/public/lib)
+### [public/src](/public/src)
 
 * The other client files
 * All combined on the server
 
-#### [public/lib/menu.js](/public/lib/menu.js)
+#### [public/src/menu.js](/public/src/menu.js)
 
 * Event listeners and logic for the main menu
 
-#### [public/lib/petal-background.js](/public/lib/petal-background.js)
+#### [public/src/petal-background.js](/public/src/petal-background.js)
 
 * Code for the floating background on the main menu
 
-#### [public/lib/ws.js](/public/lib/ws.js)
+#### [public/src/ws.js](/public/src/ws.js)
 
 * Initializes client WebSocket and handles messages
 * Controls a loading screen until the WebSocket opens
 
-#### [public/lib/game](/public/lib/game)
+#### [public/src/game](/public/src/game)
 
 * Folder for everything to do with the client game itself
 
-##### [public/lib/game/rendering.js](/public/lib/game/rendering.js)
+##### [public/src/game/rendering.js](/public/src/game/rendering.js)
 
 * All actual rendering functions called in the main loop
 
-##### [public/lib/game/player.js](/public/lib/game/player.js)
+##### [public/src/game/player.js](/public/src/game/player.js)
 
 * Client Player class
 * Also instructions for drawing player
 
-##### [public/lib/game/petals.js](/public/lib/game/petals.js)
+##### [public/src/game/petals.js](/public/src/game/petals.js)
 
 * Const object with functions to render each petal

@@ -1,5 +1,5 @@
 // instructions to render each petal
-// the param p is the petal, from the Petal class (lib/player/petal.js relative to dir root)
+// the param p is the petal, from the Petal class (src/player/petal.js relative to dir root)
 const petals = {
 
     // basic

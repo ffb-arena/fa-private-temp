@@ -125,7 +125,7 @@ function addEventListeners() {
                 res
             ]));
         } else {
-            setLevelText(); // from lib/menu.js
+            setLevelText(); // from src/menu.js
         }
         me.info.mouseX = pos.x;
         me.info.mouseY = pos.y;

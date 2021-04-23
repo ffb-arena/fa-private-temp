@@ -2,7 +2,7 @@ const { app, BrowserWindow } = require("electron");
 
 const fs = require("fs");
 const path = require("path");
-const files = require("../lib/files.js");
+const files = require("../src/files.js");
 
 
 function copyFolder(pathToFolder, outputPath) {
@@ -51,7 +51,7 @@ copyFolder(
     path.join(__dirname, "..", "public"),
     path.join(__dirname, "src")
 );
-fs.rmdirSync(path.join(__dirname, "src", "lib"), { recursive: true });
+fs.rmdirSync(path.join(__dirname, "src", "src"), { recursive: true });
 fs.writeFile(
     "./src/index.js", 
     jsFile,
@@ -70,7 +70,7 @@ function createWindow() {
     // win.removeMenu();
     win.maximize();
 
-    win.loadFile("./src/stuff.html");
+    win.loadFile("./src/index.html");
     win.on('close', () => {
         fs.rmdirSync(path.join(
             __dirname,

@@ -43,6 +43,7 @@ const limit = {
 
 // extra paddding to make sure we detect all collisions
 const collisionPadding = 20;
+const petalCollisionPadding = 0.5;
 
 module.exports = {
     names,
@@ -51,5 +52,5 @@ module.exports = {
     friction, acc, knockbackMult,
     wasdSmooth, petalLag, petalSmooth,
     limit,
-    collisionPadding
+    collisionPadding, petalCollisionPadding
 };
