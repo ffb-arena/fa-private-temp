@@ -133,7 +133,7 @@ class Room {
             let sievedPetals = [];
             myPetals.forEach(p => {
                 if (p.hp <= 0) return;
-                sievedPetals.push(p);
+                sievedPetals.push(p.pubInfo);
             });
             let me = {};
             for (const prop in player.pubInfo) {
@@ -164,7 +164,7 @@ class Room {
                     let sievedPetals = [];
                     petals.forEach(p => {
                         if (p.hp <= 0) return;
-                        sievedPetals.push(p);
+                        sievedPetals.push(p.pubInfo);
                     });
                     let playerToSend = {};
                     for (const prop in player2.pubInfo) {

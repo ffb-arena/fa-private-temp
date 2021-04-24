@@ -159,8 +159,8 @@ function handleCollision(p1, p2, mul, debug) {
             if (debug) {
                 const data = [
                     "a",
-                    { x: petal.x, y: petal.y },
-                    petal.radius
+                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                    petal.pubInfo.radius
                 ];
                 p1.debug.push(data);
                 p2.debug.push(data);
@@ -172,8 +172,8 @@ function handleCollision(p1, p2, mul, debug) {
             if (debug) {
                 const data = [
                     "a",
-                    { x: petal.x, y: petal.y },
-                    petal.radius
+                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                    petal.pubInfo.radius
                 ];
                 p1.debug.push(data);
                 p2.debug.push(data);
@@ -262,8 +262,8 @@ function handleCollision(p1, p2, mul, debug) {
                 if (debug) {
                     const data = [
                         "a",
-                        { x: petal.x, y: petal.y },
-                        petal.radius
+                        { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                        petal.pubInfo.radius
                     ];
                     p1.debug.push(data);
                     p2.debug.push(data);
@@ -277,8 +277,8 @@ function handleCollision(p1, p2, mul, debug) {
                     if (debug) {
                         const data = [
                             "a",
-                            { x: petal.x, y: petal.y },
-                            petal.radius
+                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                            petal.pubInfo.radius
                         ];
                         p1.debug.push(data);
                         p2.debug.push(data);
@@ -296,8 +296,8 @@ function handleCollision(p1, p2, mul, debug) {
                 if (debug) {
                     const data = [
                         "a",
-                        { x: petal.x, y: petal.y },
-                        petal.radius
+                        { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                        petal.pubInfo.radius
                     ];
                     p1.debug.push(data);
                     p2.debug.push(data);
@@ -311,8 +311,8 @@ function handleCollision(p1, p2, mul, debug) {
                     if (debug) {
                         const data = [
                             "a",
-                            { x: petal.x, y: petal.y },
-                            petal.radius
+                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                            petal.pubInfo.radius
                         ];
                         p1.debug.push(data);
                         p2.debug.push(data);
@@ -326,9 +326,9 @@ function handleCollision(p1, p2, mul, debug) {
             p2Petals.forEach(petal2 => {
                 // if the petals collide
                 if (
-                    Math.pow(petal.x - petal2.x, 2) + Math.pow(petal.y - petal2.y, 2)
+                    Math.pow(petal.pubInfo.x - petal2.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - petal2.pubInfo.y, 2)
                     <
-                    Math.pow(petal.radius + petal2.radius, 2)
+                    Math.pow(petal.pubInfo.radius + petal2.pubInfo.radius, 2)
                 ) {
                     petal.hp -= petal2.damage;
                     petal2.hp -= petal.damage;
@@ -340,15 +340,15 @@ function handleCollision(p1, p2, mul, debug) {
                     if (debug) {
                         let data = [
                             "c",
-                            { x: petal.x, y: petal.y },
-                            petal.radius
+                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                            petal.pubInfo.radius
                         ];
                         p1.debug.push(data);
                         p2.debug.push(data);
                         data = [
                             "c",
-                            { x: petal2.x, y: petal2.y },
-                            petal2.radius
+                            { x: petal2.pubInfo.x, y: petal2.pubInfo.y },
+                            petal2.pubInfo.radius
                         ];
                         p1.debug.push(data);
                         p2.debug.push(data);

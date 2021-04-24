@@ -3,14 +3,18 @@ const petalStats = require("./petal-stats.js");
 
 class Petal {
     constructor(id, degree, coordR, centre) {
-        this.id = id;
-        this.degree = degree;
-        this.x = centre.x + Math.sin(degree) * coordR;
-        this.y = centre.y + Math.cos(degree) * coordR;
-        this.change = 2.5 / (1000 / C.frame);
+        const stats = petalStats[id];
 
-        const stats = petalStats[this.id];
-        this.radius = stats.radius;
+        this.pubInfo = {
+            id: id,
+            y: centre.x + Math.sin(degree) * coordR,
+            y: centre.y + Math.cos(degree) * coordR,
+            radius: stats.radius
+        }
+
+
+        this.change = 2.5 / (1000 / C.frame);
+        this.degree = degree;
         this.cooldown = stats.cooldown;
         this.damage = stats.damage;
         this.maxHP = stats.hp;
@@ -21,16 +25,16 @@ class Petal {
 
     update(centre, degree, distance) {
         this.degree = degree;
-        this.x = centre.x + Math.sin(degree) * distance;
-        this.y = centre.y + Math.cos(degree) * distance;
+        this.pubInfo.x = centre.x + Math.sin(degree) * distance;
+        this.pubInfo.y = centre.y + Math.cos(degree) * distance;
         
         // if petal is dead
         if (this.hp <= 0 && !this.cooldownTimer) {
             this.hp = 0;
             this.cooldownTimer = Date.now() + this.cooldown;
-        } else if (this.cooldownTimer < Date.now()) {
+        } else if (this.cooldownTimer && this.cooldownTimer < Date.now()) {
             // cooldown is up
-            this.coooldownTimer = 0;
+            this.cooldownTimer = 0;
             this.hp = this.maxHP;
         }
 

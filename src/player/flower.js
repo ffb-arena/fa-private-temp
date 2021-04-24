@@ -305,6 +305,8 @@ class Flower {
                 nextPetalDegree, 
                 this.petalDist
             );
+            // console.log(petal.hp)
+            // console.log("-");
         });
     }
 }
