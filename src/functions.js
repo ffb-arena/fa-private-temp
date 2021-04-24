@@ -98,15 +98,6 @@ function clamp(num, min, max) {
 }
 
 /**
- * Returns 1 if positive, -1 if negative, otherwise 0.
- * @param {number} n The number.
- */
-function whichOne(n) {
-    if (!n) return 0;
-    return ((n > 0) * 1) || -1;
-}
-
-/**
  * Finds centre point of the line that passes through the overlap points of 2 circles.
  * @param {Object} cir1 First circle.
  * @param {Object} cir2 Second circle.
@@ -124,5 +115,5 @@ module.exports = {
     getID, 
     dot, normalize, addVS, addV, 
     pythag, pythagLeg,
-    clamp, whichOne, centreLine2Circles
+    clamp, centreLine2Circles
 };

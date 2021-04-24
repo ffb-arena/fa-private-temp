@@ -9,14 +9,14 @@ class AccOffset {
     update(mul) {
         if (this.x) {
             const oldAccelX = this.x;
-            this.x -= C.wasdSmooth * mul * F.whichOne(oldAccelX);
+            this.x -= C.wasdSmooth * mul * Math.sign(oldAccelX);
             if (oldAccelX && ((oldAccelX <= 0) !== (this.x <= 0))) {
                 this.x = 0;
             }
         }
         if (this.y) {
             const oldAccelY = this.y;
-            this.y -= C.wasdSmooth * mul * F.whichOne(oldAccelY);
+            this.y -= C.wasdSmooth * mul * Math.sign(oldAccelY);
             if (oldAccelY && ((oldAccelY <= 0) !== (this.y <= 0))) {
                 this.y = 0;
             }

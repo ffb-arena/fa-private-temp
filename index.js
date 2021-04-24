@@ -17,7 +17,7 @@ const WebSocket = require("ws");
 
 
 // debug mode - shows hitboxes and stuff on client
-const debug = false;
+const debug = true;
 
 // minifying
 const minify = false;

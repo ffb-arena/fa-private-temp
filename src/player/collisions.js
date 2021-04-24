@@ -38,8 +38,8 @@ function handleStillCollision(p1, p2, notMoving, divide) {
 
     // making minimum amount of knockback and applying knockback
     let posOrNeg = {
-        x: F.whichOne(cV.x),
-        y: F.whichOne(cV.y)
+        x: Math.sign(cV.x),
+        y: Math.sign(cV.y)
     }
     let knockback = {
         x: cV.x * posOrNeg.x * C.knockbackMult,

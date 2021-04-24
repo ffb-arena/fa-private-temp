@@ -213,7 +213,7 @@ class Flower {
                 }
             } else if (this.movement.acc.x) {
                 const oldAccel = this.movement.acc.x;
-                this.movement.acc.x -= C.wasdSmooth * mul * F.whichOne(oldAccel);
+                this.movement.acc.x -= C.wasdSmooth * mul * Math.sign(oldAccel);
                 if (oldAccel && ((oldAccel <= 0) !== (this.movement.acc.x <= 0))) {
                     this.movement.acc.x = 0;
                 }
@@ -234,7 +234,7 @@ class Flower {
                 }
             } else if (this.movement.acc.y) {
                 const oldAccel = this.movement.acc.y;
-                this.movement.acc.y -= C.wasdSmooth * mul * F.whichOne(oldAccel);
+                this.movement.acc.y -= C.wasdSmooth * mul * Math.sign(oldAccel);
                 if (oldAccel && ((oldAccel <= 0) !== (this.movement.acc.y <= 0))) {
                     this.movement.acc.y = 0;
                 }

@@ -1,5 +1,4 @@
 -health pt 2
-    -petal-body knockback
     -petal stats
     -client petal ui
     -checks
