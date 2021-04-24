@@ -125,7 +125,22 @@ class Room {
         this.players.forEach((player, i) => {
             if (!player) return;
             let send = [];
-            send.push(this.players[i].pubInfo);
+
+            let myPetals = [];
+            player.pubInfo.petals.forEach(petal => {
+                myPetals.push(petal);
+            });
+            let sievedPetals = [];
+            myPetals.forEach(p => {
+                if (p.hp <= 0) return;
+                sievedPetals.push(p);
+            });
+            let me = {};
+            for (const prop in player.pubInfo) {
+                me[prop] = player.pubInfo[prop];
+            }
+            me.petals = sievedPetals;
+            send.push(me);
             if (this.debug) {
                 player.debug.push([
                     "a", 
@@ -133,6 +148,7 @@ class Room {
                     player.petalDist + C.collisionPadding
                 ]);
             }
+
             this.players.forEach((player2, n) => {
                 if (!player2 || n === i) return;
                 if (
@@ -144,7 +160,7 @@ class Room {
                     let petals = [];
                     player2.pubInfo.petals.forEach(petal => {
                         petals.push(petal);
-                    });;
+                    });
                     let sievedPetals = [];
                     petals.forEach(p => {
                         if (p.hp <= 0) return;

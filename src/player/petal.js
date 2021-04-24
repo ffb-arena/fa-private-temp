@@ -23,6 +23,7 @@ class Petal {
         this.degree = degree;
         this.x = centre.x + Math.sin(degree) * distance;
         this.y = centre.y + Math.cos(degree) * distance;
+        
         // if petal is dead
         if (this.hp <= 0 && !this.cooldownTimer) {
             this.hp = 0;
