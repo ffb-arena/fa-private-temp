@@ -149,81 +149,11 @@ function handleCollision(p1, p2, mul, debug) {
         handleBodyCollision(p1, p2, mul);
     }
 
-    if (dist.dist < Math.abs(p1.petalDist - p2.petalDist)) {
-        // somehow one player is completely contained in the other
-        console.log("bruh");
-        return;
-    }
-
-
-    // finding intersection points
-    // http://paulbourke.net/geometry/circlesphere/
-    const centrePoint = F.centreLine2Circles(
-        { x: p1.petalCentre.x, y: p1.petalCentre.y, radius: p1.petalDist + C.collisionPadding },
-        { x: p2.petalCentre.x, y: p2.petalCentre.y, radius: p2.petalDist + C.collisionPadding },
-        dist.dist
-    );
-    const vector = F.normalize({ // unit vector of collision
-        x: p1.petalCentre.x - p2.petalCentre.x,
-        y: p1.petalCentre.y - p2.petalCentre.y
-    });
-    const tangent = { // unit tangent of collision
-        x: vector.y,
-        y: -vector.x
-    };
-    const distToCentre = F.pythag(
-        p1.petalCentre.x - centrePoint.x,
-        p1.petalCentre.y - centrePoint.y
-    );
-
-    const distFromCentreToIntersection = F.pythagLeg(p1.petalDist + C.collisionPadding, distToCentre);
-    const intersect1 = {
-        x: centrePoint.x + distFromCentreToIntersection * tangent.x,
-        y: centrePoint.y + distFromCentreToIntersection * tangent.y
-    };
-    const intersect2 = {
-        x: centrePoint.x - distFromCentreToIntersection * tangent.x,
-        y: centrePoint.y - distFromCentreToIntersection * tangent.y
-    };
-
-    if (debug) {
-        let data = [
-            "a",
-            { x: p1.pubInfo.x, y: p1.pubInfo.y },
-            25
-        ];
-        p1.debug.push(data);
-        p2.debug.push(data);
-
-        data = [
-            "a",
-            { x: intersect1.x, y: intersect1.y },
-            6
-        ];
-        p1.debug.push(data);
-        p2.debug.push(data);
-        data = [
-            "a",
-            { x: intersect2.x, y: intersect2.y },
-            3
-        ];
-        p1.debug.push(data);
-        p2.debug.push(data);
-    }
-
-    // angles from p1/2 to the intersect points
-    const p1angle1 = Math.atan2(intersect1.x - p1.petalCentre.x, intersect1.y - p1.petalCentre.y) - C.petalCollisionPadding;
-    const p1angle2 = Math.atan2(intersect2.x - p1.petalCentre.x, intersect2.y - p1.petalCentre.y) + C.petalCollisionPadding;
-    let p2angle1 = Math.atan2(intersect1.x - p2.petalCentre.x, intersect1.y - p2.petalCentre.y) - Math.PI + C.petalCollisionPadding;
-    let p2angle2 = Math.atan2(intersect2.x - p2.petalCentre.x, intersect2.y - p2.petalCentre.y) - Math.PI - C.petalCollisionPadding;
-    p2angle1 += (2 * Math.PI * (p2angle1 < -Math.PI));
-    p2angle2 += (2 * Math.PI * (p2angle2 < -Math.PI));
-
-    // checking which petals fall within the intersection area
     let p1Petals = [], p2Petals = [];
-    p1.pubInfo.petals.forEach(petal => {
-        const degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
-        if (p1angle1 < degree && degree < p1angle2) {
+    if (dist.dist < Math.abs(p1.petalDist - p2.petalDist)) {
+        // bruh moment
+        // somehow one player is completely contained in the other
+        p1.pubInfo.petals.forEach(petal => {
             p1Petals.push(petal);
             if (debug) {
                 const data = [
@@ -234,12 +164,8 @@ function handleCollision(p1, p2, mul, debug) {
                 p1.debug.push(data);
                 p2.debug.push(data);
             }
-        }
-    });
-    p2.pubInfo.petals.forEach(petal => {
-        let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI)) - Math.PI;
-        degree += (2 * Math.PI * (degree < -Math.PI));
-        if (p2angle1 > degree && degree > p2angle2) {
+        });
+        p2.pubInfo.petals.forEach(petal => {
             p2Petals.push(petal);
             if (debug) {
                 const data = [
@@ -250,8 +176,147 @@ function handleCollision(p1, p2, mul, debug) {
                 p1.debug.push(data);
                 p2.debug.push(data);
             }
+        });
+        
+    } else {
+
+        // finding intersection points
+        // http://paulbourke.net/geometry/circlesphere/
+        const centrePoint = F.centreLine2Circles(
+            { x: p1.petalCentre.x, y: p1.petalCentre.y, radius: p1.petalDist + C.collisionPadding },
+            { x: p2.petalCentre.x, y: p2.petalCentre.y, radius: p2.petalDist + C.collisionPadding },
+            dist.dist
+        );
+        const vector = F.normalize({ // unit vector of collision
+            x: p1.petalCentre.x - p2.petalCentre.x,
+            y: p1.petalCentre.y - p2.petalCentre.y
+        });
+        const tangent = { // unit tangent of collision
+            x: vector.y,
+            y: -vector.x
+        };
+        const distToCentre = F.pythag(
+            p1.petalCentre.x - centrePoint.x,
+            p1.petalCentre.y - centrePoint.y
+        );
+
+        const distFromCentreToIntersection = F.pythagLeg(p1.petalDist + C.collisionPadding, distToCentre);
+        const intersect1 = {
+            x: centrePoint.x + distFromCentreToIntersection * tangent.x,
+            y: centrePoint.y + distFromCentreToIntersection * tangent.y
+        };
+        const intersect2 = {
+            x: centrePoint.x - distFromCentreToIntersection * tangent.x,
+            y: centrePoint.y - distFromCentreToIntersection * tangent.y
+        };
+
+        // if the circles are barely touching but not intersecting
+        if (Number.isNaN(intersect1)) return;
+
+        if (debug) {
+            let data = [
+                "a",
+                { x: p1.pubInfo.x, y: p1.pubInfo.y },
+                25
+            ];
+            p1.debug.push(data);
+            p2.debug.push(data);
+
+            data = [
+                "a",
+                { x: intersect1.x, y: intersect1.y },
+                6
+            ];
+            p1.debug.push(data);
+            p2.debug.push(data);
+            data = [
+                "a",
+                { x: intersect2.x, y: intersect2.y },
+                3
+            ];
+            p1.debug.push(data);
+            p2.debug.push(data);
         }
-    });
+
+        // angles from p1/2 to the intersect points
+        let p1angle1 = Math.atan2(intersect1.x - p1.petalCentre.x, intersect1.y - p1.petalCentre.y) - C.petalCollisionPadding;
+        let p1angle2 = Math.atan2(intersect2.x - p1.petalCentre.x, intersect2.y - p1.petalCentre.y) + C.petalCollisionPadding;
+        p1angle2 -= p1angle1;
+        p1angle2 = p1angle2 - (2 * Math.PI * (p1angle2 > 2 * Math.PI)) + (2 * Math.PI * (p1angle2 < 0));
+
+        let p2angle1 = Math.atan2(intersect2.x - p2.petalCentre.x, intersect2.y - p2.petalCentre.y) - C.petalCollisionPadding;
+        let p2angle2 = Math.atan2(intersect1.x - p2.petalCentre.x, intersect1.y - p2.petalCentre.y) + C.petalCollisionPadding;
+        p2angle2 -= p2angle1;
+        p2angle2 = p2angle2 - (2 * Math.PI * (p2angle2 > 2 * Math.PI)) + (2 * Math.PI * (p2angle2 < 0));
+
+        // checking which petals fall within the intersection area
+        p1.pubInfo.petals.forEach(petal => {
+
+            // if the other circle is over by at least half
+            // just push all petals
+            if (p1angle2 > Math.PI) {
+                p1Petals.push(petal);
+                if (debug) {
+                    const data = [
+                        "a",
+                        { x: petal.x, y: petal.y },
+                        petal.radius
+                    ];
+                    p1.debug.push(data);
+                    p2.debug.push(data);
+                }
+            } else {
+                let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
+                degree -= p1angle1;
+                degree = degree - (2 * Math.PI * (degree > 2 * Math.PI)) + (2 * Math.PI * (degree < 0));
+                if (degree < p1angle2) {
+                    p1Petals.push(petal);
+                    if (debug) {
+                        const data = [
+                            "a",
+                            { x: petal.x, y: petal.y },
+                            petal.radius
+                        ];
+                        p1.debug.push(data);
+                        p2.debug.push(data);
+                    }
+                }
+            }
+        });
+        p2.pubInfo.petals.forEach(petal => {
+
+            // if the other circle is over by at least half
+            // just push all petals
+            if (p2angle2 > Math.PI) {
+                p2Petals.push(petal);
+                if (debug) {
+                    const data = [
+                        "a",
+                        { x: petal.x, y: petal.y },
+                        petal.radius
+                    ];
+                    p1.debug.push(data);
+                    p2.debug.push(data);
+                }
+            } else {
+                let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
+                degree -= p2angle1;
+                degree = degree - (2 * Math.PI * (degree > 2 * Math.PI)) + (2 * Math.PI * (degree < 0));
+                if (degree < p2angle2) {
+                    p2Petals.push(petal);
+                    if (debug) {
+                        const data = [
+                            "a",
+                            { x: petal.x, y: petal.y },
+                            petal.radius
+                        ];
+                        p1.debug.push(data);
+                        p2.debug.push(data);
+                    }
+                }
+            }
+        });
+    }
 }
 
 module.exports = handleCollision;
