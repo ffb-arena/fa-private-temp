@@ -1,6 +1,8 @@
-/*  WARNING:
+/*  
+    WARNING:
     HORRIBLE MESSY CODE AHEAD
-    ENTER AT YOUR OWN RISK */
+    ENTER AT YOUR OWN RISK 
+*/
 
 // Constants
 const Room = require("./src/room.js");
@@ -15,7 +17,7 @@ const WebSocket = require("ws");
 
 
 // debug mode - shows hitboxes and stuff on client
-const debug = true;
+const debug = false;
 
 // minifying
 const minify = false;

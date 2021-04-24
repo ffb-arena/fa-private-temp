@@ -137,18 +137,9 @@ function handleBodyCollision(p1, p2, mul) {
     p2.pubInfo.health -= p1.bodyDamage;
 }
 
-function handleCollision(p1, p2, mul, debug) {
-    let dist = { // distance between the players
-        x: Math.abs(p1.pubInfo.x - p2.pubInfo.x),
-        y: Math.abs(p1.pubInfo.y - p2.pubInfo.y)
-    };
-    dist.dist = F.pythag(dist.x, dist.y);
 
-    // checking if the bodies collide
-    if (dist.dist <= 50) {  
-        handleBodyCollision(p1, p2, mul);
-    }
-
+// detecting and handling petal collisions
+function handlePetalCollisions(p1, p2, dist, debug) {
     let p1Petals = [], p2Petals = [];
     if (dist.dist < Math.abs(p1.petalDist - p2.petalDist)) {
         // bruh moment
@@ -357,6 +348,125 @@ function handleCollision(p1, p2, mul, debug) {
             });
         });
     }
+
+    return [p1Petals, p2Petals];
+}
+
+
+function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
+    p1Petals.forEach(petal => {
+        // if collision
+        if (
+            Math.pow(petal.pubInfo.x - p2.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - p2.pubInfo.y, 2)
+            <
+            Math.pow(petal.pubInfo.radius + 25, 2)
+        ) {
+            p2.pubInfo.health -= petal.damage;
+            petal.hp -= p2.bodyDamage;
+
+            petal.inv = Date.now() + C.petalInvincibility;
+
+            // vector from centre of player to the colliding petal
+            // collision is on this vector's tangent
+            const vector = F.normalize({
+                x: p1.pubInfo.x - petal.pubInfo.x,
+                y: p1.pubInfo.y - petal.pubInfo.y
+            });
+            const tangent = {
+                x: -vector.y,
+                y: vector.x
+            };
+            p2.movement.accOffsets.push(new AccOffset({
+                x: tangent.x * C.petalBodyKnockbackMult,
+                y: tangent.y * C.petalBodyKnockbackMult
+            }));
+
+            if (debug) {
+                let data = [
+                    "c",
+                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                    petal.pubInfo.radius
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+                data = [
+                    "c",
+                    { x: p2.pubInfo.x, y: p2.pubInfo.y },
+                    25
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+            }
+        }
+    });
+    p2Petals.forEach(petal => {
+        // if collision
+        if (
+            Math.pow(petal.pubInfo.x - p1.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - p1.pubInfo.y, 2)
+            <
+            Math.pow(petal.pubInfo.radius + 25, 2)
+        ) {
+            p1.pubInfo.health -= petal.damage;
+            petal.hp -= p1.bodyDamage;
+
+            petal.inv = Date.now() + C.petalInvincibility;
+
+            // vector from centre of player to the colliding petal
+            // collision is on this vector's tangent
+            const vector = F.normalize({
+                x: p2.pubInfo.x - petal.pubInfo.x,
+                y: p2.pubInfo.y - petal.pubInfo.y
+            });
+            const tangent = {
+                x: -vector.y,
+                y: vector.x
+            };
+            p1.movement.accOffsets.push(new AccOffset({
+                x: tangent.x * C.petalBodyKnockbackMult,
+                y: tangent.y * C.petalBodyKnockbackMult
+            }));
+
+            if (debug) {
+                let data = [
+                    "c",
+                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
+                    petal.pubInfo.radius
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+                data = [
+                    "c",
+                    { x: p1.pubInfo.x, y: p1.pubInfo.y },
+                    25
+                ];
+                p1.debug.push(data);
+                p2.debug.push(data);
+            }
+        }
+    });
+}
+
+
+function handleCollision(p1, p2, mul, debug) {
+
+    // distance between the players
+    let dist = {
+        x: Math.abs(p1.pubInfo.x - p2.pubInfo.x),
+        y: Math.abs(p1.pubInfo.y - p2.pubInfo.y)
+    };
+    dist.dist = F.pythag(dist.x, dist.y);
+
+    // checking if the bodies collide
+    if (dist.dist <= 50) {  
+        handleBodyCollision(p1, p2, mul);
+    }
+
+    let p1Petals, p2Petals;
+    // handling petal/petal collisions
+    [p1Petals, p2Petals] = handlePetalCollisions(p1, p2, dist, debug);
+
+    // handling petal/body collisions
+    handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug);
 }
 
 module.exports = handleCollision;

@@ -30,6 +30,7 @@ const defend = 38;
 const friction = 5;
 const acc = { flower: 2.5 };
 const knockbackMult = 2;
+const petalBodyKnockbackMult = 0.5;
 
 // smoothing stuff
 const wasdSmooth = 0.1;
@@ -52,7 +53,7 @@ module.exports = {
     names,
     frame, frameRate,
     normal, attack, defend,
-    friction, acc, knockbackMult,
+    friction, acc, knockbackMult, petalBodyKnockbackMult,
     wasdSmooth, petalLag, petalSmooth,
     limit,
     collisionPadding, petalCollisionPadding,
