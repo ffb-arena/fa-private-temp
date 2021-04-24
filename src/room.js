@@ -141,7 +141,21 @@ class Room {
                     &&
                     (Math.abs(player.pubInfo.y - player2.pubInfo.y) <= 540 + Math.max(player2.petalDist, 45))
                 ) {
-                    send.push(player2.pubInfo);
+                    let petals = [];
+                    player2.pubInfo.petals.forEach(petal => {
+                        petals.push(petal);
+                    });;
+                    let sievedPetals = [];
+                    petals.forEach(p => {
+                        if (p.hp <= 0) return;
+                        sievedPetals.push(p);
+                    });
+                    let playerToSend = {};
+                    for (const prop in player2.pubInfo) {
+                        playerToSend[prop] = player2.pubInfo[prop];
+                    }
+                    playerToSend.petals = sievedPetals;
+                    send.push(playerToSend);
                     if (this.debug) {
                         player.debug.push([
                             "a", 

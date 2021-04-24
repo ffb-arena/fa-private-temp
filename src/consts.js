@@ -45,6 +45,9 @@ const limit = {
 const collisionPadding = 20;
 const petalCollisionPadding = 0.5;
 
+// petal invincibility after being hit, in ms
+const petalInvincibility = 100;
+
 module.exports = {
     names,
     frame, frameRate,
@@ -52,5 +55,6 @@ module.exports = {
     friction, acc, knockbackMult,
     wasdSmooth, petalLag, petalSmooth,
     limit,
-    collisionPadding, petalCollisionPadding
+    collisionPadding, petalCollisionPadding,
+    petalInvincibility
 };

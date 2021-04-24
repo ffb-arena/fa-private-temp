@@ -154,6 +154,7 @@ function handleCollision(p1, p2, mul, debug) {
         // bruh moment
         // somehow one player is completely contained in the other
         p1.pubInfo.petals.forEach(petal => {
+            if (petal.hp === 0 || petal.inv) return;
             p1Petals.push(petal);
             if (debug) {
                 const data = [
@@ -166,6 +167,7 @@ function handleCollision(p1, p2, mul, debug) {
             }
         });
         p2.pubInfo.petals.forEach(petal => {
+            if (petal.hp === 0 || petal.inv) return;
             p2Petals.push(petal);
             if (debug) {
                 const data = [
@@ -251,6 +253,7 @@ function handleCollision(p1, p2, mul, debug) {
 
         // checking which petals fall within the intersection area
         p1.pubInfo.petals.forEach(petal => {
+            if (petal.hp === 0 || petal.inv) return;
 
             // if the other circle is over by at least half
             // just push all petals
@@ -284,6 +287,7 @@ function handleCollision(p1, p2, mul, debug) {
             }
         });
         p2.pubInfo.petals.forEach(petal => {
+            if (petal.hp === 0 || petal.inv) return;
 
             // if the other circle is over by at least half
             // just push all petals
@@ -315,6 +319,42 @@ function handleCollision(p1, p2, mul, debug) {
                     }
                 }
             }
+        });
+
+        // seeing which petals collide
+        p1Petals.forEach(petal => {
+            p2Petals.forEach(petal2 => {
+                // if the petals collide
+                if (
+                    Math.pow(petal.x - petal2.x, 2) + Math.pow(petal.y - petal2.y, 2)
+                    <
+                    Math.pow(petal.radius + petal2.radius, 2)
+                ) {
+                    petal.hp -= petal2.damage;
+                    petal2.hp -= petal.damage;
+
+                    const inv = Date.now() + C.petalInvincibility;
+                    petal.inv = inv;
+                    petal2.inv = inv;
+
+                    if (debug) {
+                        let data = [
+                            "c",
+                            { x: petal.x, y: petal.y },
+                            petal.radius
+                        ];
+                        p1.debug.push(data);
+                        p2.debug.push(data);
+                        data = [
+                            "c",
+                            { x: petal2.x, y: petal2.y },
+                            petal2.radius
+                        ];
+                        p1.debug.push(data);
+                        p2.debug.push(data);
+                    }
+                }
+            });
         });
     }
 }

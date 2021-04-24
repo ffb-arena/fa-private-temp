@@ -188,12 +188,14 @@ function drawPerformance() {
 function drawDebug() {
     ctx.lineWidth = res * 2;
     ctx.strokeStyle = "#ff0000";
+    ctx.fillStyle = "#ff0000";
+    let centre;
     debug.forEach(debugInfo => {
         switch (debugInfo[0]) {
 
             // circles
             case "a":
-                const centre = {
+                centre = {
                     x: calculateRelPos(debugInfo[1].x, "x"),
                     y: calculateRelPos(debugInfo[1].y, "y")
                 }
@@ -208,6 +210,17 @@ function drawDebug() {
                 ctx.moveTo(debugInfo[1].x, debugInfo[1].y);
                 ctx.lineTo(debugInfo[2].x, debugInfo[2].y);
                 ctx.stroke();
+                break;
+            
+            // solid circles
+            case "c":
+                centre = {
+                    x: calculateRelPos(debugInfo[1].x, "x"),
+                    y: calculateRelPos(debugInfo[1].y, "y")
+                }
+                ctx.beginPath();
+                ctx.arc(centre.x, centre.y, debugInfo[2] * res, 0, 2 * Math.PI);
+                ctx.fill();
                 break;
         }
     });
