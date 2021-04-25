@@ -1,6 +1,6 @@
 -health pt 2
     -petal stats
-    -client petal ui
+    -inventory
     -checks
 
 -mechanics to fix 
@@ -16,6 +16,7 @@
     -random 0, 0 debug info
     -petal death
     -faces
+    -player hurt animations
 
 -far future
     -tdm

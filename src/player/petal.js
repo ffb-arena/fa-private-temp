@@ -21,6 +21,8 @@ class Petal {
         this.hp = stats.hp;
         this.inv = 0; // invincibility
         this.cooldownTimer = 0;
+
+        this.deadInfo = {};
     }
 
     update(centre, degree, distance) {
@@ -32,6 +34,14 @@ class Petal {
         if (this.hp <= 0 && !this.cooldownTimer) {
             this.hp = 0;
             this.cooldownTimer = Date.now() + this.cooldown;
+
+            // for client death animations
+            this.deadInfo = {
+                x: this.pubInfo.x,
+                y: this.pubInfo.y,
+                id: this.pubInfo.id, 
+                radius: this.pubInfo.radius
+            }
         } else if (this.cooldownTimer && this.cooldownTimer < Date.now()) {
             // cooldown is up
             this.cooldownTimer = 0;

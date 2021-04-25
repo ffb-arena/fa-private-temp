@@ -45,7 +45,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetal;
 me = {
     roomInfo: {
         x: 0,
@@ -65,7 +65,7 @@ me = {
 allPlayers = [];
 debug = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
-
+deadPetals = [];
 
 // Event Listeners
 window.addEventListener("contextmenu", c => {
@@ -170,6 +170,15 @@ function mainLoop() {
     drawPerformance();
     drawDebug();
 
+    let deadDeadPetals = [];
+    deadPetals.forEach((deadPetal, i) => {
+        if (deadPetal.update()) {
+            deadDeadPetals.push(i);
+        }
+    });
+    deadDeadPetals.forEach((i, n) => {
+        deadPetals.splice(i - n, 1);
+    });
 
     // drawing death screen
     if (deathScreen.length) {

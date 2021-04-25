@@ -72,6 +72,9 @@ class Flower {
 
         this.startingTime = Date.now();
         this.debug = [];
+
+        this.deadPetals = [];
+        this.deadPetalsToSend = [];
     }
 
     keyDown(key) {
@@ -273,6 +276,8 @@ class Flower {
             this.pubInfo.y += this.movement.yToAdd;
         }
 
+        this.deadPetals = [];
+
         // Updating petal lag
         this.petalCentre.x += C.petalLag * (this.pubInfo.x - this.petalCentre.x);
         this.petalCentre.y += C.petalLag * (this.pubInfo.y - this.petalCentre.y);
@@ -291,7 +296,7 @@ class Flower {
                 ? this.petalDist = Math.min(this.petalDist + C.petalSmooth * mul)
                 : this.petalDist = Math.max(C.normal, this.petalDist - C.petalSmooth * mul);
         }
-
+        
         // Updating rotation of each petal
         this.pubInfo.petals.forEach(petal => {
             let change = petal.change * mul;
@@ -305,6 +310,10 @@ class Flower {
                 nextPetalDegree, 
                 this.petalDist
             );
+            if (petal.deadInfo.id) {
+                this.deadPetals.push(petal.deadInfo);
+                petal.deadInfo = {};
+            }
         });
     }
 }

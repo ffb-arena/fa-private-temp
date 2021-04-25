@@ -3,12 +3,13 @@
 const petals = {
 
     // basic
-    1: p => {
+    1: (p, r) => {
+        r = r || p.radius;
         ctx.fillStyle = "#afc3b6";
         ctx.arc(
             calculateRelPos(p.x, "x"),
             calculateRelPos(p.y, "y"),
-            p.radius * res, 0, 2 * Math.PI
+            r * res, 0, 2 * Math.PI
         );
         ctx.fill();
         ctx.closePath();
@@ -18,7 +19,7 @@ const petals = {
         ctx.arc(
             calculateRelPos(p.x, "x"),
             calculateRelPos(p.y, "y"),
-            (p.radius - 2) * res, 0, 2 * Math.PI
+            (r - 2) * res, 0, 2 * Math.PI
         );
         ctx.fill();
     }

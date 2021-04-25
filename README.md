@@ -133,3 +133,8 @@ Go to localhost:9700
 ##### [public/src/game/petals.js](/public/src/game/petals.js)
 
 * Const object with functions to render each petal
+
+##### [public/src/game/dead-petal.js](/public/src/game/dead-petal.js)
+
+* The DeadPetal class
+* Makes the little "popping" petal animations when they die

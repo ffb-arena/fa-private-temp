@@ -137,6 +137,18 @@ ws.onmessage = message => {
             deathScreen[1] = msg[2];
             break;
 
+        // dead petals
+        case "d":
+            msg[1].forEach(deadPetal => {
+                deadPetals.push(new DeadPetal(
+                    deadPetal.x, 
+                    deadPetal.y, 
+                    deadPetal.id, 
+                    deadPetal.radius
+                ));
+            });
+            break;
+
         // debug info
         case "z":
             debug = msg[1];

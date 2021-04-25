@@ -149,6 +149,11 @@ class Room {
                 ]);
             }
 
+            player.deadPetalsToSend = [];
+            player.deadPetals.forEach(deadPetal => {
+                player.deadPetalsToSend.push(deadPetal);
+            });
+
             this.players.forEach((player2, n) => {
                 if (!player2 || n === i) return;
                 if (
@@ -179,8 +184,13 @@ class Room {
                             player2.petalDist + 20
                         ]);
                     }
+
+                    player2.deadPetals.forEach(deadPetal => {
+                        player.deadPetalsToSend.push(deadPetal);
+                    });
                 }
             });
+            player.ws.send(JSON.stringify(["d", player.deadPetalsToSend]));
             player.ws.send(JSON.stringify(["b", send]));
             player.ws.send(JSON.stringify(["z", player.debug]));
             player.debug = [];
