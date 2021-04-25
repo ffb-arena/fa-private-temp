@@ -136,7 +136,7 @@ let loop;
 let deathScreen = [];
 function mainLoop() {
     performance.fps.newTime = Date.now();
-    performance.fps.fpsArray.push(1 / ((performance.fps.newTime - performance.fps.oldTime) / 1000));
+    performance.fps.fpsArray.push(1 / (((performance.fps.newTime - performance.fps.oldTime) / 1000) || 1));
 
     // Clearing canvas
     ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);

@@ -138,3 +138,5 @@ Go to localhost:9700
 
 * The DeadPetal class
 * Makes the little "popping" petal animations when they die
+
+If you've read down here and like this, you may also be interested in [viter](https://github.com/FeeshDev/viter)

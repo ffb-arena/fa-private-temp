@@ -4,7 +4,6 @@
     -checks
 
 -mechanics to fix 
-    -infinite fps bug
     -random disconnects
     -petal lag is elliptical???
     -petal lag in general
