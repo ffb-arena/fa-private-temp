@@ -135,6 +135,7 @@ ws.onmessage = message => {
         case "c":
             deathScreen[0] = msg[1];
             deathScreen[1] = msg[2];
+            stopText.hidden = true;
             break;
 
         // dead petals

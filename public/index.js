@@ -170,6 +170,7 @@ function mainLoop() {
     drawPerformance();
     drawDebug();
 
+    // drawing dead petals
     let deadDeadPetals = [];
     deadPetals.forEach((deadPetal, i) => {
         if (deadPetal.update()) {
@@ -181,7 +182,9 @@ function mainLoop() {
     });
 
     // drawing death screen
-    if (deathScreen.length) {
+    if (!deathScreen.length) {
+        drawInventory();
+    } else {
         ctx.globalAlpha = 0.5;
         ctx.fillStyle = "#000000";
         ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);

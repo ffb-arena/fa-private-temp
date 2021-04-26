@@ -1,7 +1,8 @@
 -health pt 2
-    -petal stats
+    -disabling movement
     -inventory
     -checks
+    -petal stats
 
 -mechanics to fix 
     -random disconnects

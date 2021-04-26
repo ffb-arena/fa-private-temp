@@ -184,6 +184,29 @@ function drawPerformance() {
     }
 }
 
+
+// draws inventory and stuff
+function drawInventory() {
+
+    // stop moving rectangle
+    const width = 240;
+    const height = 28;
+    ctx.fillStyle = "#000000";
+    ctx.globalAlpha = 0.4;
+    ctx.roundRect(
+        window.innerWidth / 2 - width / 2,
+        window.innerHeight - height,
+        width,
+        height + 20,
+        7
+    );
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // stop moving text
+    
+}
+
 // draws debug info
 function drawDebug() {
     ctx.lineWidth = res * 2;

@@ -32,6 +32,8 @@ const health = document.getElementById("health");
 const bodyDamage = document.getElementById("body-damage");
 const petalNum = document.getElementById("petal-num");
 
+const stopText = document.getElementById("stop");
+
 roomSettingsContainer.hidden = true;
 settingsContainer.hidden = true;
 changelogContainer.hidden = true;
@@ -40,6 +42,7 @@ inputX.hidden = true;
 inputY.hidden = true;
 by.hidden = true;
 units.hidden = true;
+stopText.hidden = true;
 
 inputX.value = 20;
 inputY.value = 20;
@@ -84,6 +87,7 @@ nname.addEventListener("keydown", (key) => {
         loop = requestAnimationFrame(mainLoop); // from index.js
 
         canvas.hidden = false;
+        stopText.hidden = false;
         allPlayers = [];
 
         document.getElementById("body").style.backgroundColor = "transparent";
