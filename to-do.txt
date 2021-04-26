@@ -16,6 +16,8 @@
     -petal death
     -faces
     -player hurt animations
+    -petal bouncing (also on spawn)
+    -yy opposite knockback
 
 -far future
     -tdm
