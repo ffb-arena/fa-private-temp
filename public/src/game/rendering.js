@@ -185,26 +185,28 @@ function drawPerformance() {
 }
 
 
+inventoryWidth = 240;
+inventoryHeight = 28
+
 // draws inventory and stuff
 function drawInventory() {
 
     // stop moving rectangle
-    const width = 240;
-    const height = 28;
     ctx.fillStyle = "#000000";
     ctx.globalAlpha = 0.4;
     ctx.roundRect(
-        window.innerWidth / 2 - width / 2,
-        window.innerHeight - height,
-        width,
-        height + 20,
+        window.innerWidth / 2 - inventoryWidth / 2,
+        window.innerHeight - inventoryHeight,
+        inventoryWidth,
+        inventoryHeight + 20,
         7
     );
     ctx.fill();
     ctx.globalAlpha = 1;
 
     // stop moving text
-    
+    // oh wait it's in html
+    // nvm
 }
 
 // draws debug info

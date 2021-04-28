@@ -63,7 +63,7 @@ function createWindow() {
     let win = new BrowserWindow({
         icon: "../public/images/icons/favicon.png",
         webPreferences: {
-            nodeIntegration: true
+            nodeIntegration: false
         }
     });
 

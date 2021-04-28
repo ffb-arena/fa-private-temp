@@ -115,15 +115,29 @@ function addEventListeners() {
         ws.send(JSON.stringify(`ca${click.button}`));
     });
     window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
-    document.addEventListener("mousemove", (pos) => {
+    document.addEventListener("mousemove", pos => {
         if (title.hidden) {
-            ws.send(JSON.stringify([
-                "c", 
-                "d", 
-                pos.x - window.innerWidth / 2, 
-                window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, 
-                res
-            ]));
+            if (
+                window.innerWidth / 2 - inventoryWidth / 2 < pos.x && pos.x < window.innerWidth / 2 + inventoryWidth / 2
+                &&
+                window.innerHeight - inventoryHeight < pos.y && pos.y < window.innerHeight
+            ) {
+                inventoryWidth = 508;
+                inventoryHeight = 160;
+                ws.send(JSON.stringify(["c", "d", 0, 0, res]));
+                stopText.innerHTML = "You can also use [Q] and [E] to modify the inventory";
+            } else {
+                inventoryWidth = 240;
+                inventoryHeight = 28;
+                stopText.innerHTML = "Move mouse here to disable movement";
+                ws.send(JSON.stringify([
+                    "c", 
+                    "d", 
+                    pos.x - window.innerWidth / 2, 
+                    window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, 
+                    res
+                ]));    
+            }
         } else {
             setLevelText(); // from src/menu.js
         }

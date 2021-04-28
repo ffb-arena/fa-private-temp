@@ -19,6 +19,7 @@
     -player hurt animations
     -petal bouncing (also on spawn)
     -yy opposite knockback
+    -on mouse stop, slide player (and dark box)
 
 -far future
     -tdm
