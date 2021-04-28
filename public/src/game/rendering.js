@@ -47,11 +47,36 @@ function drawGrid() {
 function drawMap() {
     ctx.fillStyle = "#1ea761";
     ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+
+    // drawing stuff outside map
     ctx.fillStyle = "#1b9657";
-    if (me.info.x < window.innerWidth / 2 / res) ctx.fillRect(0, 0, (window.innerWidth / 2 / res - me.info.x - 25) * res, window.innerHeight);
-    if (me.info.y < window.innerHeight / 2 / res) ctx.fillRect(0, window.innerHeight - ((window.innerHeight / 2 / res - me.info.y - 25) * res), window.innerWidth, (window.innerHeight / 2 / res - me.info.y - 25) * res);
-    if (me.info.x > me.roomInfo.x - window.innerWidth / 2 / res) ctx.fillRect(window.innerWidth - ((window.innerWidth / 2 / res - 25 - (me.roomInfo.x - me.info.x)) * res), 0, (window.innerWidth / 2 / res + 25 - (me.roomInfo.x - me.info.x)) * res, window.innerHeight)
-    if (me.info.y > me.roomInfo.y - window.innerHeight / 2 / res) ctx.fillRect(0, 0, window.innerWidth, (me.info.y - 25 - (me.roomInfo.y - window.innerHeight / 2 / res)) * res);
+    if (me.info.x < window.innerWidth / 2 / res) {
+	    ctx.fillRect(0, 0, (window.innerWidth / 2 / res - me.info.x - 25) * res, window.innerHeight);
+    }
+    if (me.info.y < window.innerHeight / 2 / res) {
+	    ctx.fillRect(
+		    0, 
+		    window.innerHeight - ((window.innerHeight / 2 / res - me.info.y - 25) * res), 
+		    window.innerWidth, 
+            (window.innerHeight / 2 / res - me.info.y - 25) * res
+	    );
+    }
+    if (me.info.x > me.roomInfo.x - window.innerWidth / 2 / res) {
+	    ctx.fillRect(
+		    window.innerWidth - ((window.innerWidth / 2 / res - 25 - (me.roomInfo.x - me.info.x)) * res), 
+		    0, 
+		    (window.innerWidth / 2 / res + 25 - (me.roomInfo.x - me.info.x)) * res, 
+            window.innerHeight
+	    )
+    }
+    if (me.info.y > me.roomInfo.y - window.innerHeight / 2 / res) {
+	    ctx.fillRect(
+		    0, 
+		    0, 
+		    window.innerWidth, 
+		    (me.info.y - 25 - (me.roomInfo.y - window.innerHeight / 2 / res)) * res
+	    );
+    }
 }
 
 function drawHelper() {

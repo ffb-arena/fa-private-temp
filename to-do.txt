@@ -20,6 +20,7 @@
     -petal bouncing (also on spawn)
     -yy opposite knockback
     -on mouse stop, slide player (and dark box)
+    -make petals on petal background turn clockwise
 
 -far future
     -tdm
