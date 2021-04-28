@@ -15,11 +15,30 @@ p {
 }
 
 /* Florr.io font */
+.text-center{
+    text-align: center;
+}
 .florrfont {
     -webkit-text-fill-color: white;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
     font-family: "Ubuntu";
+
+}
+.florrfont-big {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    font-family: "Ubuntu";
+    font-size: 17px;
+
+}
+.florrfont-small {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    font-family: "Ubuntu";
+    font-size: 15px;
 
 }
 .florrtitle {
@@ -83,6 +102,22 @@ body {
 }
 
 
+.list{
+    background-color: #5a9fdb;
+}
+.list ul, li{
+    list-style: none;
+    margin: 0px;
+    padding-left: 5px;
+    margin-bottom: 8px;
+}
+.space:empty{
+    background-color: #4981b1;
+    height: 5px;
+    margin-bottom: 8px;
+    width: 260px;
+    border-radius: 3px;
+}
 /* sub-title config */
 .centertext {
     text-align: center;
@@ -464,8 +499,8 @@ input[type=number] {
     background-color: #5a9fdb;
     border: 5px solid #4981b1;
     border-radius: 3px;
-    width: 175px;
-    height: 125px;
+    width: 280px;
+    height: 170px;
     overflow: auto;
     overflow-x: hidden;
     
