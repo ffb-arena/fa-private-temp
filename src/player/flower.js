@@ -179,6 +179,7 @@ class Flower {
             y: 0
         };
 
+
         // updating the speeds and accelerations
         if (!this.keyboard) {
 
@@ -195,6 +196,8 @@ class Flower {
             trueAcc.x *= this.movement.speed;
             trueAcc.y *= this.movement.speed;
         } else {
+
+            this.movement.speed = 1;
             // wasd movement
             const up = this.keys.upDown || this.keys.upArrow;
             const down = this.keys.downDown || this.keys.downArrow;

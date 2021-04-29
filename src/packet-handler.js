@@ -1,5 +1,4 @@
 const Room = require("./room.js");
-const F = require("./functions.js");
 
 function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
     let packet;

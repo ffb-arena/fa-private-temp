@@ -101,9 +101,17 @@ window.addEventListener("resize", () => {
 function addEventListeners() {
     document.addEventListener("keydown", key => {
         ws.send(JSON.stringify(`ca${key.code}`));
+        // stopping the tab selecting stuff
+        if (key.code === "Tab") {
+            key.preventDefault();
+        }
+
+        // showing/hiding performance stats
         if (key.code === "Semicolon") {
             performance.hidden = !performance.hidden;
         }
+
+        // if on death screen and enter is pressed
         if (key.code === "Enter" && deathScreen.length) {
             returnToMenu();
             deathScreen = [];
