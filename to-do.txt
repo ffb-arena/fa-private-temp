@@ -1,5 +1,4 @@
 -health pt 2
-    -disabling movement
     -inventory
     -checks
     -petal stats
@@ -19,7 +18,7 @@
     -player hurt animations
     -petal bouncing (also on spawn)
     -yy opposite knockback
-    -on mouse stop, slide player (and dark box)
+    -on mouse stop, don't stop player immediately
     -make petals on petal background turn clockwise
 
 -far future

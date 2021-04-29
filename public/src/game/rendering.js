@@ -210,12 +210,29 @@ function drawPerformance() {
 }
 
 
-inventoryWidth = 240;
-inventoryHeight = 28
+// inventory vars
+const minInventoryWidth = 240;
+const minInventoryHeight = 28
+// 508 and 160 are the maxes
+const maxInventoryWidthAdd = 508 - 240;
+const maxOnventoryHeightAdd = 160 - 28;
+let inventoryWidth = minInventoryWidth;
+let inventoryHeight = minInventoryHeight;
+let sizeMult = 0;
 
 // draws inventory and stuff
 function drawInventory() {
 
+    // changes the size
+    if (stopText.innerHTML[0] === "M") {
+        // player isn't stopped
+        sizeMult = Math.max(sizeMult - 0.1, 0);
+    } else {
+        // player is stopp
+        sizeMult = Math.min(sizeMult + 0.1, 1);
+    }
+    inventoryWidth = minInventoryWidth + (sizeMult * maxInventoryWidthAdd);
+    inventoryHeight = minInventoryHeight + (sizeMult * maxOnventoryHeightAdd);
     // stop moving rectangle
     ctx.fillStyle = "#000000";
     ctx.globalAlpha = 0.4;
