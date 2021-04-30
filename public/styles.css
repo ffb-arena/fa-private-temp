@@ -49,6 +49,7 @@ p {
     font-size: 100px;
     letter-spacing: -6px;
 }
+
 /* Changelog font settings */
 .changelog-text{
     margin: 0px;
@@ -62,8 +63,11 @@ p {
           -ms-user-select: none; /* Internet Explorer/Edge */
               user-select: none; /* Non-prefixed version, currently
                                     supported by Chrome, Edge, Opera and Firefox */
-  }
-/* Adds a pointer when overing the object */
+}
+
+#version-number {
+    margin-top: 8px;
+}
 
 /*--Scrollbar--*/
     /*--Firefox--*/
@@ -95,7 +99,8 @@ p {
     /*--Chrome--Edge--*/
 /*--Scrollbar--*/
 
-  .pointer{
+/* Adds a pointer when hovering over the object */
+.pointer {
     cursor: pointer;
 }
 
