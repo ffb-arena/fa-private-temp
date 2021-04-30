@@ -4,6 +4,7 @@
     -petal stats
 
 -mechanics to fix 
+    -lag when switching directions with mouse
     -random disconnects
     -petal lag is elliptical???
     -petal lag in general

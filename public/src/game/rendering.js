@@ -220,6 +220,9 @@ let inventoryWidth = minInventoryWidth;
 let inventoryHeight = minInventoryHeight;
 let sizeMult = 0;
 
+const outlineWidth = 40;
+const invWidth = 33;
+const spaceBetweenIcons = 16;
 // draws inventory and stuff
 function drawInventory() {
 
@@ -246,9 +249,36 @@ function drawInventory() {
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    // stop moving text
-    // oh wait it's in html
-    // nvm
+    // stop moving text is in html
+
+    // inventory boxes
+    ctx.globalAlpha = 0.5;
+    let x;
+    x = window.innerWidth / 2 - spaceBetweenIcons * 3.5 - invWidth * 4;
+    for (let i = 0; i < 8; i++) {
+        ctx.fillStyle = "#dedede";
+        ctx.roundRect(
+            x - (outlineWidth - invWidth) / 2, 
+            window.innerHeight - 40 - invWidth - (outlineWidth - invWidth) / 2, 
+            outlineWidth, 
+            outlineWidth, 
+            2
+        );
+        ctx.fill();
+    
+        ctx.fillStyle = "#ffffff";
+        ctx.roundRect(
+            x, 
+            window.innerHeight - 40  - invWidth, 
+            invWidth, 
+            invWidth, 
+            2
+        );
+        ctx.fill();
+
+        x += spaceBetweenIcons + invWidth;
+    }
+    ctx.globalAlpha = 1;
 }
 
 // draws debug info
