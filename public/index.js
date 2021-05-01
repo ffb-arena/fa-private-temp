@@ -16,6 +16,7 @@ function toggleFunc(element) {
         case "changelog-container":
             settingsContainer.hidden = true;
             break;
+    
     }
 }
 
