@@ -536,6 +536,7 @@ input[type=number] {
 }
 
 
+
 /*gallery*/
 #gallery-container {
     
@@ -594,7 +595,7 @@ input[type=number] {
 /* .centered_tab {
     float:none /*to make sure there is no active float*/
 
-.settings {
+#settings {
     letter-spacing: -1px;
     bottom: 18px;
     left: 38px;

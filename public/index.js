@@ -231,8 +231,6 @@ function mainLoop() {
         ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
     }
 
-    
-
     performance.fps.oldTime = performance.fps.newTime;
 
     loop = requestAnimationFrame(mainLoop);
