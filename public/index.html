@@ -102,6 +102,38 @@
                 </ul>
             </div>
         </div>
+
+        <div class="scrollbar centered" id="gallery-container">
+            <div class="tab">
+                <button class="tablinks florrfont" onclick="openGallery(event, 'Mobs')">Mobs</button>
+                <button class="tablinks florrfont" onclick="openGallery(event, 'Petals')">Petals</button>
+              </div>
+              
+              <div id="Mobs" class="tabcontent">
+                <h3 class="florrfont">Mobs</h3>
+              </div>
+              
+              <div id="Petals" class="tabcontent">
+                <h3 class="florrfont">Petals</h3>
+              </div>
+              
+              
+              <script>
+              function openGallery(evt, type) {
+                var i, tabcontent, tablinks;
+                tabcontent = document.getElementsByClassName("tabcontent");
+                for (i = 0; i < tabcontent.length; i++) {
+                  tabcontent[i].style.display = "none";
+                }
+                tablinks = document.getElementsByClassName("tablinks");
+                for (i = 0; i < tablinks.length; i++) {
+                  tablinks[i].className = tablinks[i].className.replace(" active", "");
+                }
+                document.getElementById(type).style.display = "block";
+                evt.currentTarget.className += " active";
+              }
+              </script>
+        </div>
         
 
         <div id="settings-container" >
@@ -111,6 +143,8 @@
             <div id="helper"></div>
             <p id="mh" class="noselect">Movement helper</p>
         </div>
+
+        
     </div>
     <p class="noselect" id="stop">Move mouse here to disable movement</p>
 

@@ -25,6 +25,13 @@ p {
     font-family: "Ubuntu";
 
 }
+.florrfont-gallery {
+    -webkit-text-fill-color: white;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
+    font-family: "Ubuntu";
+    font-size: 40px;
+}
 .florrfont-big {
     -webkit-text-fill-color: white;
     -webkit-text-stroke-width: 0.75px;
@@ -527,8 +534,67 @@ input[type=number] {
     width: 160px;
     height: 20px;
 }
+
+
+/*gallery*/
+#gallery-container {
     
-#settings {
+    position: absolute;
+    bottom: 45px;
+    right: 10px;
+    background-color: #5a9fdb;
+    border: 5px solid #4981b1;
+    border-radius: 3px;
+    width: 280px;
+    height: 500px;
+    overflow: auto;
+    overflow-x: hidden;
+}
+
+/* Style the tab */
+.tab {
+    overflow: hidden;
+    border: 1px solid #4981b1;
+    background-color: #4981b1;
+  }
+  
+  /* Style the buttons inside the tab */
+  .tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 14px 16px;
+    transition: 0.3s;
+    font-size: 17px;
+  }
+  /* w3schools tabs maybe magico can change this later*/
+  /* Change background color of buttons on hover */
+  .tab button:hover {
+    background-color: #5a9fdb;
+  }
+  
+  /* Create an active/current tablink class */
+  .tab button.active {
+    background-color: #5a9fdb;
+  }
+  
+  /* Style the tab content */
+  .tabcontent {
+    display: none;
+    padding: 6px 12px;
+    border-top: none;
+  }
+  .centered {
+    text-align: center;
+    width: 100%;
+}
+
+/* .centered_tab {
+    float:none /*to make sure there is no active float*/
+
+.settings {
     letter-spacing: -1px;
     bottom: 18px;
     left: 38px;
