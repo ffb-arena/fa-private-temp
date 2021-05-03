@@ -21,8 +21,8 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
 
 function drawGrid() {
     ctx.strokeStyle = "#000000";
-    ctx.globalAlpha = 0.15;
-    ctx.lineWidth = 0.5;
+    ctx.globalAlpha = 0.5;
+    ctx.lineWidth = res / 4;
     let bruh = gridSpace * res;
 
     gridSetter = (window.innerWidth / 2 - me.info.x * res % bruh) % bruh - 25 * res;
@@ -207,78 +207,6 @@ function drawPerformance() {
         );
         ctx.globalAlpha = 1;
     }
-}
-
-
-// inventory vars
-const minInventoryWidth = 240;
-const minInventoryHeight = 28
-// 508 and 160 are the maxes
-const maxInventoryWidthAdd = 508 - 240;
-const maxOnventoryHeightAdd = 160 - 28;
-let inventoryWidth = minInventoryWidth;
-let inventoryHeight = minInventoryHeight;
-let sizeMult = 0;
-
-const outlineWidth = 40;
-const invWidth = 33;
-const spaceBetweenIcons = 16;
-// draws inventory and stuff
-function drawInventory() {
-
-    // changes the size
-    if (stopText.innerHTML[0] === "M") {
-        // player isn't stopped
-        sizeMult = Math.max(sizeMult - 0.1, 0);
-    } else {
-        // player is stopp
-        sizeMult = Math.min(sizeMult + 0.1, 1);
-    }
-    inventoryWidth = minInventoryWidth + (sizeMult * maxInventoryWidthAdd);
-    inventoryHeight = minInventoryHeight + (sizeMult * maxOnventoryHeightAdd);
-    // stop moving rectangle
-    ctx.fillStyle = "#000000";
-    ctx.globalAlpha = 0.4;
-    ctx.roundRect(
-        window.innerWidth / 2 - inventoryWidth / 2,
-        window.innerHeight - inventoryHeight,
-        inventoryWidth,
-        inventoryHeight + 20,
-        7
-    );
-    ctx.fill();
-    ctx.globalAlpha = 1;
-
-    // stop moving text is in html
-
-    // inventory boxes
-    ctx.globalAlpha = 0.5;
-    let x;
-    x = window.innerWidth / 2 - spaceBetweenIcons * 3.5 - invWidth * 4;
-    for (let i = 0; i < 8; i++) {
-        ctx.fillStyle = "#dedede";
-        ctx.roundRect(
-            x - (outlineWidth - invWidth) / 2, 
-            window.innerHeight - 40 - invWidth - (outlineWidth - invWidth) / 2, 
-            outlineWidth, 
-            outlineWidth, 
-            2
-        );
-        ctx.fill();
-    
-        ctx.fillStyle = "#ffffff";
-        ctx.roundRect(
-            x, 
-            window.innerHeight - 40  - invWidth, 
-            invWidth, 
-            invWidth, 
-            2
-        );
-        ctx.fill();
-
-        x += spaceBetweenIcons + invWidth;
-    }
-    ctx.globalAlpha = 1;
 }
 
 // draws debug info

@@ -7,6 +7,7 @@ const files = [ // (in public folder already)
     ["src", "game", "rendering.js"],
     ["src", "game", "player.js"],
     ["src", "game", "petals.js"],
-    ["src", "game", "dead-petal.js"]
+    ["src", "game", "dead-petal.js"],
+    ["src", "game", "inventory.js"],
 ];
 module.exports = files;
