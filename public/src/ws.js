@@ -9,7 +9,6 @@ ws.addEventListener("open", () => {
 // When messages are recieved
 ws.onmessage = message => {
     let msg = JSON.parse(message.data);
-    // console.log(msg);
     switch (msg[0]) {
 
         // Creating/joining rooms
@@ -34,7 +33,7 @@ ws.onmessage = message => {
                     nname.hidden = false;
 
                     if (msg[2] === "a") {
-                        let text = `current room: ${msgRoom === "" ? `"${msgRoom}" (community garden)` : `"${msgRoom}"`}`;
+                        let text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
                         ctx.font = "20px Ubuntu";
                         roomContainer.style.width = `${ctx.measureText(text).width}px`
                         roomID.innerHTML = text;
@@ -76,9 +75,9 @@ ws.onmessage = message => {
                     make.hidden = false;
                     nname.hidden = false;
                     if (msg[2] === "a") {
-                        let text = `current room: ${msgRoom === "" ? `"${msgRoom}" (community garden)` : `"${msgRoom}"`}`;
+                        let text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
                         ctx.font = "20px Ubuntu";
-                        roomContainer.style.width = `${ctx.measureText(text).width * 1.2}px`
+                        roomContainer.style.width = `${ctx.measureText(text).width}px`;
                         roomID.innerHTML = text;
 
                         if (!msg[5]) {
