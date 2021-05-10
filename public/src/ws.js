@@ -120,6 +120,12 @@ ws.onmessage = message => {
             }
             break;
 
+        // Player init (when spawning)
+        case "i":
+            me.info.level = msg[1];
+            me.info.petalNum = 5 + Math.floor(msg[1] / 15);
+            break;
+
         // Game data
         case "b":
             // Getting your coordinates

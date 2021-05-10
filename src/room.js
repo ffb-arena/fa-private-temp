@@ -44,6 +44,8 @@ class Room {
         if (!myName) myName = C.names[Math.abs(Math.round(Math.random() * C.names.length) - 1)];
         const name = msgName || myName;
         this.players[newID] = new Flower(newID, x, y, level, name, bruh, ws);
+        // sending init package
+        ws.send(JSON.stringify(["i", level]));
         return [newID, myName];
     }
 

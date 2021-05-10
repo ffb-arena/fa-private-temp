@@ -2,8 +2,10 @@ const changeSpeed = 0.08;
 
 const minInventoryWidth = 240;
 const minInventoryHeight = 28
-// 508 and 160 are the maxes
-const maxInventoryWidthAdd = 508 - 240;
+// 520 and 160 are the maxes
+// 508 in game, but too small here
+// and I'm too lazy to go in game and see how it handles it
+const maxInventoryWidthAdd = 520 - 240;
 const maxOnventoryHeightAdd = 160 - 28;
 let inventoryWidth = minInventoryWidth;
 let inventoryHeight = minInventoryHeight;
@@ -15,9 +17,9 @@ const invWidth = 33;
 const spaceBetweenInvIcons = 16;
 
 // hotbar vars (petals in use)
-const hotbarWidth = 46;
-const hbOutline = 56;
-const spaceBetweenHB = 26; // 72
+const hotbarWidth = 45;
+const hbOutline = 55;
+const spaceBetweenHB = 18;
 
 
 // draws inventory and stuff
@@ -78,8 +80,9 @@ function drawInventory() {
 
     // hotbar
     ctx.globalAlpha = 0.5;
-    x = window.innerWidth / 2 - hotbarWidth * 2.5 - spaceBetweenHB * 2
-    for (let i = 0; i < 5; i++) {
+    x = window.innerWidth / 2 - hotbarWidth * me.info.petalNum / 2 - spaceBetweenHB * Math.ceil(me.info.petalNum - 1) / 2
+    console.log(me.info.petalNum);
+    for (let i = 0; i < me.info.petalNum; i++) {
         ctx.fillStyle = "#dedede";
         ctx.roundRect(
             x - (hbOutline - hotbarWidth) / 2, 

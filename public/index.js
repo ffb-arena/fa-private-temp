@@ -55,7 +55,9 @@ me = {
         x: 0,
         y: 0,
         mouseX: 0,
-        mouseY: 0
+        mouseY: 0,
+        level: undefined,
+        petalNum: undefined
     },
     settings: {
         keyboard: false,

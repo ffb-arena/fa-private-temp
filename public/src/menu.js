@@ -47,6 +47,8 @@ stopText.hidden = true;
 inputX.value = 20;
 inputY.value = 20;
 
+levelInput.value = 45;
+
 // Creating Games
 make.addEventListener("click", () => {
     join.hidden = true;
