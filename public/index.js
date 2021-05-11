@@ -57,7 +57,8 @@ me = {
         mouseX: 0,
         mouseY: 0,
         level: undefined,
-        petalNum: undefined
+        hotbar: [],
+        inventory: []
     },
     settings: {
         keyboard: false,

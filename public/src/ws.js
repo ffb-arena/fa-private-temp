@@ -123,7 +123,6 @@ ws.onmessage = message => {
         // Player init (when spawning)
         case "i":
             me.info.level = msg[1];
-            me.info.petalNum = 5 + Math.floor(msg[1] / 15);
             break;
 
         // Game data
@@ -132,8 +131,9 @@ ws.onmessage = message => {
             me.info.x = msg[1][0].x;
             me.info.y = msg[1][0].y;
 
-
             allPlayers = msg[1];
+            me.info.hotbar = msg[1][0].hotbar;
+            me.info.inventory = msg[1][0].inventory;
             break;
         
         // Death

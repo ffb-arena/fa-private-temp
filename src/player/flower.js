@@ -20,6 +20,16 @@ class Flower {
             const petal = new Petal(1, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y });
             this.pubInfo.petals.push(petal);
         };
+
+        this.hotbar = [];
+        for (let i = 0; i < nOfPetals; i++) {
+            this.hotbar.push(1);
+        };
+        this.inventory = [];
+        for (let i = 0; i < 8; i++) {
+            this.inventory.push(0);
+        };
+
         this.level = level;
         this.petalNum = nOfPetals;
         this.id = id;

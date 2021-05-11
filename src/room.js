@@ -142,6 +142,8 @@ class Room {
                 me[prop] = player.pubInfo[prop];
             }
             me.petals = sievedPetals;
+            me.hotbar = player.hotbar;
+            me.inventory = player.inventory;
             send.push(me);
             if (this.debug) {
                 player.debug.push([

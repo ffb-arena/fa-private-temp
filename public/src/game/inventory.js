@@ -5,7 +5,7 @@ const minInventoryHeight = 28
 // 520 and 160 are the maxes
 // 508 in game, but too small here
 // and I'm too lazy to go in game and see how it handles it
-const maxInventoryWidthAdd = 520 - 240;
+const maxInventoryWidthAdd = 525 - 240;
 const maxOnventoryHeightAdd = 160 - 28;
 let inventoryWidth = minInventoryWidth;
 let inventoryHeight = minInventoryHeight;
@@ -80,9 +80,8 @@ function drawInventory() {
 
     // hotbar
     ctx.globalAlpha = 0.5;
-    x = window.innerWidth / 2 - hotbarWidth * me.info.petalNum / 2 - spaceBetweenHB * Math.ceil(me.info.petalNum - 1) / 2
-    console.log(me.info.petalNum);
-    for (let i = 0; i < me.info.petalNum; i++) {
+    x = window.innerWidth / 2 - hotbarWidth * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
+    for (let i = 0; i < me.info.hotbar.length; i++) {
         ctx.fillStyle = "#dedede";
         ctx.roundRect(
             x - (hbOutline - hotbarWidth) / 2, 
