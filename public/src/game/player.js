@@ -36,7 +36,7 @@ class Player {
     _drawPetals() {
         this.petals.forEach(p => {
             ctx.beginPath();
-            petals[p.id](p); // draws the petals
+            petals[p.id](p, ctx); // draws the petals
             ctx.closePath()
         });
     }
@@ -72,12 +72,7 @@ class Player {
     }
 
     _drawName() {
-        // Name
-        ctx.lineWidth = 4 * res;
-        ctx.font = `${22.5 * res}px Ubuntu`;
-        ctx.strokeText(this.name, this.x, this.y - 35 * res);
-        ctx.fillStyle = "#ffffff";
-        ctx.fillText(this.name, this.x, this.y - 35 * res);
+        florrText(this.name, 22 * res, {x: this.x, y: this.y - 45 * res}, ctx);
     }
 
     draw() {

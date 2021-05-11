@@ -143,8 +143,8 @@ Go to localhost:9700
 
 * Client inventory rendering
 
-##### [public/src/game/images.js](/public/src/game/images.js)
+##### [public/src/game/florr-text.js](/public/src/game/florr-text.js)
 
-* This file handles all images so they can be displayed on the canvas
+* This file has a function which draws the text
 
 If you've read down here and like this, you may also be interested in [viter](https://github.com/FeeshDev/viter)

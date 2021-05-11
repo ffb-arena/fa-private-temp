@@ -3,24 +3,24 @@
 const petals = {
 
     // basic
-    1: (p, r) => {
+    1: (p, c, r) => {
         r = r || p.radius;
-        ctx.fillStyle = "#afc3b6";
-        ctx.arc(
+        c.fillStyle = "#afc3b6";
+        c.arc(
             calculateRelPos(p.x, "x"),
             calculateRelPos(p.y, "y"),
             r * res, 0, 2 * Math.PI
         );
-        ctx.fill();
-        ctx.closePath();
+        c.fill();
+        c.closePath();
 
-        ctx.beginPath();
-        ctx.fillStyle = "#ffffff";
-        ctx.arc(
+        c.beginPath();
+        c.fillStyle = "#ffffff";
+        c.arc(
             calculateRelPos(p.x, "x"),
             calculateRelPos(p.y, "y"),
             (r - 2) * res, 0, 2 * Math.PI
         );
-        ctx.fill();
+        c.fill();
     }
 }

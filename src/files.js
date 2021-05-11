@@ -3,7 +3,7 @@ const files = [ // (in public folder already)
     ["index.js"],
     ["src", "ws.js"],
     ["src", "menu.js"],
-    ["src", "game", "images.js"],
+    ["src", "game", "florr-text.js"],
     ["src", "petal-background.js"],
     ["src", "game", "rendering.js"],
     ["src", "game", "player.js"],
