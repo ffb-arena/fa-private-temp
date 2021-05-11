@@ -79,10 +79,10 @@ function drawInventory() {
     }
 
     // hotbar
-    ctx.globalAlpha = 0.5;
     x = window.innerWidth / 2 - hotbarWidth * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
     for (let i = 0; i < me.info.hotbar.length; i++) {
-        if (me.info.hotbar[0] === 0) {
+        if (me.info.hotbar[i] === 0) {
+            ctx.globalAlpha = 0.5;
             ctx.fillStyle = "#dedede";
             ctx.roundRect(
                 x - (hbOutline - hotbarWidth) / 2, 
@@ -102,7 +102,7 @@ function drawInventory() {
             );
             ctx.fill();
         } else {
-
+            
         }
         x += spaceBetweenHB + hotbarWidth;
     }

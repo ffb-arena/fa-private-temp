@@ -40,7 +40,8 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 ctx.textAlign = "center";
 
-window.onbeforeunload = () => { return "Are you sure you want to leave this page?" };
+
+window.onbeforeunload = () => "Are you sure you want to leave this page?";
 ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
