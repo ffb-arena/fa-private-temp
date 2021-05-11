@@ -591,6 +591,15 @@ input[type=number] {
     text-align: center;
     width: 100%;
 }
+.myGallery {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+  
+  .myGallery img {
+    width: 22%;
+  }
 
 /* .centered_tab {
     float:none /*to make sure there is no active float*/
