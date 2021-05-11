@@ -11,11 +11,11 @@ function loadImage(src) {
     return image;
 }
 
-const commonPetals = ["basic", "fast", "heavy"]
-const uncommonPetals = ["iris", "leaf", "rose", "stinger"]
-const rarePetals = ["bubble", "cactus", "honey", "rock", "wing"]
-const epicPetals = ["ecactus", "egg", "erose", "heaviest", "yinyang"];
-const legPetals = ["tringer"];
+const commonPetals = [petalIDs[1], petalIDs[2], petalIDs[3]]
+const uncommonPetals = [petalIDs[8], petalIDs[32], petalIDs[6], petalIDs[7]] // iris, leaf, rose, stinger
+const rarePetals = [petalIDs[18], petalIDs[13], petalIDs[31], petalIDs[4], petalIDs[9]] // bubble, cactus, honey, rock, wing
+const epicPetals = [petalIDs[21], petalIDs[22], petalIDs[15], petalIDs[26], petalIDs[28]]; // ecactus, egg, erose, heaviest, yin-yang
+const legPetals = [petalIDs[27]]; // tringer
 let textures = {};
 for (const name of commonPetals) {
     textures[name] = loadImage(name);

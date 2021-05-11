@@ -139,4 +139,12 @@ Go to localhost:9700
 * The DeadPetal class
 * Makes the little "popping" petal animations when they die
 
+##### [public/src/game/inventory.js](/public/src/game/inventory.js)
+
+* Client inventory rendering
+
+##### [public/src/game/images.js](/public/src/game/images.js)
+
+* This file handles all images so they can be displayed on the canvas
+
 If you've read down here and like this, you may also be interested in [viter](https://github.com/FeeshDev/viter)

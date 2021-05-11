@@ -30,7 +30,7 @@ function drawInventory() {
         // player isn't stopped
         sizeMult = Math.max(sizeMult - changeSpeed, 0);
     } else {
-        // player is stopp
+        // player is stopped
         sizeMult = Math.min(sizeMult + changeSpeed, 1);
     }
     inventoryWidth = minInventoryWidth + (sizeMult * maxInventoryWidthAdd);
@@ -82,24 +82,28 @@ function drawInventory() {
     ctx.globalAlpha = 0.5;
     x = window.innerWidth / 2 - hotbarWidth * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
     for (let i = 0; i < me.info.hotbar.length; i++) {
-        ctx.fillStyle = "#dedede";
-        ctx.roundRect(
-            x - (hbOutline - hotbarWidth) / 2, 
-            window.innerHeight - 93 - hotbarWidth - (hbOutline - hotbarWidth) / 2, 
-            hbOutline, 
-            hbOutline, 
-            4
-        );
-        ctx.fill();
-        ctx.fillStyle = "#ffffff";
-        ctx.roundRect(
-            x, 
-            window.innerHeight - 93 - hotbarWidth, 
-            hotbarWidth, 
-            hotbarWidth, 
-            0
-        );
-        ctx.fill();
+        if (me.info.hotbar[0] === 0) {
+            ctx.fillStyle = "#dedede";
+            ctx.roundRect(
+                x - (hbOutline - hotbarWidth) / 2, 
+                window.innerHeight - 93 - hotbarWidth - (hbOutline - hotbarWidth) / 2, 
+                hbOutline, 
+                hbOutline, 
+                4
+            );
+            ctx.fill();
+            ctx.fillStyle = "#ffffff";
+            ctx.roundRect(
+                x, 
+                window.innerHeight - 93 - hotbarWidth, 
+                hotbarWidth, 
+                hotbarWidth, 
+                0
+            );
+            ctx.fill();
+        } else {
+
+        }
         x += spaceBetweenHB + hotbarWidth;
     }
     ctx.globalAlpha = 1;
