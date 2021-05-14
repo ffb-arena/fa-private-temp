@@ -12,7 +12,8 @@ class DeadPetal {
 
         ctx.globalAlpha = 1 / this.stage + 0.2;
         ctx.beginPath();
-        petals[this.id](this, ctx, this.radius * (this.stage / 10));
+        petals[this.id]({ x: calculateRelPos(this.x, "x"), y: calculateRelPos(this.y, "y"), radius: this.radius }, 
+            ctx, res, this.radius * (this.stage / 10));
         ctx.globalAlpha = 1;
 
         if (this.stage === 16) return true;

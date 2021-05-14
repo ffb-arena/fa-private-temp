@@ -36,7 +36,8 @@ class Player {
     _drawPetals() {
         this.petals.forEach(p => {
             ctx.beginPath();
-            petals[p.id](p, ctx); // draws the petals
+            petals[p.id]({ x: calculateRelPos(p.x, "x"), y: calculateRelPos(p.y, "y"), radius: p.radius },
+                ctx, res); // draws the petals
             ctx.closePath()
         });
     }

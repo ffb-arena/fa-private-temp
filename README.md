@@ -133,6 +133,9 @@ Go to localhost:9700
 ##### [public/src/game/petals.js](/public/src/game/petals.js)
 
 * Const object with functions to render each petal
+* Keeps track of petal rarities
+* Petal rarity colours
+* Petal names
 
 ##### [public/src/game/dead-petal.js](/public/src/game/dead-petal.js)
 

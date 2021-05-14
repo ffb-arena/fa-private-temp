@@ -1,15 +1,19 @@
 // instructions to render each petal
 // the param p is the petal, from the Petal class (src/player/petal.js relative to dir root)
 const petals = {
+    0: () => {},
 
     // basic
-    1: (p, c, r) => {
-        r = r || p.radius;
-        c.fillStyle = "#afc3b6";
+    1: (p, c, ratio, radius) => {
+        radius = radius || p.radius;
+        ratio = ratio || 1;
+
+        c.beginPath();
+        c.fillStyle = "#c2c2c2";
         c.arc(
-            calculateRelPos(p.x, "x"),
-            calculateRelPos(p.y, "y"),
-            r * res, 0, 2 * Math.PI
+            p.x,
+            p.y,
+            radius * ratio, 0, 2 * Math.PI
         );
         c.fill();
         c.closePath();
@@ -17,10 +21,28 @@ const petals = {
         c.beginPath();
         c.fillStyle = "#ffffff";
         c.arc(
-            calculateRelPos(p.x, "x"),
-            calculateRelPos(p.y, "y"),
-            (r - 2) * res, 0, 2 * Math.PI
+            p.x,
+            p.y,
+            radius * 0.8 * ratio, 0, 2 * Math.PI
         );
         c.fill();
+        c.closePath();
     }
-}
+};
+
+// rarity colours
+const rarityColours = {
+    "common": {
+        bg: "#68c058",
+        fg: "#82ec71"
+    }
+};
+
+// which petals are which rarity
+const rarities = {
+    1: "common"
+};
+
+const petalNames = {
+    1: "Basic"
+};
