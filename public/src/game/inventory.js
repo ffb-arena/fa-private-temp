@@ -49,8 +49,8 @@ function drawInventory() {
     ctx.globalAlpha = 1;
 
     // stop moving text
-    florrText(stopText, 11, 
-        { x: window.innerWidth / 2, y: window.innerHeight - 13 }, ctx);
+    florrText(stopText, 11.9,
+        { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 35, ctx);
 
     // inventory boxes
     ctx.globalAlpha = 0.5;

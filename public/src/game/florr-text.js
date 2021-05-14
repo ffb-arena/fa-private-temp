@@ -1,14 +1,24 @@
-function florrText(text, fontSize, centre, c) {
+const texts = document.getElementById("texts");
+function florrText(text, fontSize, centre, textStroke, c) {
+    const p = document.createElement("p");
+    p.className = "temp-text noselect";
 
-    // canvas setup
-    c.strokeStyle = "#000000";
-    c.fillStyle = "#ffffff";
-    c.lineWidth = fontSize / 6;
+
+    p.style.position = "absolute";
+    p.style.fontSize = `${fontSize}px`;
+    p.style.color = "#ffffff";
+    p.style["-webkit-text-stroke"] = `${fontSize / textStroke}px black`;
+    p.style["letter-spacing"] = "-0.35px";
+
     c.font = `${fontSize}px Ubuntu`;
-    c.textAlign = "center";
-    c.textBaseline = "middle";
+    const metrics = c.measureText(text);
+    const width = metrics.width - 0.35 * (text.length - 1);
+    const height = metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
 
-    // actually writing the text
-    c.strokeText(text, centre.x, centre.y);
-    c.fillText(text, centre.x, centre.y);
+    p.style.top = `${centre.y - height / 2}px`;
+    p.style.left = `${centre.x - width / 2}px`;
+
+    let newText = document.createTextNode(text);
+    p.appendChild(newText);
+    texts.appendChild(p);
 }

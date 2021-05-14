@@ -6,7 +6,15 @@ function calculateRelPos(pos, axis) {
 
 // clears everything
 function clear(ctx) {
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+
+    // clearing canvas
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    // removing all text
+    const textToRemove = document.getElementsByClassName("temp-text");
+    while (textToRemove[0]) {
+        texts.removeChild(textToRemove[0]);
+    }
 }
 
 // ~~Stole~~ borrowed this from stackoverflow.
