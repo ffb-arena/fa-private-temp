@@ -14,7 +14,7 @@ function loadImage(src) {
 const commonPetals = ["basic", "fast", "heavy"];
 const uncommonPetals = ["iris", "leaf", "rose", "stinger"];
 const rarePetals = ["bubble", "cactus", "honey", "rock", "wing"];
-const epicPetals = ["ecactus", "egg", "erose", "heaviest", "yinyang"];
+const epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin-yang"];
 const legPetals = ["tringer"];
 let textures = {};
 for (const name of commonPetals) {

@@ -71,6 +71,8 @@ debug = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 deadPetals = [];
 
+stopText = "Move mouse here to disable movement";
+
 // Event Listeners
 window.addEventListener("contextmenu", c => {
     c.preventDefault();
@@ -137,9 +139,9 @@ function addEventListeners() {
                 window.innerHeight - inventoryHeight < pos.y && pos.y < window.innerHeight
             ) {
                 ws.send(JSON.stringify(["c", "d", 0, 0, res]));
-                stopText.innerHTML = "You can also use [Q] and [E] to modify the inventory";
+                stopText = "You can also use [Q] and [E] to modify the inventory";
             } else {
-                stopText.innerHTML = "Move mouse here to disable movement";
+                stopText = "Move mouse here to disable movement";
                 ws.send(JSON.stringify([
                     "c", 
                     "d", 
@@ -163,7 +165,7 @@ function mainLoop() {
     performance.fps.fpsArray.push(1 / (((performance.fps.newTime - performance.fps.oldTime) / 1000) || 1));
 
     // Clearing canvas
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    clear(ctx);
 
     // ping stuff
     ws.send(JSON.stringify(["ping", Date.now()]));

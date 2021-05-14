@@ -4,6 +4,11 @@ function calculateRelPos(pos, axis) {
     return window.innerHeight / 2 - pos * res + me.info.y * res;
 }
 
+// clears everything
+function clear(ctx) {
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+}
+
 // ~~Stole~~ borrowed this from stackoverflow.
 // Thanks
 CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {

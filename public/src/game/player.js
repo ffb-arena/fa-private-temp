@@ -72,7 +72,8 @@ class Player {
     }
 
     _drawName() {
-        florrText(this.name, 22 * res, {x: this.x, y: this.y - 45 * res}, ctx);
+        florrText(this.name, 22 * res, 
+            { x: this.x, y: this.y - 45 * res }, ctx);
     }
 
     draw() {

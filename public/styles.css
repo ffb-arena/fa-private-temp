@@ -731,14 +731,3 @@ input[type=number] {
     -webkit-text-stroke: 0.5px black;
     transform: translate(-50%, 0);
 }
-
-#stop {
-    color: #ffffff;
-    left: 50%;
-    bottom: 7px;
-    position: absolute;
-    -webkit-text-stroke: 0.3px black;
-    transform: translate(-50%, 0);
-    font-size: 13px;
-    letter-spacing: -0.8px;
-}

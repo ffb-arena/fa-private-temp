@@ -26,7 +26,7 @@ const spaceBetweenHB = 18;
 function drawInventory() {
 
     // changes the size of black box
-    if (stopText.innerHTML[0] === "M") {
+    if (stopText[0] === "M") {
         // player isn't stopped
         sizeMult = Math.max(sizeMult - changeSpeed, 0);
     } else {
@@ -48,7 +48,9 @@ function drawInventory() {
     ctx.fill();
     ctx.globalAlpha = 1;
 
-    // stop moving text is in html
+    // stop moving text
+    florrText(stopText, 11, 
+        { x: window.innerWidth / 2, y: window.innerHeight - 13 }, ctx);
 
     // inventory boxes
     ctx.globalAlpha = 0.5;
