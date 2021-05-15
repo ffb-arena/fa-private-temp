@@ -1,3 +1,5 @@
+// percent of the icon is foreground
+const fgPercent = 13/16;
 function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c) {
     c.globalAlpha = globalAlpha;
 
@@ -8,7 +10,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
     c.fill();
 
     // foreground square
-    const newWidth = width * 13/16;
+    const newWidth = width * fgPercent;
     c.fillStyle = foregroundColour;
     c.strokeStyle = foregroundColour;
     c.roundRect(pos.x + (width - newWidth) / 2, pos.y + (width - newWidth) / 2, newWidth, newWidth, newWidth / 30);
@@ -39,19 +41,17 @@ let sizeMult = 0;
 
 // inventory vars (petals not in use)
 const outlineWidth = 40;
-const invWidth = outlineWidth * 13/16;
-const spaceBetweenInvIcons = 16;
+const spaceBetweenInvIcons = 8;
 
 // hotbar vars (petals in use)
 const hbOutline = 55;
-const hotbarWidth = hbOutline * 13/16;
-const spaceBetweenHB = 18;
+const spaceBetweenHB = 8;
 
 
 // draws inventory and stuff
 function drawInventory() {
 
-    // changes the size of black box
+    // changes the size of stop moving rectangle
     if (stopText[0] === "M") {
         // player isn't stopped
         sizeMult = Math.max(sizeMult - changeSpeed, 0);
@@ -61,7 +61,8 @@ function drawInventory() {
     }
     inventoryWidth = minInventoryWidth + (sizeMult * maxInventoryWidthAdd);
     inventoryHeight = minInventoryHeight + (sizeMult * maxOnventoryHeightAdd);
-    // stop moving rectangle
+
+    // draws stop moving rectangle
     ctx.fillStyle = "#000000";
     ctx.globalAlpha = 0.4;
     ctx.roundRect(
@@ -78,36 +79,36 @@ function drawInventory() {
         { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 35, ctx);
 
     // inventory boxes
-    ctx.globalAlpha = 0.5;
     let x;
-    x = window.innerWidth / 2 - spaceBetweenInvIcons * 3.5 - invWidth * 4;
+    x = window.innerWidth / 2 - spaceBetweenInvIcons * 3.5 - outlineWidth * 4;
+
     if (me.info.inventory.length === 0) return;
     for (let i = 0; i < 8; i++) {
         if (me.info.inventory[i] === 0) {
-            drawPetalIcon({ x: x - (outlineWidth - invWidth) / 2, y: window.innerHeight - 45 - invWidth - (invWidth - invWidth) / 2 },
+            drawPetalIcon({ x: x, y: window.innerHeight - 81 },
                 "", 0, outlineWidth, "#dedede", "#ffffff", 0.5, ctx);
         } else {
             const colours = rarityColours[rarities[me.info.inventory[i]]];
-            drawPetalIcon({ x: x - (outlineWidth - invWidth) / 2, y: window.innerHeight - 45 - invWidth - (invWidth - invWidth) / 2 },
+            drawPetalIcon({ x: x, y: window.innerHeight - 81 },
                 petalNames[me.info.inventory[i]], me.info.inventory[i], outlineWidth, colours.bg, colours.fg, 0.9, ctx);
         }
 
-        x += spaceBetweenInvIcons + invWidth;
+        x += spaceBetweenInvIcons + outlineWidth;
     }
 
     // hotbar
-    x = window.innerWidth / 2 - hotbarWidth * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
+    x = window.innerWidth / 2 - hbOutline * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
+
     for (let i = 0; i < me.info.hotbar.length; i++) {
         if (me.info.hotbar[i] === 0) {
-            drawPetalIcon({ x: x - (hbOutline - hotbarWidth) / 2, y: window.innerHeight - 93 - hotbarWidth - (hbOutline - hotbarWidth) / 2 },
+            drawPetalIcon({ x: x, y: window.innerHeight - 144 },
                 "", 0, hbOutline, "#dedede", "#ffffff", 0.5, ctx);
         } else {
             const colours = rarityColours[rarities[me.info.hotbar[i]]];
-            drawPetalIcon({ x: x - (hbOutline - hotbarWidth) / 2, y: window.innerHeight - 93 - hotbarWidth - (hbOutline - hotbarWidth) / 2 },
+            drawPetalIcon({ x: x, y: window.innerHeight - 144 },
                 petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline, colours.bg, colours.fg, 0.9, ctx);
         }
 
-        x += spaceBetweenHB + hotbarWidth;
+        x += spaceBetweenHB + hbOutline;
     }
-    ctx.globalAlpha = 1;
 }
