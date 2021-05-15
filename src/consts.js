@@ -49,6 +49,9 @@ const petalCollisionPadding = 0.5;
 // petal invincibility after being hit, in ms
 const petalInvincibility = 100;
 
+// cooldown after pressing x, in ms
+const maxXCooldown = 300;
+
 module.exports = {
     names,
     frame, frameRate,
@@ -57,5 +60,6 @@ module.exports = {
     wasdSmooth, petalLag, petalSmooth,
     limit,
     collisionPadding, petalCollisionPadding,
-    petalInvincibility
+    petalInvincibility,
+    maxXCooldown
 };

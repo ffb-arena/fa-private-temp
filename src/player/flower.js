@@ -85,6 +85,8 @@ class Flower {
 
         this.deadPetals = [];
         this.deadPetalsToSend = [];
+
+        this._nextX = Date.now();
     }
 
     keyDown(key) {
@@ -100,6 +102,10 @@ class Flower {
                 break;
             case "KeyA":
                 this.keys.leftDown = true;
+                break;
+
+            case "KeyX":
+                this._x();
                 break;
 
             case "ArrowUp":
@@ -177,6 +183,24 @@ class Flower {
                 this.keys.rightMouse = false;
                 break;
         }
+    }
+
+    // when x is pressed
+    _x() {
+        if (Date.now() < this._nextX) return;
+        this._nextX = Date.now() + C.maxXCooldown;
+
+		for (let i = 0; i < this.petalNum; i++) {
+			let temp, oldPetal;
+			temp = this.inventory[i];
+			this.inventory[i] = this.hotbar[i];
+			this.hotbar[i] = temp;
+
+			oldPetal = this.pubInfo.petals[i];
+			this.pubInfo.petals[i] = new Petal(oldPetal.pubInfo.id, oldPetal.degree, this.petalDist, this.petalCentre);
+			this.pubInfo.petals[i].hp = 0;
+			this.pubInfo.petals[i].cooldownTimer = Date.now() + this.pubInfo.petals[i].cooldown;
+		}
     }
 
     // updates position based on mouse position/keys down

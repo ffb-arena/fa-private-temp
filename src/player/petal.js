@@ -7,7 +7,7 @@ class Petal {
 
         this.pubInfo = {
             id: id,
-            y: centre.x + Math.sin(degree) * coordR,
+            x: centre.x + Math.sin(degree) * coordR,
             y: centre.y + Math.cos(degree) * coordR,
             radius: stats.radius
         }
