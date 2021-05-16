@@ -134,7 +134,7 @@ class Room {
             });
             let sievedPetals = [];
             myPetals.forEach(p => {
-                if (p.hp <= 0) return;
+                if (p.cooldownTimer) return;
                 sievedPetals.push(p.pubInfo);
             });
             let me = {};
@@ -172,7 +172,7 @@ class Room {
                     });
                     let sievedPetals = [];
                     petals.forEach(p => {
-                        if (p.hp <= 0) return;
+                        if (p.cooldownTimer) return;
                         sievedPetals.push(p.pubInfo);
                     });
                     let playerToSend = {};

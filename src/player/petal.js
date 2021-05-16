@@ -32,8 +32,7 @@ class Petal {
         
         // if petal is dead
         if (this.hp <= 0 && !this.cooldownTimer) {
-            this.hp = 0;
-            this.cooldownTimer = Date.now() + this.cooldown;
+			this.reload();
 
             // for client death animations
             this.deadInfo = {
@@ -53,6 +52,11 @@ class Petal {
             this.inv = 0;
         }
     }
+
+	reload() {
+		this.hp = 0;
+		this.cooldownTimer = Date.now() + this.cooldown;
+	}
 }
 
 module.exports = Petal;

@@ -1,6 +1,5 @@
 const backgroundCanvas = document.getElementById("petalBackground");
 const ctx2 = backgroundCanvas.getContext("2d");
-const oneOverSixty = 1/60 * 1000;
 
 backgroundCanvas.width = window.innerWidth;
 backgroundCanvas.height = window.innerHeight;
@@ -83,6 +82,7 @@ class PetalBackground{
     }
 }
 
+const oneOverSixty = 1/60 * 1000;
 let petalBackgrounds = [];
 let petalSpawnCooldown = 6;
 let background;

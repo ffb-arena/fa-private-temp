@@ -1,3 +1,25 @@
+// inventory classes
+// rendering reloading inventory slots
+class inventoryReload {
+	constructor(timeUntilReloadFinished, pos, width) {
+		this._totalTime = timeUntilReloadFinished;
+		this._time = timeUntilReloadFinished;
+		this._percent = 0;
+		this._pos = pos;
+		this._width = width;
+	}
+
+	update(timeSinceLastFrame, c) {
+
+	}
+}
+
+
+// inventory vars
+let inventoryReloads = [];
+
+
+
 // percent of the icon is foreground
 const fgPercent = 13/16;
 function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c) {
@@ -49,7 +71,7 @@ const spaceBetweenHB = 8;
 
 
 // draws inventory and stuff
-function drawInventory() {
+function drawInventory(timeSinceLastFrame) {
 
     // changes the size of stop moving rectangle
     if (stopText[0] === "M") {

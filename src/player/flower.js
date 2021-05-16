@@ -198,8 +198,7 @@ class Flower {
 
 			oldPetal = this.pubInfo.petals[i];
 			this.pubInfo.petals[i] = new Petal(oldPetal.pubInfo.id, oldPetal.degree, this.petalDist, this.petalCentre);
-			this.pubInfo.petals[i].hp = 0;
-			this.pubInfo.petals[i].cooldownTimer = Date.now() + this.pubInfo.petals[i].cooldown;
+			this.pubInfo.petals[i].reload();
 		}
     }
 

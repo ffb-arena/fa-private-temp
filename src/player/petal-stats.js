@@ -9,4 +9,4 @@ const petalStats = {
     }
 };
 
-module.exports = petalStats
+module.exports = petalStats;

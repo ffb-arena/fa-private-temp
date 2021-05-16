@@ -145,7 +145,7 @@ function handlePetalCollisions(p1, p2, dist, debug) {
         // bruh moment
         // somehow one player is completely contained in the other
         p1.pubInfo.petals.forEach(petal => {
-            if (petal.hp === 0 || petal.inv) return;
+            if (petal.cooldownTimer || petal.inv) return;
             p1Petals.push(petal);
             if (debug) {
                 const data = [
@@ -158,7 +158,7 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             }
         });
         p2.pubInfo.petals.forEach(petal => {
-            if (petal.hp === 0 || petal.inv) return;
+            if (petal.cooldownTimer || petal.inv) return;
             p2Petals.push(petal);
             if (debug) {
                 const data = [
@@ -244,7 +244,7 @@ function handlePetalCollisions(p1, p2, dist, debug) {
 
         // checking which petals fall within the intersection area
         p1.pubInfo.petals.forEach(petal => {
-            if (petal.hp === 0 || petal.inv) return;
+            if (petal.cooldownTimer || petal.inv) return;
 
             // if the other circle is over by at least half
             // just push all petals
@@ -278,7 +278,7 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             }
         });
         p2.pubInfo.petals.forEach(petal => {
-            if (petal.hp === 0 || petal.inv) return;
+            if (petal.cooldownTimer || petal.inv) return;
 
             // if the other circle is over by at least half
             // just push all petals
