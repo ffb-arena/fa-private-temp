@@ -186,56 +186,60 @@ function mainLoop() {
         performance.fps.fpsArray = [];
     }
 
-    drawMap();
-    drawGrid();
+    // if not on menu
+    if (gallery.hidden) {
+        drawMap();
+        drawGrid();
 
-    // Drawing players
-    allPlayers.forEach((data, i) => renderPlayer(data, i));
+        // Drawing players
+        allPlayers.forEach((data, i) => renderPlayer(data, i));
 
-    drawHelper();
-    drawMinimap();
-    drawPerformance();
-    drawDebug();
+        drawHelper();
+        drawMinimap();
+        drawPerformance();
+        drawDebug();
 
-    // drawing dead petals
-    let deadDeadPetals = [];
-    deadPetals.forEach((deadPetal, i) => {
-        if (deadPetal.update()) {
-            deadDeadPetals.push(i);
+        // drawing dead petals
+        let deadDeadPetals = [];
+        deadPetals.forEach((deadPetal, i) => {
+            if (deadPetal.update()) {
+                deadDeadPetals.push(i);
+            }
+        });
+        deadDeadPetals.forEach((i, n) => {
+            deadPetals.splice(i - n, 1);
+        });
+
+        // drawing death screen
+        if (!deathScreen.length) {
+            drawInventory(msSinceLastFrame);
+        } else {
+            clearText(); // from src/game/rendering.js
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+            ctx.globalAlpha = 1;
+
+            ctx.lineWidth = 7 * res;
+            ctx.strokeStyle = "#000000";
+            ctx.fillStyle = "#ffffff";
+            ctx.font = "30px Ubuntu"
+            ctx.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+            ctx.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+
+            ctx.lineWidth = 3 * res;
+            ctx.strokeStyle = "#000000";
+            ctx.font = "15px Ubuntu"
+            
+            ctx.strokeText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+            ctx.fillText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+
+            ctx.strokeText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+            ctx.fillText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+
+            ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
+            ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
         }
-    });
-    deadDeadPetals.forEach((i, n) => {
-        deadPetals.splice(i - n, 1);
-    });
-
-    // drawing death screen
-    if (!deathScreen.length) {
-        drawInventory(msSinceLastFrame);
-    } else {
-        ctx.globalAlpha = 0.5;
-        ctx.fillStyle = "#000000";
-        ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-        ctx.globalAlpha = 1;
-
-        ctx.lineWidth = 7 * res;
-        ctx.strokeStyle = "#000000";
-        ctx.fillStyle = "#ffffff";
-        ctx.font = "30px Ubuntu"
-        ctx.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-        ctx.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-
-        ctx.lineWidth = 3 * res;
-        ctx.strokeStyle = "#000000";
-        ctx.font = "15px Ubuntu"
-        
-        ctx.strokeText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
-        ctx.fillText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
-
-        ctx.strokeText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
-        ctx.fillText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
-
-        ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
-        ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
     }
 
     performance.fps.oldTime = performance.fps.newTime;

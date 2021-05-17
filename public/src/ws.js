@@ -162,10 +162,11 @@ ws.onmessage = message => {
 		// petal reloads
 		case "e":
             let squareX;
-            squareX = window.innerWidth / 2 - hbOutline * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2 + (msg[1] * (spaceBetweenHB + hbOutline));
-            console.log(squareX);
+			const newNum = msg[1] - me.info.hotbar.length / 2;
+			squareX = window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB;
+			squareX += (hbOutline - (hbOutline * fgPercent)) * 1.25;
 			hotbarReloads[msg[1]] = new hotbarReload(msg[2], 
-                { x: squareX + (hbOutline - (hbOutline * fgPercent)) / 2, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
+                { x: squareX, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
                 hbOutline * fgPercent); 
 			break;
 

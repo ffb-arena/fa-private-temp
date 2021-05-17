@@ -4,17 +4,20 @@ function calculateRelPos(pos, axis) {
     return window.innerHeight / 2 - pos * res + me.info.y * res;
 }
 
-// clears everything
-function clear(ctx) {
-
-    // clearing canvas
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-    // removing all text
+// clears all text
+function clearText() {
     const textToRemove = document.getElementsByClassName("temp-text");
     while (textToRemove[0]) {
         texts.removeChild(textToRemove[0]);
     }
+}
+
+// clears everything
+function clear(ctx) {
+    // clearing canvas
+    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+    clearText();
 }
 
 // ~~Stole~~ borrowed this from stackoverflow.
