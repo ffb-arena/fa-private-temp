@@ -5,10 +5,10 @@
 */
 
 // Constants
-const Room = require("./src/room.js");
-const C = require("./src/consts.js");
-const files = require("./src/files.js");
-const ph = require("./src/packet-handler.js");
+const Room = require("./server/room.js");
+const C = require("./server/consts.js");
+const files = require("./server/files.js");
+const ph = require("./server/packet-handler.js");
 
 const http = require("http");
 const path = require("path");

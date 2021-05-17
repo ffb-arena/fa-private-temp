@@ -123,6 +123,11 @@ ws.onmessage = message => {
         // Player init (when spawning)
         case "i":
             me.info.level = msg[1];
+
+            hotbarReloads = [];
+            for (let i = 0; i < msg[2]; i++) {
+                hotbarReloads.push(new hotbarReload(0, 0, 0));
+            }
             break;
 
         // Game data
@@ -153,6 +158,16 @@ ws.onmessage = message => {
                 ));
             });
             break;
+		
+		// petal reloads
+		case "e":
+            let squareX;
+            squareX = window.innerWidth / 2 - hbOutline * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2 + (msg[1] * (spaceBetweenHB + hbOutline));
+            console.log(squareX);
+			hotbarReloads[msg[1]] = new hotbarReload(msg[2], 
+                { x: squareX + (hbOutline - (hbOutline * fgPercent)) / 2, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
+                hbOutline * fgPercent); 
+			break;
 
         // debug info
         case "z":

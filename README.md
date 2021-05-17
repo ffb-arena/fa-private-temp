@@ -17,27 +17,27 @@ Go to localhost:9700
 * To do list
 * Includes bugs and mechanics to fix
 
-### [src](/src)
+### [server](/server)
 
 * The meat of the server logic
 
-#### [src/consts.js](/src/consts.js)
+#### [server/consts.js](/server/consts.js)
 
 * All game constants, used in other files
 
-#### [src/files.js](/src/files.js)
+#### [server/files.js](/server/files.js)
 
 * List of public JavaScript files that need to be combined
 
-#### [src/functions.js](/src/functions.js)
+#### [server/functions.js](/server/functions.js)
 
 * All game functions, used in other files
 
-#### [src/packet-handler.js](/src/packet-handler.js)
+#### [server/packet-handler.js](/server/packet-handler.js)
 
 * The server WebSocket packet handler (recieving messages from client)
 
-#### [src/room.js](/src/room.js)
+#### [server/room.js](/server/room.js)
 
 * The server Room class
 * Contains player spawning
@@ -45,29 +45,29 @@ Go to localhost:9700
 * Contains collision detection
 * Contains sending data of viewable players to players
 
-#### [src/player](/src/player)
+#### [server/player](/server/player)
 
 * All server files associated with the player
 
-##### [src/player/flower.js](/src/player/flower.js)
+##### [server/player/flower.js](/server/player/flower.js)
 
 * The server Player class
 * Handles movement, petal rotation, and petal lag
 
-##### [src/player/petal.js](/src/player/petal.js)
+##### [server/player/petal.js](/server/player/petal.js)
 
 * The server Petal class
 * Handles updating petals
 
-##### [src/player/petal-stats.js](/src/player/petal-stats.js)
+##### [server/player/petal-stats.js](/server/player/petal-stats.js)
 
 * All petal statistics
 
-##### [src/player/collisions.js](/src/player/collisions.js)
+##### [server/player/collisions.js](/server/player/collisions.js)
 
 * Player-player collision handling
 
-##### [src/player/acc-offset.js](/src/player/acc-offset.js)
+##### [server/player/acc-offset.js](/server/player/acc-offset.js)
 
 * The server AccOffset class
 * Applies acceleration offsets to players

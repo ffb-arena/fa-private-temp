@@ -2,7 +2,7 @@ const C = require("../consts.js");
 const petalStats = require("./petal-stats.js");
 
 class Petal {
-    constructor(id, degree, coordR, centre) {
+    constructor(id, degree, coordR, centre, ws, n) {
         const stats = petalStats[id];
 
         this.pubInfo = {
@@ -21,6 +21,8 @@ class Petal {
         this.hp = stats.hp;
         this.inv = 0; // invincibility
         this.cooldownTimer = 0;
+		this.ws = ws;
+		this.n = n; // position in hotbar
 
         this.deadInfo = {};
     }
@@ -56,6 +58,7 @@ class Petal {
 	reload() {
 		this.hp = 0;
 		this.cooldownTimer = Date.now() + this.cooldown;
+		if (this.pubInfo.id) this.ws.send(JSON.stringify(["e", this.n, this.cooldown]));
 	}
 }
 

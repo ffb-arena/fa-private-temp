@@ -5,7 +5,7 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
     try {
         packet = JSON.parse(msg);
     } catch {
-        console.log(`Invalid message: #{msg}`);
+        console.log(`Invalid message: ${msg}`);
         return;
     }
     if (!rooms.get(myRoom).players[myID]) myID = undefined;

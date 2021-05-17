@@ -1,28 +1,51 @@
-// inventory classes
-// rendering reloading inventory slots
-class inventoryReload {
+// how far a line will go from the centre of a square to an edge
+function lineSquare(angle, squareWidth) {
+	const adjacent = squareWidth / 2;
+	let modAngle = angle % (Math.PI / 2);
+	if (modAngle > Math.PI / 4) modAngle = Math.PI / 2 - modAngle;
+	const opposite = adjacent * Math.tan(modAngle);
+	return Math.sqrt(opposite * opposite + adjacent * adjacent); 
+}
+
+
+// rendering reloading hotbar slots
+class hotbarReload {
 	constructor(timeUntilReloadFinished, pos, width) {
 		this._totalTime = timeUntilReloadFinished;
 		this._time = timeUntilReloadFinished;
 		this._percent = 0;
-		this._pos = pos;
+		this._pos = {
+			x: pos.x + width / 2,
+			y: pos.y + width / 2
+		}; 
 		this._width = width;
+		this._angle = 0;
+		this._timePerRotation = this._totalTime / 5; // 5 rotations in total
 	}
 
 	update(timeSinceLastFrame, c) {
+		if (this._totalTime === 0) return;
+        if (this._time <= 0) return;
 
+		this._time -= timeSinceLastFrame;
+		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
+
+		const length = lineSquare(this._angle, this._width);
+		c.strokeStyle = "#000000";
+		c.beginPath();
+		c.moveTo(this._pos.x, this._pos.y);
+		c.lineTo(this._pos.x + Math.cos(this._angle) * length, this._pos.y + Math.sin(this._angle) * length);
+		c.closePath();
+		c.stroke();
 	}
 }
 
 
-// inventory vars
-let inventoryReloads = [];
-
-
+let hotbarReloads = [];
 
 // percent of the icon is foreground
 const fgPercent = 13/16;
-function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c) {
+function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot, timeSinceLastFrame) {
     c.globalAlpha = globalAlpha;
 
     // background square
@@ -37,6 +60,12 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
     c.strokeStyle = foregroundColour;
     c.roundRect(pos.x + (width - newWidth) / 2, pos.y + (width - newWidth) / 2, newWidth, newWidth, newWidth / 30);
     c.fill();
+
+	if (invSlot !== undefined) {
+		// reload (if there is one)
+		hotbarReloads[invSlot].update(timeSinceLastFrame, c);
+		c.globalAlpha = globalAlpha;
+	}
 
     // text
     florrText(name, width / 4.5, { x: pos.x + width / 2, y: pos.y + width * 0.7 }, 30, c);
@@ -128,7 +157,8 @@ function drawInventory(timeSinceLastFrame) {
         } else {
             const colours = rarityColours[rarities[me.info.hotbar[i]]];
             drawPetalIcon({ x: x, y: window.innerHeight - 144 },
-                petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline, colours.bg, colours.fg, 0.9, ctx);
+                petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,
+				colours.bg, colours.fg, 0.9, ctx, i, timeSinceLastFrame);
         }
 
         x += spaceBetweenHB + hbOutline;

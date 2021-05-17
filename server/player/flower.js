@@ -17,7 +17,7 @@ class Flower {
         }
 
         for (let i = 0; i < nOfPetals; i++) {
-            const petal = new Petal(1, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y });
+            const petal = new Petal(1, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
             this.pubInfo.petals.push(petal);
         };
 
@@ -197,7 +197,7 @@ class Flower {
 			this.hotbar[i] = temp;
 
 			oldPetal = this.pubInfo.petals[i];
-			this.pubInfo.petals[i] = new Petal(oldPetal.pubInfo.id, oldPetal.degree, this.petalDist, this.petalCentre);
+			this.pubInfo.petals[i] = new Petal(oldPetal.pubInfo.id, oldPetal.degree, this.petalDist, this.petalCentre, oldPetal.ws, oldPetal.n);
 			this.pubInfo.petals[i].reload();
 		}
     }

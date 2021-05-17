@@ -45,7 +45,7 @@ class Room {
         const name = msgName || myName;
         this.players[newID] = new Flower(newID, x, y, level, name, bruh, ws);
         // sending init package
-        ws.send(JSON.stringify(["i", level]));
+        ws.send(JSON.stringify(["i", level, 5 + Math.floor(level / 15)]));
         return [newID, myName];
     }
 
