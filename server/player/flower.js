@@ -197,7 +197,7 @@ class Flower {
 			this.hotbar[i] = temp;
 
 			oldPetal = this.pubInfo.petals[i];
-			this.pubInfo.petals[i] = new Petal(oldPetal.pubInfo.id, oldPetal.degree, this.petalDist, this.petalCentre, oldPetal.ws, oldPetal.n);
+			this.pubInfo.petals[i] = new Petal(this.hotbar[i], oldPetal.degree, this.petalDist, this.petalCentre, oldPetal.ws, i);
 			this.pubInfo.petals[i].reload();
 		}
     }
