@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@700&display=swap" rel="stylesheet"> 
     <link href="styles.css" rel="stylesheet">
 </head>
-<body id="body" >
+<body id="body">
     <div id="container">
         <canvas id="petalBackground" style="background-color: Transparent; position: fixed; z-index: -1;"></canvas>
         <div id="Discord" >
@@ -108,9 +108,9 @@
             <div class="tab">
                 <button class="tablinks florrfont" onclick="openGallery(event, 'Petals')">Petals</button>
                 <button class="tablinks florrfont" onclick="openGallery(event, 'Mobs')">Mobs</button>
-              </div>
+            </div>
               
-              <div id="Petals" class="tabcontent myGallery active">
+            <div id="Petals" class="tabcontent myGallery active">
                 <div class=”myGallery”>
                     <img src="images/petal-icons/basic.png" />
                     <img src="images/petal-icons/fast.png">
@@ -144,49 +144,48 @@
                     <img src="images/petal-icons/legg.png">
                     <img src="images/petal-icons/lweb.png" />
                     <img src="images/petal-icons/square.png">
-              </div>
+                </div>
               
-              <div id="Mobs" class="tabcontent">
-                <h3 class="florrfont">Mobs</h3>
-              </div>
+                <div id="Mobs" class="tabcontent">
+                    <h3 class="florrfont">Mobs</h3>
+                </div>
               
               
-              <script>
-              function openGallery(evt, type) {
-                let tabcontent, tablinks;
-                tabcontent = document.getElementsByClassName("tabcontent");
-                for (let i = 0; i < tabcontent.length; i++) {
-                  tabcontent[i].style.display = "none";
-                }
-                tablinks = document.getElementsByClassName("tablinks");
-                for (let i = 0; i < tablinks.length; i++) {
-                  tablinks[i].className = tablinks[i].className.replace(" active", "");
-                }
-                document.getElementById(type).style.display = "block";
-                evt.currentTarget.className += " active";
-              }
-              </script>
+                <script>
+                    function openGallery(evt, type) {
+                        let tabcontent, tablinks;
+                        tabcontent = document.getElementsByClassName("tabcontent");
+                        for (let i = 0; i < tabcontent.length; i++) {
+                        tabcontent[i].style.display = "none";
+                        }
+                        tablinks = document.getElementsByClassName("tablinks");
+                        for (let i = 0; i < tablinks.length; i++) {
+                        tablinks[i].className = tablinks[i].className.replace(" active", "");
+                        }
+                        document.getElementById(type).style.display = "block";
+                        evt.currentTarget.className += " active";
+                    }
+                </script>
+            </div>
         </div>
-        
 
-        <div id="settings-container" >
+        <div id="settings-container" hidden="true">
             <p id="settings" class="noselect">Settings</p>
             <div id="keyboard"></div>
             <p id="km" class="noselect">Keyboard movement</p>
             <div id="helper"></div>
             <p id="mh" class="noselect">Movement helper</p>
         </div>
-
         
-    </div>
-    <div id="texts"></div>
+        <div id="texts"></div>
     
-    <!-- ANYTHING BELOW HERE WILL BE RENDERED ON THE LOADING SCREEN -->
-    <!-- SO UNLESS YOU WANT SOMETHING ON THE LOADING SCREEN, PUT IT HIGHER UP -->
-    <div id="loading">
-        <p id="loading-text">Loading...</p>
+        <!-- ANYTHING BELOW HERE WILL BE RENDERED ON THE LOADING SCREEN -->
+        <!-- SO UNLESS YOU WANT SOMETHING ON THE LOADING SCREEN, PUT IT HIGHER UP -->
+        <div id="loading">
+            <p id="loading-text">Loading...</p>
+        </div>
+        <canvas id="canvas"></canvas>
     </div>
-    <canvas id="canvas"></canvas>
     <script src="./index.js"></script>
 </body>
 </html>
