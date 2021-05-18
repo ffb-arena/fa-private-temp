@@ -73,29 +73,21 @@ class hotbarReload {
             this._pos.x + corners[this._whichSide(angleChecking)].x * this._width, 
             this._pos.y + corners[this._whichSide(angleChecking)].y * this._width);
 
-        if (this._angleToSecondLine > Math.PI) {
-            while (
-                (this._whichSide(this._angle) !== (this._whichSide(angleChecking)))
-            ) {
-                const side = this._whichSide(angleChecking);
-                c.lineTo(
-                    this._pos.x + corners[side].x * this._width, 
-                    this._pos.y + corners[side].y * this._width);
-                
-                angleChecking = angles[side];
-            }
-        } else {
-            do {
-                const side = this._whichSide(angleChecking);
-                c.lineTo(
-                    this._pos.x + corners[side].x * this._width, 
-                    this._pos.y + corners[side].y * this._width);
-                
-                angleChecking = angles[side];
-            }
-            while (
-                (this._whichSide(this._angle) !== (this._whichSide(angleChecking)))
-            )
+        if (this._angleToSecondLine < Math.PI) {
+            const side = this._whichSide(angleChecking);
+            c.lineTo(
+                this._pos.x + corners[side].x * this._width, 
+                this._pos.y + corners[side].y * this._width);
+            
+            angleChecking = angles[side];
+        }
+        while (this._whichSide(this._angle) !== this._whichSide(angleChecking)) {
+            const side = this._whichSide(angleChecking);
+            c.lineTo(
+                this._pos.x + corners[side].x * this._width, 
+                this._pos.y + corners[side].y * this._width);
+            
+            angleChecking = angles[side];
         }
         
 		c.lineTo(this._pos.x + Math.cos(this._angle - Math.PI / 2) * length, this._pos.y + Math.sin(this._angle - Math.PI / 2) * length);
