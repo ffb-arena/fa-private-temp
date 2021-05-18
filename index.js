@@ -131,7 +131,11 @@ wss.on('connection', function connection(ws) {
         myName = undefined;
         if (myID !== undefined) {
             // for debugging a bug
-            console.log("Someone in game just left", rooms.get(myRoom).players[myID].pubInfo.name);
+            try {
+                console.log("Someone in game just left", rooms.get(myRoom).players[myID].pubInfo.name);
+            } catch (e) {
+                console.log(e);
+            }
 
             rooms.get(myRoom).players[myID] = undefined;
             myID = undefined;

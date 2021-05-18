@@ -1,12 +1,19 @@
-// how far a line will go from the centre of a square to an edge
-function lineSquare(angle, squareWidth) {
-	const adjacent = squareWidth / 2;
-	let modAngle = angle % (Math.PI / 2);
-	if (modAngle > Math.PI / 4) modAngle = Math.PI / 2 - modAngle;
-	const opposite = adjacent * Math.tan(modAngle);
-	return Math.sqrt(opposite * opposite + adjacent * adjacent); 
-}
+// farthest right corner on a side (see hotbarReload._whichSide())
+// relative to the middle, using canvas coords
+const corners = [
+    { x: 0.5, y: -0.5 }, // 0
+    { x: 0.5, y: 0.5 }, // 1
+    { x: -0.5, y: 0.5 }, // 2
+    { x: -0.5, y: -0.5 } // 3
+];
 
+// angles to corners above
+const angles = [
+    2 * Math.PI * 1/8, // 0
+    2 * Math.PI * 3/8, // 1
+    2 * Math.PI * 5/8, // 2
+    2 * Math.PI * 7/8 // 3
+];
 
 // rendering reloading hotbar slots
 class hotbarReload {
@@ -20,8 +27,26 @@ class hotbarReload {
 		}; 
 		this._width = width;
 		this._angle = 0;
+        this._angleToSecondLine = 0;
+        this._angleAddPerMs = (2 * Math.PI) / timeUntilReloadFinished;
 		this._timePerRotation = this._totalTime / 5; // 5 rotations in total
 	}
+
+    // how far a line will go from the centre of a square to an edge
+    _lineSquare(angle, squareWidth) {
+        const adjacent = squareWidth / 2;
+        let modAngle = angle % (Math.PI / 2);
+        if (modAngle > Math.PI / 4) modAngle = Math.PI / 2 - modAngle;
+        const opposite = adjacent * Math.tan(modAngle);
+        return Math.sqrt(opposite * opposite + adjacent * adjacent); 
+    }
+
+    // what side of a square an angle is on
+    // top is 0, right is 1 etc.
+    _whichSide(angle) {
+        let side = angle + (Math.PI / 4);
+        return Math.floor(side / (Math.PI / 2)) % 4;
+    }
 
 	update(timeSinceLastFrame, c) {
 		if (this._totalTime === 0) return;
@@ -29,14 +54,56 @@ class hotbarReload {
 
 		this._time -= timeSinceLastFrame;
 		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
+        this._angleToSecondLine += this._angleAddPerMs * timeSinceLastFrame;
 
-		const length = lineSquare(this._angle, this._width);
-		c.strokeStyle = "#000000";
+        const angle2 = this._angle + this._angleToSecondLine;
+		const length = this._lineSquare(this._angle, this._width);
+        const length2 = this._lineSquare(angle2, this._width);
+
+        c.fillStyle = "#000000";
+        c.globalAlpha = 0.4;
+
+        let angleChecking = angle2;
+
 		c.beginPath();
-		c.moveTo(this._pos.x, this._pos.y);
-		c.lineTo(this._pos.x + Math.cos(this._angle) * length, this._pos.y + Math.sin(this._angle) * length);
+        c.moveTo(this._pos.x, this._pos.y);
+        c.moveTo(this._pos.x + Math.cos(angle2 - Math.PI / 2) * length2, this._pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
+
+        c.lineTo(
+            this._pos.x + corners[this._whichSide(angleChecking)].x * this._width, 
+            this._pos.y + corners[this._whichSide(angleChecking)].y * this._width);
+
+        if (this._angleToSecondLine > Math.PI) {
+            while (
+                (this._whichSide(this._angle) !== (this._whichSide(angleChecking)))
+            ) {
+                const side = this._whichSide(angleChecking);
+                c.lineTo(
+                    this._pos.x + corners[side].x * this._width, 
+                    this._pos.y + corners[side].y * this._width);
+                
+                angleChecking = angles[side];
+            }
+        } else {
+            do {
+                const side = this._whichSide(angleChecking);
+                c.lineTo(
+                    this._pos.x + corners[side].x * this._width, 
+                    this._pos.y + corners[side].y * this._width);
+                
+                angleChecking = angles[side];
+            }
+            while (
+                (this._whichSide(this._angle) !== (this._whichSide(angleChecking)))
+            )
+        }
+        
+		c.lineTo(this._pos.x + Math.cos(this._angle - Math.PI / 2) * length, this._pos.y + Math.sin(this._angle - Math.PI / 2) * length);
+        c.lineTo(this._pos.x, this._pos.y);
 		c.closePath();
-		c.stroke();
+		c.fill();
+
+        c.globalAlpha = 1;
 	}
 }
 
