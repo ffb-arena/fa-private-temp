@@ -40,6 +40,7 @@ const rarityColours = {
 
 // which petals are which rarity
 const rarities = {
+    0: undefined,
     1: "common"
 };
 

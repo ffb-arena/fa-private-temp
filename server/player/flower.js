@@ -191,14 +191,18 @@ class Flower {
         this._nextX = Date.now() + C.maxXCooldown;
 
 		for (let i = 0; i < this.petalNum; i++) {
+            if (this.inventory[i] === this.hotbar[i]) return;
 			let temp, oldPetal;
 			temp = this.inventory[i];
 			this.inventory[i] = this.hotbar[i];
 			this.hotbar[i] = temp;
 
 			oldPetal = this.pubInfo.petals[i];
-			this.pubInfo.petals[i] = new Petal(this.hotbar[i], oldPetal.degree, this.petalDist, this.petalCentre, oldPetal.ws, i);
+			this.pubInfo.petals[i] = new Petal(this.hotbar[i], oldPetal.degree, 
+                this.petalDist, this.petalCentre, oldPetal.ws, i);
 			this.pubInfo.petals[i].reload();
+
+            this.ws.send(JSON.stringify(["f", [this.hotbar[i], i, this.inventory[i], i]]));
 		}
     }
 

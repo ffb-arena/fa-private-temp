@@ -123,11 +123,22 @@ ws.onmessage = message => {
         // Player init (when spawning)
         case "i":
             me.info.level = msg[1];
+            const nOfPetals = 5 + Math.floor(msg[1] / 15);
 
             hotbarReloads = [];
-            for (let i = 0; i < msg[2]; i++) {
+            belowSlidingPetals = [];
+            for (let i = 0; i < nOfPetals; i++) {
                 hotbarReloads.push(new hotbarReload(0, 0, 0));
+                belowSlidingPetals.push(undefined);
             }
+
+            aboveSlidingPetals = [];
+            for (let i = 0; i < 8; i++) {
+                aboveSlidingPetals.push(undefined);
+            }
+
+            me.info.hotbar = msg[2];
+            me.info.inventory = msg[3];
             break;
 
         // Game data
@@ -137,8 +148,6 @@ ws.onmessage = message => {
             me.info.y = msg[1][0].y;
 
             allPlayers = msg[1];
-            me.info.hotbar = msg[1][0].hotbar;
-            me.info.inventory = msg[1][0].inventory;
             break;
         
         // Death
@@ -163,12 +172,43 @@ ws.onmessage = message => {
 		case "e":
             let squareX;
 			const newNum = msg[1] - me.info.hotbar.length / 2;
-			squareX = window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB;
-			squareX += (hbOutline - (hbOutline * fgPercent)) * 1.25;
+			squareX = window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB + spaceBetweenHB;
+			squareX += (hbOutline - (hbOutline * fgPercent)) / 2;
 			hotbarReloads[msg[1]] = new hotbarReload(msg[2], 
                 { x: squareX, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
                 hbOutline * fgPercent); 
 			break;
+
+        // petals switching places
+        case "f":
+            // format:
+            // msg[1][0]: petal id in inventory switching to hotbar
+            // msg[1][1]: which inventory slot it's in
+            // msg[1][2]: petal id of the hotbar switching to inventory
+            // msg[1][3]: which hotbar slot the petal is switching to
+            let newNum2 = msg[1][1] - me.info.hotbar.length / 2;
+            let squareX2 = window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons;
+            const invInfo = {
+                x: squareX2,
+                y: window.innerHeight - 81,
+                n: msg[1][1]
+            };
+
+            newNum2 = msg[1][3] - me.info.inventory.length / 2;
+            squareX2 = window.innerWidth / 2 + newNum2 * hbOutline + (newNum2 - 0.5) * spaceBetweenHB + spaceBetweenHB;
+            const hbInfo = {
+                x: squareX2,
+                y: window.innerHeight - 144,
+                n: msg[1][3]
+            };
+
+            me.info.inventory[msg[1][1]] = -1;
+            me.info.hotbar[msg[1][3]] = -1;
+            aboveSlidingPetals[msg[1][3]] = new slidingPetal(300, invInfo, 
+                hbInfo, outlineWidth, hbOutline, msg[1][0]);
+            belowSlidingPetals[msg[1][1]] = new slidingPetal(300, hbInfo, 
+                invInfo, hbOutline, outlineWidth, msg[1][2]);
+            break;
 
         // debug info
         case "z":
@@ -182,5 +222,6 @@ ws.onmessage = message => {
 
         default:
             console.log(`Unknown packet type: ${msg[0]}. Full packet is ${msg}`);
+            break;
     }
 }

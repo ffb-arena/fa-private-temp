@@ -1,3 +1,9 @@
+// lerps a certain percent between 2 numbers
+// amount = 0 - 1
+function lerp(begin, end, amount) {
+    return begin + ((end - begin) * amount);
+}
+
 // farthest right corner on a side (see hotbarReload._whichSide())
 // relative to the middle, using canvas coords
 const corners = [
@@ -30,10 +36,11 @@ class hotbarReload {
         this._angleToSecondLine = 0;
         this._angleAddPerMs = (2 * Math.PI) / timeUntilReloadFinished;
 		this._timePerRotation = this._totalTime / 5; // 5 rotations in total
+        this._lastUpdateTime = Date.now();
 	}
 
     // how far a line will go from the centre of a square to an edge
-    _lineSquare(angle, squareWidth) {
+    static lineSquare(angle, squareWidth) {
         const adjacent = squareWidth / 2;
         let modAngle = angle % (Math.PI / 2);
         if (modAngle > Math.PI / 4) modAngle = Math.PI / 2 - modAngle;
@@ -43,22 +50,24 @@ class hotbarReload {
 
     // what side of a square an angle is on
     // top is 0, right is 1 etc.
-    _whichSide(angle) {
+    static whichSide(angle) {
         let side = angle + (Math.PI / 4);
         return Math.floor(side / (Math.PI / 2)) % 4;
     }
 
-	update(timeSinceLastFrame, c) {
+	update(c) {
 		if (this._totalTime === 0) return;
         if (this._time <= 0) return;
 
+        const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
 		this._time -= timeSinceLastFrame;
 		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
         this._angleToSecondLine += this._angleAddPerMs * timeSinceLastFrame;
+        this._lastUpdateTime = Date.now();
 
         const angle2 = this._angle + this._angleToSecondLine;
-		const length = this._lineSquare(this._angle, this._width);
-        const length2 = this._lineSquare(angle2, this._width);
+		const length = hotbarReload.lineSquare(this._angle, this._width);
+        const length2 = hotbarReload.lineSquare(angle2, this._width);
 
         c.fillStyle = "#000000";
         c.globalAlpha = 0.4;
@@ -70,19 +79,19 @@ class hotbarReload {
         c.moveTo(this._pos.x + Math.cos(angle2 - Math.PI / 2) * length2, this._pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
 
         c.lineTo(
-            this._pos.x + corners[this._whichSide(angleChecking)].x * this._width, 
-            this._pos.y + corners[this._whichSide(angleChecking)].y * this._width);
+            this._pos.x + corners[hotbarReload.whichSide(angleChecking)].x * this._width, 
+            this._pos.y + corners[hotbarReload.whichSide(angleChecking)].y * this._width);
 
         if (this._angleToSecondLine < Math.PI) {
-            const side = this._whichSide(angleChecking);
+            const side = hotbarReload.whichSide(angleChecking);
             c.lineTo(
                 this._pos.x + corners[side].x * this._width, 
                 this._pos.y + corners[side].y * this._width);
             
             angleChecking = angles[side];
         }
-        while (this._whichSide(this._angle) !== this._whichSide(angleChecking)) {
-            const side = this._whichSide(angleChecking);
+        while (hotbarReload.whichSide(this._angle) !== hotbarReload.whichSide(angleChecking)) {
+            const side = hotbarReload.whichSide(angleChecking);
             c.lineTo(
                 this._pos.x + corners[side].x * this._width, 
                 this._pos.y + corners[side].y * this._width);
@@ -100,11 +109,54 @@ class hotbarReload {
 }
 
 
+// for inventory icons that are moving from a place to another
+class slidingPetal {
+    constructor(time, startingPos, targetPos, startingWidth, targetWidth, petalID) {
+        this._totalTime = time;
+        this._timeRemaining = time;
+        this.targetPos = targetPos;
+        this.startingPos = startingPos;
+        this._startingWidth = startingWidth;
+        this._targetWidth = targetWidth;
+        this.petalID = petalID;
+        this._lastUpdateTime = Date.now();
+    }
+
+    update(c) {
+        let returnValue;
+        const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
+        this._lastUpdateTime = Date.now();
+
+        this._timeRemaining -= timeSinceLastFrame;
+        if (this._timeRemaining <= 0) {
+            this._timeRemaining = 0;
+            returnValue = true;
+        } else returnValue = false;
+
+        const colours = rarityColours[rarities[this.petalID]];
+        if (!colours) return;
+
+        const amount = 1 - this._timeRemaining / this._totalTime;
+
+        const width = lerp(this._startingWidth, this._targetWidth, amount);
+        const x = lerp(this.startingPos.x, this.targetPos.x, amount);
+        const y = lerp(this.startingPos.y, this.targetPos.y, amount);
+
+        drawPetalIcon({ x: x, y: y }, petalNames[this.petalID], this.petalID, width,
+            colours.bg, colours.fg, 0.9, c);
+
+        return returnValue;
+    }
+}
+
+
 let hotbarReloads = [];
+let belowSlidingPetals = [];
+let aboveSlidingPetals = [];
 
 // percent of the icon is foreground
 const fgPercent = 13/16;
-function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot, timeSinceLastFrame) {
+function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot) {
     c.globalAlpha = globalAlpha;
 
     // background square
@@ -122,7 +174,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 
 	if (invSlot !== undefined) {
 		// reload (if there is one)
-		hotbarReloads[invSlot].update(timeSinceLastFrame, c);
+		hotbarReloads[invSlot].update(c);
 		c.globalAlpha = globalAlpha;
 	}
 
@@ -159,7 +211,7 @@ const spaceBetweenHB = 8;
 
 
 // draws inventory and stuff
-function drawInventory(timeSinceLastFrame) {
+function drawInventory() {
 
     // changes the size of stop moving rectangle
     if (stopText[0] === "M") {
@@ -194,13 +246,23 @@ function drawInventory(timeSinceLastFrame) {
 
     if (me.info.inventory.length === 0) return;
     for (let i = 0; i < 8; i++) {
-        if (me.info.inventory[i] === 0) {
-            drawPetalIcon({ x: x, y: window.innerHeight - 81 },
-                "", 0, outlineWidth, "#dedede", "#ffffff", 0.5, ctx);
-        } else {
-            const colours = rarityColours[rarities[me.info.inventory[i]]];
-            drawPetalIcon({ x: x, y: window.innerHeight - 81 },
-                petalNames[me.info.inventory[i]], me.info.inventory[i], outlineWidth, colours.bg, colours.fg, 0.9, ctx);
+        switch (me.info.inventory[i]) {
+
+            // petal is a slidingPetal
+            case -1:
+
+            // empty slot
+            case 0:
+                drawPetalIcon({ x: x, y: window.innerHeight - 81 },
+                    "", 0, outlineWidth, "#dedede", "#ffffff", 0.5, ctx);
+                break;
+            
+            // normal petal
+            default: 
+                const colours = rarityColours[rarities[me.info.inventory[i]]];
+                drawPetalIcon({ x: x, y: window.innerHeight - 81 },
+                    petalNames[me.info.inventory[i]], me.info.inventory[i], outlineWidth, colours.bg, colours.fg, 0.9, ctx);
+                break;
         }
 
         x += spaceBetweenInvIcons + outlineWidth;
@@ -210,16 +272,44 @@ function drawInventory(timeSinceLastFrame) {
     x = window.innerWidth / 2 - hbOutline * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
 
     for (let i = 0; i < me.info.hotbar.length; i++) {
-        if (me.info.hotbar[i] === 0) {
-            drawPetalIcon({ x: x, y: window.innerHeight - 144 },
-                "", 0, hbOutline, "#dedede", "#ffffff", 0.5, ctx);
-        } else {
-            const colours = rarityColours[rarities[me.info.hotbar[i]]];
-            drawPetalIcon({ x: x, y: window.innerHeight - 144 },
-                petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,
-				colours.bg, colours.fg, 0.9, ctx, i, timeSinceLastFrame);
+        switch (me.info.hotbar[i]) {
+
+            // petal is a slidingPetal
+            case -1:
+        
+            // empty slot
+            case 0:
+                drawPetalIcon({ x: x, y: window.innerHeight - 144 },
+                    "", 0, hbOutline, "#dedede", "#ffffff", 0.5, ctx);
+                break;
+
+            // normal petal
+            default: 
+                const colours = rarityColours[rarities[me.info.hotbar[i]]];
+                drawPetalIcon({ x: x, y: window.innerHeight - 144 },
+                    petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,
+                    colours.bg, colours.fg, 0.9, ctx, i);
+                break;
         }
 
         x += spaceBetweenHB + hbOutline;
+    }
+
+    // drawing the transisioning petals
+    for (let i = 0; i < belowSlidingPetals.length; i++) {
+        if (belowSlidingPetals[i]) {
+            if (belowSlidingPetals[i].update(ctx)) {
+                me.info.inventory[belowSlidingPetals[i].targetPos.n] = belowSlidingPetals[i].petalID;
+                belowSlidingPetals[i] = undefined;
+            }
+        }
+    }
+    for (let i = 0; i < 8; i++) {
+        if (aboveSlidingPetals[i]) {
+            if (aboveSlidingPetals[i].update(ctx)) {
+                me.info.hotbar[aboveSlidingPetals[i].targetPos.n] = aboveSlidingPetals[i].petalID;
+                aboveSlidingPetals[i] = undefined;
+            }
+        }
     }
 }

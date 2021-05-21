@@ -158,12 +158,11 @@ function addEventListeners() {
     });
 }
 
-let loop, msSinceLastFrame;
+let loop;
 let deathScreen = [];
 function mainLoop() {
     performance.fps.newTime = Date.now();
     performance.fps.fpsArray.push(1 / (((performance.fps.newTime - performance.fps.oldTime) / 1000) || 1));
-	msSinceLastFrame = performance.fps.newTime - performance.fps.oldTime;
 
     // Clearing canvas
     clear(ctx);
@@ -212,7 +211,7 @@ function mainLoop() {
 
         // drawing death screen
         if (!deathScreen.length) {
-            drawInventory(msSinceLastFrame);
+            drawInventory();
         } else {
             clearText(); // from src/game/rendering.js
             ctx.globalAlpha = 0.5;

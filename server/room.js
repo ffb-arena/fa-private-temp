@@ -45,7 +45,7 @@ class Room {
         const name = msgName || myName;
         this.players[newID] = new Flower(newID, x, y, level, name, bruh, ws);
         // sending init package
-        ws.send(JSON.stringify(["i", level, 5 + Math.floor(level / 15)]));
+        ws.send(JSON.stringify(["i", level, this.players[newID].hotbar, this.players[newID].inventory]));
         return [newID, myName];
     }
 
@@ -142,8 +142,6 @@ class Room {
                 me[prop] = player.pubInfo[prop];
             }
             me.petals = sievedPetals;
-            me.hotbar = player.hotbar;
-            me.inventory = player.inventory;
             send.push(me);
             if (this.debug) {
                 player.debug.push([
