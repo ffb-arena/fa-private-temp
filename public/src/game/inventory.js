@@ -184,7 +184,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
     c.globalAlpha = 1;
 
     // image
-    petals[id]({ x: pos.x + width / 2, y: pos.y + width * 2/5 }, c, 1, width / 6);
+    petals[id]({ x: pos.x + width / 2, y: pos.y + width * 2/5 }, c, 1, width / 6 * radii[id] / 10);
 }
 
 

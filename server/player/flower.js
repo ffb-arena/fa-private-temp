@@ -26,7 +26,8 @@ class Flower {
             this.hotbar.push(1);
         };
         this.inventory = [];
-        for (let i = 0; i < 8; i++) {
+		this.inventory.push(2);
+        for (let i = 0; i < 7; i++) {
             this.inventory.push(0);
         };
 

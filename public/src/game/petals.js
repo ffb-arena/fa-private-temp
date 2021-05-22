@@ -27,6 +27,31 @@ const petals = {
         );
         c.fill();
         c.closePath();
+    },
+    // fast
+    2: (p, c, ratio, radius) => {
+        radius = radius || p.radius;
+        ratio = ratio || 1;
+
+        c.beginPath();
+        c.fillStyle = "#c2c2c2";
+        c.arc(
+            p.x,
+            p.y,
+            radius * ratio, 0, 2 * Math.PI
+        );
+        c.fill();
+        c.closePath();
+
+        c.beginPath();
+        c.fillStyle = "#ffffff";
+        c.arc(
+            p.x,
+            p.y,
+            radius * 0.8 * ratio, 0, 2 * Math.PI
+        );
+        c.fill();
+        c.closePath();
     }
 };
 
@@ -41,9 +66,18 @@ const rarityColours = {
 // which petals are which rarity
 const rarities = {
     0: undefined,
-    1: "common"
+    1: "common",
+	2: "common"
 };
 
 const petalNames = {
-    1: "Basic"
+    1: "Basic",
+	2: "Fast"
 };
+
+// petal radii
+const radii = {
+	1: 10,
+	2: 8
+};
+

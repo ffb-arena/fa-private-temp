@@ -13,7 +13,15 @@ const petalStats = {
         cooldown: 2500,
         damage: 10,
         hp: 10
-    }
+    },
+
+	// fast
+	2: {
+		radius: 8,
+		cooldown: 500,
+		damage: 8,
+		health: 5
+	}
 };
 
 module.exports = petalStats;
