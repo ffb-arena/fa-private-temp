@@ -196,20 +196,34 @@ class Flower {
             if (this._swapCooldowns[i] > Date.now()) continue;
             if (this.inventory[i] === this.hotbar[i]) continue;
 
-            this._swapCooldowns[i] = Date.now() + C.maxXCooldown;
-
-			let temp, oldPetal;
-			temp = this.inventory[i];
-			this.inventory[i] = this.hotbar[i];
-			this.hotbar[i] = temp;
-
-			oldPetal = this.pubInfo.petals[i];
-			this.pubInfo.petals[i] = new Petal(this.hotbar[i], oldPetal.degree, 
-                this.petalDist, this.petalCentre, oldPetal.ws, i);
-			this.pubInfo.petals[i].reload();
-
-            this.ws.send(JSON.stringify(["f", [this.hotbar[i], i, this.inventory[i], i]]));
+            this._swapPetals(i, i);
 		}
+    }
+
+    // swapping petals checks
+    swapPetalsChecks(invPetal, hotbarPetal) {
+        if (this.inventory[invPetal] === 0) return;
+        if (this.inventory[invPetal] === this.hotbar[hotbarPetal]) return;
+        if (this._swapCooldowns[invPetal] > Date.now()) return;
+
+        this._swapPetals(invPetal, hotbarPetal);
+    }
+
+    // swapping petals after checks have been passed
+    _swapPetals(invPetal, hotbarPetal) {
+        this._swapCooldowns[invPetal] = Date.now() + C.maxXCooldown;
+
+        let temp, oldPetal;
+        temp = this.inventory[invPetal];
+        this.inventory[invPetal] = this.hotbar[hotbarPetal];
+        this.hotbar[hotbarPetal] = temp;
+
+        oldPetal = this.pubInfo.petals[hotbarPetal];
+        this.pubInfo.petals[hotbarPetal] = new Petal(this.hotbar[hotbarPetal], oldPetal.degree, 
+            this.petalDist, this.petalCentre, oldPetal.ws, hotbarPetal);
+        this.pubInfo.petals[hotbarPetal].reload();
+
+        this.ws.send(JSON.stringify(["f", [this.hotbar[hotbarPetal], invPetal, this.inventory[invPetal], hotbarPetal]]));
     }
 
     // updates position based on mouse position/keys down

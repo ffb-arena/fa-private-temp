@@ -111,6 +111,11 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
             }
             break;
 
+        // swapping petals
+        case "d": 
+            rooms.get(myRoom).players[myID].swapPetalsChecks(packet[1], packet[2]);
+            break;
+
         // Ping
         case "ping":
             ws.send(JSON.stringify(["pong", packet[1]]));

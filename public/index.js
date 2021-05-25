@@ -156,7 +156,7 @@ function addEventListeners() {
 					selectedPetal = 0;
 				}
 				// send message to swap selectedPetal and whichever digit was pressed
-				
+				ws.send(JSON.stringify(["d", selectedPetal, i - 1]));
 				unselectTime = Date.now() + 5000;
 			}
 		}

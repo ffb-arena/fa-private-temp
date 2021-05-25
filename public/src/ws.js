@@ -183,9 +183,10 @@ ws.onmessage = message => {
         case "f":
             // format:
             // msg[1][0]: petal id in inventory switching to hotbar
-            // msg[1][1]: which inventory slot it's in
+            // msg[1][1]: which inventory slot it's currently in
             // msg[1][2]: petal id of the hotbar switching to inventory
-            // msg[1][3]: which hotbar slot the petal is switching to
+            // msg[1][3]: which hotbar slot it's currently in
+            console.log(msg[1][0], msg[1][2]);
             let newNum2 = msg[1][1] - me.info.hotbar.length / 2;
             let squareX2 = window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons;
             const invInfo = {
@@ -208,6 +209,10 @@ ws.onmessage = message => {
                 hbInfo, outlineWidth, hbOutline, msg[1][0]);
             belowSlidingPetals[msg[1][1]] = new slidingPetal(300, hbInfo, 
                 invInfo, hbOutline, outlineWidth, msg[1][2]);
+
+
+            // TODO:
+            // FIND NEXT SELECTED PETAL
             break;
 
         // debug info
