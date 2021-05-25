@@ -88,7 +88,10 @@ class Flower {
         this.deadPetals = [];
         this.deadPetalsToSend = [];
 
-        this._nextX = Date.now();
+        this._swapCooldowns = [];
+        for (let i = 0; i < 8; i++) {
+            this._swapCooldowns.push(Date.now());
+        }
     }
 
     keyDown(key) {
@@ -189,11 +192,12 @@ class Flower {
 
     // when x is pressed
     _x() {
-        if (Date.now() < this._nextX) return;
-        this._nextX = Date.now() + C.maxXCooldown;
-
 		for (let i = 0; i < this.petalNum; i++) {
-            if (this.inventory[i] === this.hotbar[i]) return;
+            if (this._swapCooldowns[i] > Date.now()) continue;
+            if (this.inventory[i] === this.hotbar[i]) continue;
+
+            this._swapCooldowns[i] = Date.now() + C.maxXCooldown;
+
 			let temp, oldPetal;
 			temp = this.inventory[i];
 			this.inventory[i] = this.hotbar[i];

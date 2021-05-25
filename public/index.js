@@ -133,7 +133,7 @@ function addEventListeners() {
 				numInfo = true;
 				selectedPetal = 0
 			} else {
-				if (key.code == "KeyQ") {
+				if (key.code === "KeyQ") {
 					do {
 						selectedPetal--;
 						if (selectedPetal === -1) selectedPetal = 7;
@@ -146,6 +146,19 @@ function addEventListeners() {
 				}	
 			}
 			unselectTime = Date.now() + 5000; // unselect in 5000 ms
+		}
+
+		// switching petals
+		for (let i = 0; i < me.info.hotbar.length; i++) {
+			if (key.code == `Digit${i}`) {
+				if (!numInfo) {
+					numInfo = true;
+					selectedPetal = 0;
+				}
+				// send message to swap selectedPetal and whichever digit was pressed
+				
+				unselectTime = Date.now() + 5000;
+			}
 		}
     });
     document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
