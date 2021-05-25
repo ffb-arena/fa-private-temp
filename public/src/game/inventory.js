@@ -76,7 +76,8 @@ class hotbarReload {
 
 		c.beginPath();
         c.moveTo(this._pos.x, this._pos.y);
-        c.moveTo(this._pos.x + Math.cos(angle2 - Math.PI / 2) * length2, this._pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
+        c.moveTo(this._pos.x + Math.cos(angle2 - Math.PI / 2) * length2, 
+			this._pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
 
         c.lineTo(
             this._pos.x + corners[hotbarReload.whichSide(angleChecking)].x * this._width, 
@@ -99,7 +100,8 @@ class hotbarReload {
             angleChecking = angles[side];
         }
         
-		c.lineTo(this._pos.x + Math.cos(this._angle - Math.PI / 2) * length, this._pos.y + Math.sin(this._angle - Math.PI / 2) * length);
+		c.lineTo(this._pos.x + Math.cos(this._angle - Math.PI / 2) * length, 
+			this._pos.y + Math.sin(this._angle - Math.PI / 2) * length);
         c.lineTo(this._pos.x, this._pos.y);
 		c.closePath();
 		c.fill();
@@ -179,7 +181,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 	}
 
     // text
-    florrText(name, width / 4.5, { x: pos.x + width / 2, y: pos.y + width * 0.7 }, 30, c);
+    florrText(name, width / 4.5, { x: pos.x + width / 2, y: pos.y + width * 0.7 }, width / 120, c);
 
     c.globalAlpha = 1;
 
@@ -190,16 +192,21 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 
 const changeSpeed = 0.08;
 
-const minInventoryWidth = 240;
-const minInventoryHeight = 28
+const minBoxWidth = 240;
+const minBoxHeight = 28
 // 530 and 160 are the maxes
 // 508 in game, but too small here
 // and I'm too lazy to go in game and see how it handles it
-const maxInventoryWidthAdd = 530 - 240;
-const maxOnventoryHeightAdd = 160 - 28;
-let inventoryWidth = minInventoryWidth;
-let inventoryHeight = minInventoryHeight;
+const maxBoxWidthAdd = 530 - 240;
+const maxBoxHeightAdd = 160 - 28;
+let boxWidth = minBoxWidth;
+let boxHeight = minBoxHeight;
 let sizeMult = 0;
+
+// whether to show the numbers above the petals
+let numInfo = false;
+let selectedPetal = 0;
+let unselectTime = undefined;
 
 // inventory vars (petals not in use)
 const outlineWidth = 40;
@@ -213,6 +220,11 @@ const spaceBetweenHB = 8;
 // draws inventory and stuff
 function drawInventory() {
 
+	// checks if should automatically unselect
+	if (Date.now() > unselectTime) {
+		numInfo = false;
+	}	
+
     // changes the size of stop moving rectangle
     if (stopText[0] === "M") {
         // player isn't stopped
@@ -221,24 +233,24 @@ function drawInventory() {
         // player is stopped
         sizeMult = Math.min(sizeMult + changeSpeed, 1);
     }
-    inventoryWidth = minInventoryWidth + (sizeMult * maxInventoryWidthAdd);
-    inventoryHeight = minInventoryHeight + (sizeMult * maxOnventoryHeightAdd);
+    boxWidth = minBoxWidth + (sizeMult * maxBoxWidthAdd);
+    boxHeight = minBoxHeight + (sizeMult * maxBoxHeightAdd);
 
     // draws stop moving rectangle
     ctx.fillStyle = "#000000";
     ctx.globalAlpha = 0.4;
     ctx.roundRect(
-        window.innerWidth / 2 - inventoryWidth / 2,
-        window.innerHeight - inventoryHeight,
-        inventoryWidth,
-        inventoryHeight + 20,
+        window.innerWidth / 2 - boxWidth / 2,
+        window.innerHeight - boxHeight,
+        boxWidth,
+        boxHeight + 20,
         7
     );
     ctx.fill();
 
     // stop moving text
     florrText(stopText, 11.9,
-        { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 35, ctx);
+        { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 0.3, ctx);
 
     // inventory boxes
     let x;
@@ -259,9 +271,16 @@ function drawInventory() {
             
             // normal petal
             default: 
-                const colours = rarityColours[rarities[me.info.inventory[i]]];
-                drawPetalIcon({ x: x, y: window.innerHeight - 81 },
-                    petalNames[me.info.inventory[i]], me.info.inventory[i], outlineWidth, colours.bg, colours.fg, 0.9, ctx);
+               	const colours = rarityColours[rarities[me.info.inventory[i]]];
+               	drawPetalIcon({ x: x, y: window.innerHeight - 81 },
+               		petalNames[me.info.inventory[i]], me.info.inventory[i], 
+					outlineWidth, colours.bg, colours.fg, 0.9, ctx);
+				// if the petal is selected in the inventory
+				if (numInfo && selectedPetal === i) {	
+					ctx.lineWidth = 1.6;
+					ctx.strokeStyle = colours.fg;
+					ctx.strokeRect(x, window.innerHeight - 81, outlineWidth, outlineWidth);
+				}
                 break;
         }
 
@@ -269,7 +288,8 @@ function drawInventory() {
     }
 
     // hotbar
-    x = window.innerWidth / 2 - hbOutline * me.info.hotbar.length / 2 - spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2
+    x = window.innerWidth / 2 - (hbOutline * me.info.hotbar.length / 2) - 
+		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
 
     for (let i = 0; i < me.info.hotbar.length; i++) {
         switch (me.info.hotbar[i]) {
@@ -312,4 +332,16 @@ function drawInventory() {
             }
         }
     }
+
+    // drawing numbers
+    if (numInfo) {
+        x = window.innerWidth / 2 - (hbOutline * me.info.hotbar.length / 2) - 
+			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbOutline / 2);
+
+        for (let i = 0; i < me.info.hotbar.length; i++) {
+            florrText(`[${i + 1}]`, 14, { x: x, y: window.innerHeight - 157 }, 0.5, ctx);
+            x += spaceBetweenHB + hbOutline;
+        }
+    }
+    // drawing petal that is being held
 }

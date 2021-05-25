@@ -7,7 +7,7 @@ function florrText(text, fontSize, centre, textStroke, c) {
     p.style.position = "absolute";
     p.style.fontSize = `${fontSize}px`;
     p.style.color = "#ffffff";
-    p.style["-webkit-text-stroke"] = `${fontSize / textStroke}px black`;
+    p.style["-webkit-text-stroke"] = `${textStroke}px black`;
     p.style["letter-spacing"] = "-0.35px";
 
     c.font = `${fontSize}px Ubuntu`;

@@ -122,6 +122,31 @@ function addEventListeners() {
             returnToMenu();
             deathScreen = [];
         }
+
+		// hiding numbers
+		if (key.code === "Escape") {
+			numInfo = false;
+		}	
+		// going into key inventory mode
+		if (key.code === "KeyQ" || key.code === "KeyE") {
+			if (!numInfo) {
+				numInfo = true;
+				selectedPetal = 0
+			} else {
+				if (key.code == "KeyQ") {
+					do {
+						selectedPetal--;
+						if (selectedPetal === -1) selectedPetal = 7;
+					} while (me.info.inventory[selectedPetal] === 0)
+				} else {
+					do {
+						selectedPetal++;
+						if (selectedPetal === 8) selectedPetal = 0;
+					} while (me.info.inventory[selectedPetal] === 0)
+				}	
+			}
+			unselectTime = Date.now() + 5000; // unselect in 5000 ms
+		}
     });
     document.addEventListener("keyup", key => ws.send(JSON.stringify(`cb${key.code}`)));
     window.addEventListener("mousedown", click => {
@@ -134,9 +159,9 @@ function addEventListeners() {
     document.addEventListener("mousemove", pos => {
         if (title.hidden) {
             if (
-                window.innerWidth / 2 - inventoryWidth / 2 < pos.x && pos.x < window.innerWidth / 2 + inventoryWidth / 2
+                window.innerWidth / 2 - boxWidth / 2 < pos.x && pos.x < window.innerWidth / 2 + boxWidth / 2
                 &&
-                window.innerHeight - inventoryHeight < pos.y && pos.y < window.innerHeight
+                window.innerHeight - boxHeight < pos.y && pos.y < window.innerHeight
             ) {
                 ws.send(JSON.stringify(["c", "d", 0, 0, res]));
                 stopText = "You can also use [Q] and [E] to modify the inventory";
@@ -186,7 +211,7 @@ function mainLoop() {
     }
 
     // if not on menu
-    if (gallery.hidden) {
+    if (title.hidden) {
         drawMap();
         drawGrid();
 
@@ -214,6 +239,8 @@ function mainLoop() {
             drawInventory();
         } else {
             clearText(); // from src/game/rendering.js
+			numInfo = false;
+
             ctx.globalAlpha = 0.5;
             ctx.fillStyle = "#000000";
             ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);

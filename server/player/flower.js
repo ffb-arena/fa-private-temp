@@ -27,7 +27,8 @@ class Flower {
         };
         this.inventory = [];
 		this.inventory.push(2);
-        for (let i = 0; i < 7; i++) {
+		this.inventory.push(1);
+        for (let i = 0; i < 6; i++) {
             this.inventory.push(0);
         };
 
