@@ -202,9 +202,9 @@ ws.onmessage = message => {
 
             me.info.inventory[msg[1][1]] = -1;
             me.info.hotbar[msg[1][3]] = -1;
-            aboveSlidingPetals[msg[1][3]] = new SlidingPetal(300, invInfo, 
+            aboveSlidingPetals[msg[1][3]] = new SlidingPetal(300, invInfo,
                 hbInfo, outlineWidth, hbOutline, msg[1][0]);
-            belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo, 
+            belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo,
                 invInfo, hbOutline, outlineWidth, msg[1][2]);
 
 
