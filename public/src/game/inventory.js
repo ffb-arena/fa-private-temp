@@ -27,10 +27,7 @@ class HotbarReload {
 		this._totalTime = timeUntilReloadFinished;
 		this._time = timeUntilReloadFinished;
 		this._percent = 0;
-		this._pos = {
-			x: pos.x + width / 2,
-			y: pos.y + width / 2
-		}; 
+		this._pos = pos;
 		this._width = width;
 		this._angle = 0;
         this._angleToSecondLine = 0;
@@ -64,7 +61,10 @@ class HotbarReload {
 		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
         this._angleToSecondLine += this._angleAddPerMs * timeSinceLastFrame;
 
-		const pos = posParam || this._pos;
+		const pos = posParam || {
+			x: this._pos.x() + this._width / 2,
+			y: this._pos.y() + this._width / 2
+		};
 		const width = widthParam || this._width
         this._lastUpdateTime = Date.now();
 
@@ -144,14 +144,14 @@ class SlidingPetal {
         const amount = 1 - this._timeRemaining / this._totalTime;
 
         const width = lerp(this._startingWidth, this._targetWidth, amount);
-        const x = lerp(this.startingPos.x, this.targetPos.x, amount);
-        const y = lerp(this.startingPos.y, this.targetPos.y, amount);
+        const x = lerp(this.startingPos.x(), this.targetPos.x(), amount);
+        const y = lerp(this.startingPos.y(), this.targetPos.y(), amount);
 		let reloadSettings, invSlot;
 
 		if (drawReload) {
 			reloadSettings = {
 				pos: { x: x + width / 2, y: y + width / 2 },
-				width: width - (hbOutline - (hbOutline * fgPercent))
+				width: width * fgPercent
 			};
 			invSlot = this.targetPos.n;
 		}
