@@ -170,12 +170,12 @@ ws.onmessage = message => {
 		
 		// petal reloads
 		case "e":
+            let squareX;
 			const newNum = msg[1] - me.info.hotbar.length / 2;
+			squareX = window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB + spaceBetweenHB;
+			squareX += (hbOutline - (hbOutline * fgPercent)) / 2;
 			hotbarReloads[msg[1]] = new HotbarReload(msg[2], 
-                { 
-					x: () => window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB + spaceBetweenHB + (hbOutline - (hbOutline * fgPercent)) / 2,
-					y: () => window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 
-				}, 
+                { x: squareX, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
                 hbOutline * fgPercent); 
 			break;
 
@@ -187,16 +187,18 @@ ws.onmessage = message => {
             // msg[1][2]: petal id of the hotbar switching to inventory
             // msg[1][3]: which hotbar slot it's currently in
             let newNum2 = msg[1][1] - me.info.hotbar.length / 2;
+            let squareX2 = window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons;
             const invInfo = {
-                x: () => window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons,
-                y: () => window.innerHeight - 81,
+                x: squareX2,
+                y: window.innerHeight - 81,
                 n: msg[1][1]
             };
 
             newNum2 = msg[1][3] - me.info.inventory.length / 2;
+            squareX2 = window.innerWidth / 2 + newNum2 * hbOutline + (newNum2 - 0.5) * spaceBetweenHB + spaceBetweenHB;
             const hbInfo = {
-                x: () => window.innerWidth / 2 + newNum2 * hbOutline + (newNum2 - 0.5) * spaceBetweenHB + spaceBetweenHB,
-                y: () => window.innerHeight - 144,
+                x: squareX2,
+                y: window.innerHeight - 144,
                 n: msg[1][3]
             };
 
