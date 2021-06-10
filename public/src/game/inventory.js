@@ -4,7 +4,7 @@ function lerp(begin, end, amount) {
     return begin + ((end - begin) * amount);
 }
 
-// farthest right corner on a side (see hotbarReload._whichSide())
+// farthest right corner on a side (see HotbarReload._whichSide())
 // relative to the middle, using canvas coords
 const corners = [
     { x: 0.5, y: -0.5 }, // 0
@@ -22,7 +22,7 @@ const angles = [
 ];
 
 // rendering reloading hotbar slots
-class hotbarReload {
+class HotbarReload {
 	constructor(timeUntilReloadFinished, pos, width) {
 		this._totalTime = timeUntilReloadFinished;
 		this._time = timeUntilReloadFinished;
@@ -55,7 +55,7 @@ class hotbarReload {
         return Math.floor(side / (Math.PI / 2)) % 4;
     }
 
-	update(c) {
+	update(c, posParam, widthParam) {
 		if (this._totalTime === 0) return;
         if (this._time <= 0) return;
 
@@ -63,11 +63,14 @@ class hotbarReload {
 		this._time -= timeSinceLastFrame;
 		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
         this._angleToSecondLine += this._angleAddPerMs * timeSinceLastFrame;
+
+		const pos = posParam || this._pos;
+		const width = widthParam || this._width
         this._lastUpdateTime = Date.now();
 
         const angle2 = this._angle + this._angleToSecondLine;
-		const length = hotbarReload.lineSquare(this._angle, this._width);
-        const length2 = hotbarReload.lineSquare(angle2, this._width);
+		const length = HotbarReload.lineSquare(this._angle, width);
+        const length2 = HotbarReload.lineSquare(angle2, width);
 
         c.fillStyle = "#000000";
         c.globalAlpha = 0.4;
@@ -75,34 +78,34 @@ class hotbarReload {
         let angleChecking = angle2;
 
 		c.beginPath();
-        c.moveTo(this._pos.x, this._pos.y);
-        c.moveTo(this._pos.x + Math.cos(angle2 - Math.PI / 2) * length2, 
-			this._pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
+        c.moveTo(pos.x, pos.y);
+        c.moveTo(pos.x + Math.cos(angle2 - Math.PI / 2) * length2, 
+			pos.y + Math.sin(angle2 - Math.PI / 2) * length2);
 
         c.lineTo(
-            this._pos.x + corners[hotbarReload.whichSide(angleChecking)].x * this._width, 
-            this._pos.y + corners[hotbarReload.whichSide(angleChecking)].y * this._width);
+            pos.x + corners[HotbarReload.whichSide(angleChecking)].x * width, 
+            pos.y + corners[HotbarReload.whichSide(angleChecking)].y * width);
 
         if (this._angleToSecondLine < Math.PI) {
-            const side = hotbarReload.whichSide(angleChecking);
+            const side = HotbarReload.whichSide(angleChecking);
             c.lineTo(
-                this._pos.x + corners[side].x * this._width, 
-                this._pos.y + corners[side].y * this._width);
+                pos.x + corners[side].x * width, 
+                pos.y + corners[side].y * width);
             
             angleChecking = angles[side];
         }
-        while (hotbarReload.whichSide(this._angle) !== hotbarReload.whichSide(angleChecking)) {
-            const side = hotbarReload.whichSide(angleChecking);
+        while (HotbarReload.whichSide(this._angle) !== HotbarReload.whichSide(angleChecking)) {
+            const side = HotbarReload.whichSide(angleChecking);
             c.lineTo(
-                this._pos.x + corners[side].x * this._width, 
-                this._pos.y + corners[side].y * this._width);
+                pos.x + corners[side].x * width, 
+                pos.y + corners[side].y * width);
             
             angleChecking = angles[side];
         }
         
-		c.lineTo(this._pos.x + Math.cos(this._angle - Math.PI / 2) * length, 
-			this._pos.y + Math.sin(this._angle - Math.PI / 2) * length);
-        c.lineTo(this._pos.x, this._pos.y);
+		c.lineTo(pos.x + Math.cos(this._angle - Math.PI / 2) * length, 
+			pos.y + Math.sin(this._angle - Math.PI / 2) * length);
+        c.lineTo(pos.x, pos.y);
 		c.closePath();
 		c.fill();
 
@@ -112,7 +115,7 @@ class hotbarReload {
 
 
 // for inventory icons that are moving from a place to another
-class slidingPetal {
+class SlidingPetal {
     constructor(time, startingPos, targetPos, startingWidth, targetWidth, petalID) {
         this._totalTime = time;
         this._timeRemaining = time;
@@ -124,7 +127,7 @@ class slidingPetal {
         this._lastUpdateTime = Date.now();
     }
 
-    update(c) {
+    update(c, drawReload = false) {
         let returnValue;
         const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
         this._lastUpdateTime = Date.now();
@@ -143,9 +146,18 @@ class slidingPetal {
         const width = lerp(this._startingWidth, this._targetWidth, amount);
         const x = lerp(this.startingPos.x, this.targetPos.x, amount);
         const y = lerp(this.startingPos.y, this.targetPos.y, amount);
+		let reloadSettings, invSlot;
+
+		if (drawReload) {
+			reloadSettings = {
+				pos: { x: x + width / 2, y: y + width / 2 },
+				width: width - (hbOutline - (hbOutline * fgPercent))
+			};
+			invSlot = this.targetPos.n;
+		}
 
         drawPetalIcon({ x: x, y: y }, petalNames[this.petalID], this.petalID, width,
-            colours.bg, colours.fg, 0.9, c);
+            colours.bg, colours.fg, 0.9, c, invSlot, reloadSettings);
 
         return returnValue;
     }
@@ -158,7 +170,7 @@ let aboveSlidingPetals = [];
 
 // percent of the icon is foreground
 const fgPercent = 13/16;
-function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot) {
+function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot, reloadSettings) {
     c.globalAlpha = globalAlpha;
 
     // background square
@@ -176,7 +188,11 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 
 	if (invSlot !== undefined) {
 		// reload (if there is one)
-		hotbarReloads[invSlot].update(c);
+		if (!reloadSettings) {
+			hotbarReloads[invSlot].update(c);
+		} else {
+			hotbarReloads[invSlot].update(c, reloadSettings.pos, reloadSettings.width);
+		}
 		c.globalAlpha = globalAlpha;
 	}
 
@@ -326,7 +342,8 @@ function drawInventory() {
     }
     for (let i = 0; i < 8; i++) {
         if (aboveSlidingPetals[i]) {
-            if (aboveSlidingPetals[i].update(ctx)) {
+			// updating with reload
+            if (aboveSlidingPetals[i].update(ctx, true)) {
                 me.info.hotbar[aboveSlidingPetals[i].targetPos.n] = aboveSlidingPetals[i].petalID;
                 aboveSlidingPetals[i] = undefined;
             }
@@ -343,5 +360,6 @@ function drawInventory() {
             x += spaceBetweenHB + hbOutline;
         }
     }
+
     // drawing petal that is being held
 }

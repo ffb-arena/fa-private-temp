@@ -128,7 +128,7 @@ ws.onmessage = message => {
             hotbarReloads = [];
             belowSlidingPetals = [];
             for (let i = 0; i < nOfPetals; i++) {
-                hotbarReloads.push(new hotbarReload(0, 0, 0));
+                hotbarReloads.push(new HotbarReload(0, 0, 0));
                 belowSlidingPetals.push(undefined);
             }
 
@@ -174,7 +174,7 @@ ws.onmessage = message => {
 			const newNum = msg[1] - me.info.hotbar.length / 2;
 			squareX = window.innerWidth / 2 + newNum * hbOutline + (newNum - 0.5) * spaceBetweenHB + spaceBetweenHB;
 			squareX += (hbOutline - (hbOutline * fgPercent)) / 2;
-			hotbarReloads[msg[1]] = new hotbarReload(msg[2], 
+			hotbarReloads[msg[1]] = new HotbarReload(msg[2], 
                 { x: squareX, y: window.innerHeight - 144 + (hbOutline - (hbOutline * fgPercent)) / 2 }, 
                 hbOutline * fgPercent); 
 			break;
@@ -186,7 +186,6 @@ ws.onmessage = message => {
             // msg[1][1]: which inventory slot it's currently in
             // msg[1][2]: petal id of the hotbar switching to inventory
             // msg[1][3]: which hotbar slot it's currently in
-            console.log(msg[1][0], msg[1][2]);
             let newNum2 = msg[1][1] - me.info.hotbar.length / 2;
             let squareX2 = window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons;
             const invInfo = {
@@ -205,9 +204,9 @@ ws.onmessage = message => {
 
             me.info.inventory[msg[1][1]] = -1;
             me.info.hotbar[msg[1][3]] = -1;
-            aboveSlidingPetals[msg[1][3]] = new slidingPetal(300, invInfo, 
+            aboveSlidingPetals[msg[1][3]] = new SlidingPetal(300, invInfo, 
                 hbInfo, outlineWidth, hbOutline, msg[1][0]);
-            belowSlidingPetals[msg[1][1]] = new slidingPetal(300, hbInfo, 
+            belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo, 
                 invInfo, hbOutline, outlineWidth, msg[1][2]);
 
 
