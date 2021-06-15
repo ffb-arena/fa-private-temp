@@ -1,8 +1,9 @@
 # Florr-Arena
 
-How to use  
-Make sure you have Node.js, npm installed  
-Run node index  
+## How to use  
+Make sure you have [Node.js](https://nodejs.org/en/download/) installed  
+cd to the root where you cloned this/downloaded the files
+Run `npm i` followed by `node index`
 Go to localhost:9700  
 
 ## Files and folders
