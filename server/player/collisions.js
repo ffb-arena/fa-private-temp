@@ -317,9 +317,9 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             p2Petals.forEach(petal2 => {
                 // if the petals collide
                 if (
-                    Math.pow(petal.pubInfo.x - petal2.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - petal2.pubInfo.y, 2)
+                    ((petal.pubInfo.x - petal2.pubInfo.x) ** 2) + ((petal.pubInfo.y - petal2.pubInfo.y) ** 2)
                     <
-                    Math.pow(petal.pubInfo.radius + petal2.pubInfo.radius, 2)
+                    ((petal.pubInfo.radius + petal2.pubInfo.radius) ** 2)
                 ) {
                     petal.hp -= petal2.damage;
                     petal2.hp -= petal.damage;
@@ -357,9 +357,9 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
     p1Petals.forEach(petal => {
         // if collision
         if (
-            Math.pow(petal.pubInfo.x - p2.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - p2.pubInfo.y, 2)
+            ((petal.pubInfo.x - p2.pubInfo.x) ** 2) + ((petal.pubInfo.y - p2.pubInfo.y) ** 2)
             <
-            Math.pow(petal.pubInfo.radius + 25, 2)
+            ((petal.pubInfo.radius + 25) ** 2)
         ) {
             p2.pubInfo.health -= petal.damage;
             petal.hp -= p2.bodyDamage;
@@ -402,9 +402,9 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
     p2Petals.forEach(petal => {
         // if collision
         if (
-            Math.pow(petal.pubInfo.x - p1.pubInfo.x, 2) + Math.pow(petal.pubInfo.y - p1.pubInfo.y, 2)
+            ((petal.pubInfo.x - p1.pubInfo.x) ** 2) + ((petal.pubInfo.y - p1.pubInfo.y) ** 2)
             <
-            Math.pow(petal.pubInfo.radius + 25, 2)
+            ((petal.pubInfo.radius + 25) ** 2)
         ) {
             p1.pubInfo.health -= petal.damage;
             petal.hp -= p1.bodyDamage;

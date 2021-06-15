@@ -98,8 +98,8 @@ function drawMap() {
 function drawHelper() {
     if (!(me.settings.helper && !me.settings.keyboard)) return;
     let d = Math.sqrt(
-        Math.pow(me.info.mouseX - window.innerWidth / 2, 2) + 
-        Math.pow(me.info.mouseY - window.innerHeight / 2, 2)
+        (me.info.mouseX - window.innerWidth / 2 ** 2) + 
+        (me.info.mouseY - window.innerHeight / 2 ** 2)
     )
     ctx.globalAlpha = 0.2 * ((d / res / 200 > 1) ? 1 : (d / res / 200));
     ctx.lineWidth = 17.5 * res;
@@ -115,7 +115,7 @@ function drawHelper() {
         start.y /= Math.abs(me.info.mouseX - window.innerWidth / 2);
     }
 
-    let distance = Math.sqrt(Math.pow(start.x, 2) + Math.pow(start.y, 2));
+    let distance = Math.sqrt((start.x ** 2) + (start.y ** 2));
     start.x /= distance;
     start.y /= distance;
     start.x *= 30;

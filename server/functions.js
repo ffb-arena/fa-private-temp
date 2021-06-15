@@ -104,7 +104,7 @@ function clamp(num, min, max) {
  */
 function centreLine2Circles(cir1, cir2, d) {
     // http://paulbourke.net/geometry/circlesphere/
-    const a = (Math.pow(cir1.radius, 2) - Math.pow(cir2.radius, 2) + d * d) / (d * 2);
+    const a = ((cir1.radius ** 2) - (cir2.radius ** 2) + d * d) / (d * 2);
     return {
         x:  cir1.x + a * (cir2.x - cir1.x) / d,
         y: cir1.y + a * (cir2.y - cir1.y) / d,

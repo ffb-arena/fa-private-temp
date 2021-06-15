@@ -1,4 +1,5 @@
 -health pt 2
+	-fix crappy stopping system
     -inventory
     -checks
     -petal stats

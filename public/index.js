@@ -57,6 +57,7 @@ me = {
         y: 0,
         mouseX: 0,
         mouseY: 0,
+		leftMouseDown: false,
         level: undefined,
         hotbar: [],
         inventory: []
@@ -165,32 +166,26 @@ function addEventListeners() {
     window.addEventListener("mousedown", click => {
         if (click.button === 1) click.preventDefault();
         ws.send(JSON.stringify(`ca${click.button}`));
+		if (click.button === 0) me.info.leftMouseDown = true;
     });
-    window.addEventListener("mouseup", click => ws.send(JSON.stringify(`cb${click.button}`)));
+    window.addEventListener("mouseup", click => {
+		ws.send(JSON.stringify(`cb${click.button}`));
+		if (click.button === 0) me.info.leftMouseDown = false;
+	});
 
 
     document.addEventListener("mousemove", pos => {
-        if (title.hidden) {
-            if (
-                window.innerWidth / 2 - boxWidth / 2 < pos.x && pos.x < window.innerWidth / 2 + boxWidth / 2
-                &&
-                window.innerHeight - boxHeight < pos.y && pos.y < window.innerHeight
-            ) {
-                ws.send(JSON.stringify(["c", "d", 0, 0, res]));
-                stopText = "You can also use [Q] and [E] to modify the inventory";
-            } else {
-                stopText = "Move mouse here to disable movement";
-                ws.send(JSON.stringify([
-                    "c", 
-                    "d", 
-                    pos.x - window.innerWidth / 2, 
-                    window.innerHeight - ((pos.y - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, 
-                    res
-                ]));    
-            }
-        } else {
+        if (!title.hidden) {
             setLevelText(); // from src/menu.js
-        }
+        } else {
+			ws.send(JSON.stringify([
+				"c", 
+				"d", 
+				me.info.mouseX - window.innerWidth / 2, 
+				window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, 
+				res
+			]));    
+		}
         me.info.mouseX = pos.x;
         me.info.mouseY = pos.y;
     });

@@ -1,5 +1,5 @@
 // lerps a certain percent between 2 numbers
-// amount = 0 - 1
+// amount = number between 0 and 1
 function lerp(begin, end, amount) {
     return begin + ((end - begin) * amount);
 }
@@ -168,7 +168,7 @@ let hotbarReloads = [];
 let belowSlidingPetals = [];
 let aboveSlidingPetals = [];
 
-// percent of the icon is foreground
+// percent of petals icons that are foreground (not border)
 const fgPercent = 13/16;
 function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot, reloadSettings) {
     c.globalAlpha = globalAlpha;
@@ -232,9 +232,36 @@ const spaceBetweenInvIcons = 8;
 const hbOutline = 55;
 const spaceBetweenHB = 8;
 
+const holdingWidth = 70; // width of petals being held
+
+class HoldingPetal {
+	constructor() {
+		this.id = 0;
+		this.pos = {
+			x: undefined,
+			y: undefined
+		};
+		this.width = holdingWidth;
+		this.n = undefined;
+		// whether the petal is from hotbar or inventory
+		this.fromHotbar = undefined;
+	}
+
+	updatePos(x, y) {
+		this.pos.x = x - this.width / 2;
+		this.pos.y = y - this.width / 2;
+	}
+}
+// petal that is being held
+let holdingPetal = new HoldingPetal();
+
+// if the player is stopped or not
+let playerStopped = false;
+
 
 // draws inventory and stuff
 function drawInventory() {
+	let pointerCursor = !!holdingPetal.id; // if the cursor should be a pointer or not
 
 	// checks if should automatically unselect
 	if (Date.now() > unselectTime) {
@@ -242,13 +269,22 @@ function drawInventory() {
 	}	
 
     // changes the size of stop moving rectangle
-    if (stopText[0] === "M") {
-        // player isn't stopped
-        sizeMult = Math.max(sizeMult - changeSpeed, 0);
-    } else {
-        // player is stopped
+	if (
+		(window.innerWidth / 2 - boxWidth / 2 < me.info.mouseX && me.info.mouseX < window.innerWidth / 2 + boxWidth / 2
+		&&
+		window.innerHeight - boxHeight < me.info.mouseY && me.info.mouseY < window.innerHeight)
+		||
+		(playerStopped && holdingPetal.id)
+	) {
+		playerStopped = true;
+		ws.send(JSON.stringify(["c", "d", 0, 0, res]));
+		stopText = "You can also use [Q] and [E] to modify the inventory";
         sizeMult = Math.min(sizeMult + changeSpeed, 1);
-    }
+	} else {
+		playerStopped = false;
+		stopText = "Move mouse here to disable movement";
+        sizeMult = Math.max(sizeMult - changeSpeed, 0);
+	}
     boxWidth = minBoxWidth + (sizeMult * maxBoxWidthAdd);
     boxHeight = minBoxHeight + (sizeMult * maxBoxHeightAdd);
 
@@ -268,11 +304,12 @@ function drawInventory() {
     florrText(stopText, 11.9,
         { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 0.3, ctx);
 
-    // inventory boxes
+    // inventory boxes (+ detecting if cursor is hovering over them)
     let x;
     x = window.innerWidth / 2 - spaceBetweenInvIcons * 3.5 - outlineWidth * 4;
 
     if (me.info.inventory.length === 0) return;
+	let y = window.innerHeight - 81;
     for (let i = 0; i < 8; i++) {
         switch (me.info.inventory[i]) {
 
@@ -281,21 +318,34 @@ function drawInventory() {
 
             // empty slot
             case 0:
-                drawPetalIcon({ x: x, y: window.innerHeight - 81 },
+                drawPetalIcon({ x: x, y: y },
                     "", 0, outlineWidth, "#dedede", "#ffffff", 0.5, ctx);
                 break;
             
             // normal petal
             default: 
+				if (
+					x < me.info.mouseX && me.info.mouseX < (x + outlineWidth)
+					&&
+					y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
+				) {
+					pointerCursor = true;
+					if (!holdingPetal.id) {
+						holdingPetal.id = me.info.inventory[i];
+						holdingPetal.n = i;
+						holdingPetal.fromHotbar = false;
+						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+					}
+				}
                	const colours = rarityColours[rarities[me.info.inventory[i]]];
-               	drawPetalIcon({ x: x, y: window.innerHeight - 81 },
+               	drawPetalIcon({ x: x, y: y },
                		petalNames[me.info.inventory[i]], me.info.inventory[i], 
 					outlineWidth, colours.bg, colours.fg, 0.9, ctx);
 				// if the petal is selected in the inventory
 				if (numInfo && selectedPetal === i) {	
 					ctx.lineWidth = 1.6;
 					ctx.strokeStyle = colours.fg;
-					ctx.strokeRect(x, window.innerHeight - 81, outlineWidth, outlineWidth);
+					ctx.strokeRect(x, y, outlineWidth, outlineWidth);
 				}
                 break;
         }
@@ -306,7 +356,7 @@ function drawInventory() {
     // hotbar
     x = window.innerWidth / 2 - (hbOutline * me.info.hotbar.length / 2) - 
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
-
+	y = window.innerHeight - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
         switch (me.info.hotbar[i]) {
 
@@ -315,14 +365,27 @@ function drawInventory() {
         
             // empty slot
             case 0:
-                drawPetalIcon({ x: x, y: window.innerHeight - 144 },
+                drawPetalIcon({ x: x, y: y },
                     "", 0, hbOutline, "#dedede", "#ffffff", 0.5, ctx);
                 break;
 
             // normal petal
             default: 
+				if (
+					x < me.info.mouseX && me.info.mouseX < (x + hbOutline)
+					&&
+					y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
+				) {
+					pointerCursor = true;
+					if (!holdingPetal.id) {
+						holdingPetal.id = me.info.hotbar[i];
+						holdingPetal.n = i;
+						holdingPetal.fromHotbar = true;
+						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+					}
+				}
                 const colours = rarityColours[rarities[me.info.hotbar[i]]];
-                drawPetalIcon({ x: x, y: window.innerHeight - 144 },
+                drawPetalIcon({ x: x, y: y },
                     petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,
                     colours.bg, colours.fg, 0.9, ctx, i);
                 break;
@@ -331,7 +394,7 @@ function drawInventory() {
         x += spaceBetweenHB + hbOutline;
     }
 
-    // drawing the transisioning petals
+    // drawing the transitioning petals
     for (let i = 0; i < belowSlidingPetals.length; i++) {
         if (belowSlidingPetals[i]) {
             if (belowSlidingPetals[i].update(ctx)) {
@@ -361,5 +424,25 @@ function drawInventory() {
         }
     }
 
-    // drawing petal that is being held
+	// updating petal that is being held
+	if (!me.info.leftMouseDown && holdingPetal.id) {
+		// TODO: make petal zoom back to its spot
+		holdingPetal.id = 0;
+	} else if (holdingPetal.id) {
+		holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+	}
+    // TODO: drawing petal that is being held
+	if (holdingPetal.id) {
+		const colours = rarityColours[rarities[holdingPetal.id]];
+		drawPetalIcon({ x: holdingPetal.pos.x, y: holdingPetal.pos.y },
+			petalNames[holdingPetal.id], holdingPetal.id, holdingPetal.width,
+			colours.bg, colours.fg, 0.9, ctx, holdingPetal.n);
+	}
+
+	// setting correct cursor
+	if (pointerCursor) {
+		canvas.style.cursor = "pointer";
+	} else {
+		canvas.style.cursor = "auto";
+	}
 }
