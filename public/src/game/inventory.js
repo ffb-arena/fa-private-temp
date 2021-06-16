@@ -268,41 +268,48 @@ function drawInventory() {
 		numInfo = false;
 	}	
 
-    // changes the size of stop moving rectangle
-	if (
-		(window.innerWidth / 2 - boxWidth / 2 < me.info.mouseX && me.info.mouseX < window.innerWidth / 2 + boxWidth / 2
-		&&
-		window.innerHeight - boxHeight < me.info.mouseY && me.info.mouseY < window.innerHeight)
-		||
-		(playerStopped && holdingPetal.id)
-	) {
-		playerStopped = true;
-		ws.send(JSON.stringify(["c", "d", 0, 0, res]));
-		stopText = "You can also use [Q] and [E] to modify the inventory";
-        sizeMult = Math.min(sizeMult + changeSpeed, 1);
-	} else {
-		playerStopped = false;
-		stopText = "Move mouse here to disable movement";
-        sizeMult = Math.max(sizeMult - changeSpeed, 0);
+	if (!me.settings.keyboard) {
+    	// changes the size of stop moving rectangle
+		if (
+			(window.innerWidth / 2 - boxWidth / 2 < me.info.mouseX && me.info.mouseX < window.innerWidth / 2 + boxWidth / 2
+			&&
+			window.innerHeight - boxHeight < me.info.mouseY && me.info.mouseY < window.innerHeight)
+			||
+			(playerStopped && holdingPetal.id)
+		) {
+			if (!playerStopped) {
+				ws.send(JSON.stringify("cea"));
+				playerStopped = true;
+			}
+			stopText = "You can also use [Q] and [E] to modify the inventory";
+    	    sizeMult = Math.min(sizeMult + changeSpeed, 1);
+		} else {
+			if (playerStopped) {
+				playerStopped = false;
+				ws.send(JSON.stringify("ceb"));
+			}
+			stopText = "Move mouse here to disable movement";
+    	    sizeMult = Math.max(sizeMult - changeSpeed, 0);
+		}
+    	boxWidth = minBoxWidth + (sizeMult * maxBoxWidthAdd);
+    	boxHeight = minBoxHeight + (sizeMult * maxBoxHeightAdd);
+
+    	// draws stop moving rectangle
+    	ctx.fillStyle = "#000000";
+    	ctx.globalAlpha = 0.4;
+    	ctx.roundRect(
+    	    window.innerWidth / 2 - boxWidth / 2,
+    	    window.innerHeight - boxHeight,
+    	    boxWidth,
+    	    boxHeight + 20,
+    	    7
+    	);
+    	ctx.fill();
+
+    	// stop moving text
+    	florrText(stopText, 11.9,
+    	    { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 0.3, ctx);
 	}
-    boxWidth = minBoxWidth + (sizeMult * maxBoxWidthAdd);
-    boxHeight = minBoxHeight + (sizeMult * maxBoxHeightAdd);
-
-    // draws stop moving rectangle
-    ctx.fillStyle = "#000000";
-    ctx.globalAlpha = 0.4;
-    ctx.roundRect(
-        window.innerWidth / 2 - boxWidth / 2,
-        window.innerHeight - boxHeight,
-        boxWidth,
-        boxHeight + 20,
-        7
-    );
-    ctx.fill();
-
-    // stop moving text
-    florrText(stopText, 11.9,
-        { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 0.3, ctx);
 
     // inventory boxes (+ detecting if cursor is hovering over them)
     let x;

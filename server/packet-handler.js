@@ -108,6 +108,19 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
                         rooms.get(myRoom).players[myID].mouse.mouseY = packet[3];
                         rooms.get(myRoom).players[myID].res = packet[4];
                     }
+					break;
+			
+				// freezing/stopping freezing
+				case "e":
+					if (myID !== undefined) {
+						if (packet[2] === "a") {
+							// freezing
+							rooms.get(myRoom).players[myID].frozen = true;
+						} else {
+							// stopping freezing
+							rooms.get(myRoom).players[myID].frozen = false;
+						}
+					}
             }
             break;
 

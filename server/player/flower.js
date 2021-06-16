@@ -76,6 +76,7 @@ class Flower {
             x: x, 
             y: y
         };
+		this.frozen = false;
         this.bodyDamage = Math.max(0, Math.min(25, (level - 8) * 25/7));
         this.healthRegen = this.pubInfo.maxHealth / 100 * 1/60; // per tick
 
@@ -248,6 +249,12 @@ class Flower {
                 trueAcc.y = this.mouse.mouseY;
 
                 trueAcc = F.normalize(trueAcc);
+		
+				// bad stopping system	
+				if (this.frozen) {
+					trueAcc.x = 0;
+					trueAcc.y = 0;
+				}
             }
 
             trueAcc.x *= this.movement.speed;

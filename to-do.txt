@@ -1,5 +1,4 @@
 -health pt 2
-	-fix crappy stopping system
     -inventory
     -checks
     -petal stats
@@ -22,6 +21,7 @@
     -yy opposite knockback
     -on mouse stop, don't stop player immediately
     -make petals on petal background turn clockwise
+	-don't start petal background until loading is stopped
 
 -far future
     -tdm

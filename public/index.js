@@ -151,7 +151,7 @@ function addEventListeners() {
 
 		// switching petals
 		for (let i = 1; i < me.info.hotbar.length + 1; i++) {
-			if (key.code == `Digit${i}`) {
+			if (key.code === `Digit${i}`) {
 				if (!numInfo) {
 					numInfo = true;
 					selectedPetal = 0;

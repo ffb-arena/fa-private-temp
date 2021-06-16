@@ -126,13 +126,13 @@ body {
 .list{
     background-color: #5a9fdb;
 }
-.list ul, li{
+.list ul, li {
     list-style: none;
     margin: 0px;
     padding-left: 5px;
     margin-bottom: 8px;
 }
-.space:empty{
+.changelog-separator:empty {
     background-color: #4981b1;
     height: 5px;
     margin-bottom: 8px;
