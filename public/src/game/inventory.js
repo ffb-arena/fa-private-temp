@@ -320,6 +320,9 @@ function drawInventory() {
     for (let i = 0; i < 8; i++) {
         switch (me.info.inventory[i]) {
 
+			// petal is being dragged
+			case -2:
+
             // petal is a slidingPetal
             case -1:
 
@@ -337,11 +340,13 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id) {
+					if (!holdingPetal.id && me.info.leftMouseDown) {
 						holdingPetal.id = me.info.inventory[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = false;
 						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+						me.info.inventory[i] = -2;
+						break;
 					}
 				}
                	const colours = rarityColours[rarities[me.info.inventory[i]]];
@@ -367,6 +372,9 @@ function drawInventory() {
     for (let i = 0; i < me.info.hotbar.length; i++) {
         switch (me.info.hotbar[i]) {
 
+			// petal is being dragged
+			case -2:
+
             // petal is a slidingPetal
             case -1:
         
@@ -384,11 +392,13 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id) {
+					if (!holdingPetal.id && me.info.leftMouseDown) {
 						holdingPetal.id = me.info.hotbar[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = true;
 						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+						me.info.hotbar[i] = -2;
+						break;
 					}
 				}
                 const colours = rarityColours[rarities[me.info.hotbar[i]]];
@@ -434,6 +444,11 @@ function drawInventory() {
 	// updating petal that is being held
 	if (!me.info.leftMouseDown && holdingPetal.id) {
 		// TODO: make petal zoom back to its spot
+		if (holdingPetal.fromHotbar) {
+		 	me.info.hotbar[holdingPetal.n] = holdingPetal.id;
+		} else {
+		 	me.info.inventory[holdingPetal.n] = holdingPetal.id;
+		}
 		holdingPetal.id = 0;
 	} else if (holdingPetal.id) {
 		holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
