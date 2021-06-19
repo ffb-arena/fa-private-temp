@@ -1,9 +1,15 @@
--health pt 2
-    -inventory
-    -checks
-    -petal stats
+-inventory
+	-make transition take petal out of hand
+		-deselect and don't let retake until new click
+	-make them snap
+	-make swapping work
+	-make select right one after swap
+	-fix text
+-petal stats
 
 -mechanics to fix 
+	-fix discoloured "echo"
+    -checks
     -lag when switching directions with mouse
     -random disconnects
     -petal lag is elliptical???

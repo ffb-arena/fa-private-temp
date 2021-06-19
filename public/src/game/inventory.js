@@ -116,6 +116,15 @@ class HotbarReload {
 
 // for inventory icons that are moving from a place to another
 class SlidingPetal {
+	/*
+		startingPos: { x: function, y: function }
+		targetPos: { x: function, y: function, n: int }
+		n is the # of the slot the SlidingPetal will end up in
+		how does it know if n refers to inventory or hotbar?
+		if it's in belowSlidingPetals array, it's inventory
+		(those petals go below the others when you press x)
+		if it's in the aboveSlidingPetals array, it's destined for the hotbar
+	*/
     constructor(time, startingPos, targetPos, startingWidth, targetWidth, petalID) {
         this._totalTime = time;
         this._timeRemaining = time;
@@ -250,6 +259,14 @@ class HoldingPetal {
 	updatePos(x, y) {
 		this.pos.x = x - this.width / 2;
 		this.pos.y = y - this.width / 2;
+	}
+
+	draw() {
+		const colours = rarityColours[rarities[this.id]];
+		drawPetalIcon({ x: this.pos.x, y: this.pos.y },
+			petalNames[this.id], this.id, this.width,
+			colours.bg, colours.fg, 0.9, ctx, this.n,
+			{ pos: { x: this.pos.x + this.width / 2, y: this.pos.y + this.width / 2 }, width: this.width * fgPercent });
 	}
 }
 // petal that is being held
@@ -443,22 +460,51 @@ function drawInventory() {
 
 	// updating petal that is being held
 	if (!me.info.leftMouseDown && holdingPetal.id) {
-		// TODO: make petal zoom back to its spot
+		// petal has been released
+
+		// making it zoom back to its spot
+		const xPercent = holdingPetal.pos.x / window.innerWidth;
+		const yPercent = holdingPetal.pos.y / window.innerHeight;
+
+		const endWidth = holdingPetal.fromHotbar ? hbOutline : outlineWidth;
+		const spacing = holdingPetal.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
+
+		const newN = holdingPetal.n - ((holdingPetal.fromHotbar ? me.info.hotbar.length : me.info.inventory.length) / 2);
+
+		const fromObject = {
+			x: () => xPercent * window.innerWidth, 
+			y: () => yPercent * window.innerHeight 
+		};
+
+		const toObject = {
+			x: () => window.innerWidth / 2 + newN * endWidth + (newN - 0.5) * spacing + spacing,
+			y: holdingPetal.fromHotbar ? () => window.innerHeight - 144 : () => window.innerHeight - 81,
+			n: holdingPetal.n 
+		};
+
+		const distance = Math.sqrt(
+			Math.abs(holdingPetal.pos.x - toObject.x()) ** 2
+			+
+			Math.abs(holdingPetal.pos.y - toObject.y()) ** 2
+		);
+
+		const slider = new SlidingPetal(distance * 1.3,
+			fromObject, toObject,
+			holdingPetal.width, endWidth, holdingPetal.id);
+
 		if (holdingPetal.fromHotbar) {
-		 	me.info.hotbar[holdingPetal.n] = holdingPetal.id;
+			aboveSlidingPetals[holdingPetal.n] = slider;
 		} else {
-		 	me.info.inventory[holdingPetal.n] = holdingPetal.id;
+			belowSlidingPetals[holdingPetal.n] = slider;
 		}
 		holdingPetal.id = 0;
 	} else if (holdingPetal.id) {
 		holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
 	}
-    // TODO: drawing petal that is being held
+
+    // drawing petal that is being held
 	if (holdingPetal.id) {
-		const colours = rarityColours[rarities[holdingPetal.id]];
-		drawPetalIcon({ x: holdingPetal.pos.x, y: holdingPetal.pos.y },
-			petalNames[holdingPetal.id], holdingPetal.id, holdingPetal.width,
-			colours.bg, colours.fg, 0.9, ctx, holdingPetal.n);
+		holdingPetal.draw();
 	}
 
 	// setting correct cursor

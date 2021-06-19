@@ -186,16 +186,16 @@ ws.onmessage = message => {
             // msg[1][1]: which inventory slot it's currently in
             // msg[1][2]: petal id of the hotbar switching to inventory
             // msg[1][3]: which hotbar slot it's currently in
-            let newNum2 = msg[1][1] - me.info.hotbar.length / 2;
+            const newNum2 = msg[1][1] - me.info.inventory.length / 2;
             const invInfo = {
                 x: () => window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons,
                 y: () => window.innerHeight - 81,
                 n: msg[1][1]
             };
 
-            newNum2 = msg[1][3] - me.info.inventory.length / 2;
+            const newNum3 = msg[1][3] - me.info.hotbar.length / 2;
             const hbInfo = {
-                x: () => window.innerWidth / 2 + newNum2 * hbOutline + (newNum2 - 0.5) * spaceBetweenHB + spaceBetweenHB,
+                x: () => window.innerWidth / 2 + newNum3 * hbOutline + (newNum3 - 0.5) * spaceBetweenHB + spaceBetweenHB,
                 y: () => window.innerHeight - 144,
                 n: msg[1][3]
             };
