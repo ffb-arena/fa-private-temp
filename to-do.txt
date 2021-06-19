@@ -1,6 +1,5 @@
 -inventory
 	-make transition take petal out of hand
-		-deselect and don't let retake until new click
 	-make them snap
 	-make swapping work
 	-make select right one after swap
@@ -8,6 +7,8 @@
 -petal stats
 
 -mechanics to fix 
+	-more consistent inventory.js variable names
+	-function for getting pos with n and which row
 	-fix discoloured "echo"
     -checks
     -lag when switching directions with mouse
@@ -27,7 +28,7 @@
     -yy opposite knockback
     -on mouse stop, don't stop player immediately
     -make petals on petal background turn clockwise
-	-don't start petal background until loading is stopped
+	-don't start petal background until loading is stopped (also better loading screen)
 
 -far future
     -tdm

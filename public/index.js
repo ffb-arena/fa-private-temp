@@ -58,6 +58,7 @@ me = {
         mouseX: 0,
         mouseY: 0,
 		leftMouseDown: false,
+		justClicked: false,
         level: undefined,
         hotbar: [],
         inventory: []
@@ -166,7 +167,10 @@ function addEventListeners() {
     window.addEventListener("mousedown", click => {
         if (click.button === 1) click.preventDefault();
         ws.send(JSON.stringify(`ca${click.button}`));
-		if (click.button === 0) me.info.leftMouseDown = true;
+		if (click.button === 0) {
+			me.info.leftMouseDown = true;
+			me.info.justClicked = true;
+		}
     });
     window.addEventListener("mouseup", click => {
 		ws.send(JSON.stringify(`cb${click.button}`));

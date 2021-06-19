@@ -357,7 +357,7 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id && me.info.leftMouseDown) {
+					if (!holdingPetal.id && me.info.justClicked) {
 						holdingPetal.id = me.info.inventory[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = false;
@@ -409,7 +409,7 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id && me.info.leftMouseDown) {
+					if (!holdingPetal.id && me.info.justClicked) {
 						holdingPetal.id = me.info.hotbar[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = true;
@@ -507,6 +507,7 @@ function drawInventory() {
 		holdingPetal.draw();
 	}
 
+	me.info.justClicked = false;
 	// setting correct cursor
 	if (pointerCursor) {
 		canvas.style.cursor = "pointer";
