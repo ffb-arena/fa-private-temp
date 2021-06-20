@@ -3,10 +3,13 @@
 	-make them snap
 	-make swapping work
 	-make select right one after swap
+	-make selecting work if there's nothing in inventory 0
 	-fix text
+	-fix "2e2"
 -petal stats
 
 -mechanics to fix 
+	-making petal swaps proper ui speed
 	-more consistent inventory.js variable names
 	-function for getting pos with n and which row
 	-fix discoloured "echo"

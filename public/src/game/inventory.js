@@ -268,6 +268,48 @@ class HoldingPetal {
 			colours.bg, colours.fg, 0.9, ctx, this.n,
 			{ pos: { x: this.pos.x + this.width / 2, y: this.pos.y + this.width / 2 }, width: this.width * fgPercent });
 	}
+
+	release() {
+		if (!this.id) return;
+
+		// making it zoom back to its spot
+		const xPercent = this.pos.x / window.innerWidth;
+		const yPercent = this.pos.y / window.innerHeight;
+
+		const endWidth = this.fromHotbar ? hbOutline : outlineWidth;
+		const spacing = this.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
+
+		const newN = this.n - ((this.fromHotbar ? me.info.hotbar.length : me.info.inventory.length) / 2);
+
+		const fromObject = {
+			x: () => xPercent * window.innerWidth, 
+			y: () => yPercent * window.innerHeight 
+		};
+
+		const toObject = {
+			x: () => window.innerWidth / 2 + newN * endWidth + (newN - 0.5) * spacing + spacing,
+			y: this.fromHotbar ? () => window.innerHeight - 144 : () => window.innerHeight - 81,
+			n: this.n 
+		};
+
+		const distance = Math.sqrt(
+			Math.abs(this.pos.x - toObject.x()) ** 2
+			+
+			Math.abs(this.pos.y - toObject.y()) ** 2
+		);
+
+		const slider = new SlidingPetal(distance * 1.3,
+			fromObject, toObject,
+			this.width, endWidth, this.id);
+
+		if (this.fromHotbar) {
+			aboveSlidingPetals[this.n] = slider;
+		} else {
+			belowSlidingPetals[this.n] = slider;
+		}
+
+		this.id = 0;
+	}
 }
 // petal that is being held
 let holdingPetal = new HoldingPetal();
@@ -461,43 +503,7 @@ function drawInventory() {
 	// updating petal that is being held
 	if (!me.info.leftMouseDown && holdingPetal.id) {
 		// petal has been released
-
-		// making it zoom back to its spot
-		const xPercent = holdingPetal.pos.x / window.innerWidth;
-		const yPercent = holdingPetal.pos.y / window.innerHeight;
-
-		const endWidth = holdingPetal.fromHotbar ? hbOutline : outlineWidth;
-		const spacing = holdingPetal.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
-
-		const newN = holdingPetal.n - ((holdingPetal.fromHotbar ? me.info.hotbar.length : me.info.inventory.length) / 2);
-
-		const fromObject = {
-			x: () => xPercent * window.innerWidth, 
-			y: () => yPercent * window.innerHeight 
-		};
-
-		const toObject = {
-			x: () => window.innerWidth / 2 + newN * endWidth + (newN - 0.5) * spacing + spacing,
-			y: holdingPetal.fromHotbar ? () => window.innerHeight - 144 : () => window.innerHeight - 81,
-			n: holdingPetal.n 
-		};
-
-		const distance = Math.sqrt(
-			Math.abs(holdingPetal.pos.x - toObject.x()) ** 2
-			+
-			Math.abs(holdingPetal.pos.y - toObject.y()) ** 2
-		);
-
-		const slider = new SlidingPetal(distance * 1.3,
-			fromObject, toObject,
-			holdingPetal.width, endWidth, holdingPetal.id);
-
-		if (holdingPetal.fromHotbar) {
-			aboveSlidingPetals[holdingPetal.n] = slider;
-		} else {
-			belowSlidingPetals[holdingPetal.n] = slider;
-		}
-		holdingPetal.id = 0;
+		holdingPetal.release();
 	} else if (holdingPetal.id) {
 		holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
 	}

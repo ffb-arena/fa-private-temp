@@ -186,6 +186,7 @@ ws.onmessage = message => {
             // msg[1][1]: which inventory slot it's currently in
             // msg[1][2]: petal id of the hotbar switching to inventory
             // msg[1][3]: which hotbar slot it's currently in
+
             const newNum2 = msg[1][1] - me.info.inventory.length / 2;
             const invInfo = {
                 x: () => window.innerWidth / 2 + newNum2 * outlineWidth + (newNum2 - 0.5) * spaceBetweenInvIcons + spaceBetweenInvIcons,
@@ -200,13 +201,42 @@ ws.onmessage = message => {
                 n: msg[1][3]
             };
 
+
+			// checking if any of them are being held, or are sliding
+			switch (me.info.inventory[msg[1][1]]) {
+				// petal is being held
+				case -2:
+					holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
+					holdingPetal.n = msg[1][1];
+					holdingPetal.release();
+					break;
+				// petal is sliding
+				case -1:
+						
+					break;
+				// petal is normal
+				default:
+            		aboveSlidingPetals[msg[1][1]] = new SlidingPetal(300, invInfo,
+            		    hbInfo, outlineWidth, hbOutline, msg[1][0]);
+					break;
+			}
+			// same as above, but for hotbar
+			switch (me.info.hotbar[msg[1][3]]) {
+				case -2:
+					holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
+					holdingPetal.n = msg[1][1];
+					holdingPetal.release();
+					break;
+				case -1:
+					break;
+				default:
+            		belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo,
+            		    invInfo, hbOutline, outlineWidth, msg[1][2]);
+					break;
+			}
+
             me.info.inventory[msg[1][1]] = -1;
             me.info.hotbar[msg[1][3]] = -1;
-            aboveSlidingPetals[msg[1][3]] = new SlidingPetal(300, invInfo,
-                hbInfo, outlineWidth, hbOutline, msg[1][0]);
-            belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo,
-                invInfo, hbOutline, outlineWidth, msg[1][2]);
-
 
             // TODO:
             // FIND NEXT SELECTED PETAL
