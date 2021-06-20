@@ -1,11 +1,9 @@
 -inventory
-	-make transition take petal out of hand
 	-make them snap
 	-make swapping work
 	-make select right one after swap
 	-make selecting work if there's nothing in inventory 0
 	-fix text
-	-fix "2e2"
 -petal stats
 
 -mechanics to fix 

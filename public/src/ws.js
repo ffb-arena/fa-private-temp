@@ -213,7 +213,6 @@ ws.onmessage = message => {
 				// petal is sliding
 				case -1:
 						
-					break;
 				// petal is normal
 				default:
             		aboveSlidingPetals[msg[1][1]] = new SlidingPetal(300, invInfo,
@@ -228,7 +227,7 @@ ws.onmessage = message => {
 					holdingPetal.release();
 					break;
 				case -1:
-					break;
+
 				default:
             		belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo,
             		    invInfo, hbOutline, outlineWidth, msg[1][2]);
