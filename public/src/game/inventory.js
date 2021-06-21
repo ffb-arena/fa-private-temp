@@ -254,11 +254,19 @@ class HoldingPetal {
 		this.n = undefined;
 		// whether the petal is from hotbar or inventory
 		this.fromHotbar = undefined;
+		this.snapping = false;
+		this.snapN = undefined;
+		this.snapInHotbar = undefined;
 	}
 
 	updatePos(x, y) {
-		this.pos.x = x - this.width / 2;
-		this.pos.y = y - this.width / 2;
+		if (this.snapping) {
+			this.snapping = false;
+		} else {
+			this.width = holdingWidth;
+			this.pos.x = x - this.width / 2;
+			this.pos.y = y - this.width / 2;
+		}
 	}
 
 	draw() {
@@ -399,7 +407,17 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id && me.info.justClicked) {
+					if (holdingPetal.id) {
+						if (me.info.inventory[i] !== holdingPetal.id) {
+							holdingPetal.width = outlineWidth + 10;
+							holdingPetal.pos.x = x - 5;
+							holdingPetal.pos.y = y - 5;
+							holdingPetal.snapping = true;
+							holdingPetal.snapN = i;
+							holdingPetal.snapInHotbar = false;
+						}
+					} else if (me.info.justClicked) {
+						// new petal was selected
 						holdingPetal.id = me.info.inventory[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = false;
@@ -451,7 +469,17 @@ function drawInventory() {
 					y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
 				) {
 					pointerCursor = true;
-					if (!holdingPetal.id && me.info.justClicked) {
+					if (holdingPetal.id) {
+						if (me.info.hotbar[i] !== holdingPetal.id) {
+							holdingPetal.width = hbOutline + 10;
+							holdingPetal.pos.x = x - 5;
+							holdingPetal.pos.y = y - 5;
+							holdingPetal.snapping = true;
+							holdingPetal.snapN = i;
+							holdingPetal.snapInHotbar = true;
+						}
+					} else if (me.info.justClicked) {
+						// new petal was selected
 						holdingPetal.id = me.info.hotbar[i];
 						holdingPetal.n = i;
 						holdingPetal.fromHotbar = true;
