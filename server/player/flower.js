@@ -89,9 +89,13 @@ class Flower {
         this.deadPetals = [];
         this.deadPetalsToSend = [];
 
-        this._swapCooldowns = [];
+		this._hotbarCooldowns = [];
+		for (let i = 0; i < nOfPetals; i++) {
+			this._hotbarCooldowns.push(Date.now());
+		}
+        this._inventoryCooldowns = [];
         for (let i = 0; i < 8; i++) {
-            this._swapCooldowns.push(Date.now());
+            this._inventoryCooldowns.push(Date.now());
         }
     }
 
@@ -194,7 +198,7 @@ class Flower {
     // when x is pressed
     _x() {
 		for (let i = 0; i < this.petalNum; i++) {
-            if (this._swapCooldowns[i] > Date.now()) continue;
+            if (this._inventoryCooldowns[i] > Date.now() || this._hotbarCooldowns[i] > Date.now()) continue;
             if (this.inventory[i] === this.hotbar[i]) continue;
 
             this._swapPetals(i, i);
@@ -205,14 +209,15 @@ class Flower {
     swapPetalsChecks(invPetal, hotbarPetal) {
         if (this.inventory[invPetal] === 0) return;
         if (this.inventory[invPetal] === this.hotbar[hotbarPetal]) return;
-        if (this._swapCooldowns[invPetal] > Date.now()) return;
+        if (this._inventoryCooldowns[invPetal] > Date.now() || this._hotbarCooldowns[hotbarPetal] > Date.now()) return;
 
         this._swapPetals(invPetal, hotbarPetal);
     }
 
     // swapping petals after checks have been passed
     _swapPetals(invPetal, hotbarPetal) {
-        this._swapCooldowns[invPetal] = Date.now() + C.maxXCooldown;
+        this._inventoryCooldowns[invPetal] = Date.now() + C.maxSwapCooldown;
+		this._hotbarCooldowns[hotbarPetal] = Date.now() + C.maxSwapCooldown;
 
         let temp, oldPetal;
         temp = this.inventory[invPetal];

@@ -49,8 +49,8 @@ const petalCollisionPadding = 0.5;
 // petal invincibility after being hit, in ms
 const petalInvincibility = 100;
 
-// cooldown after pressing x, in ms
-const maxXCooldown = 300;
+// cooldown after pressing swapping a petal, in ms
+const maxSwapCooldown = 300;
 
 module.exports = {
     names,
@@ -61,5 +61,5 @@ module.exports = {
     limit,
     collisionPadding, petalCollisionPadding,
     petalInvincibility,
-    maxXCooldown
+    maxSwapCooldown
 };
