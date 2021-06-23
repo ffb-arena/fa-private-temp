@@ -1,5 +1,8 @@
 -inventory
-	-make swapping work
+	-add cooldowns on client
+	-do rest of clientsideisation
+	-heartbeat packet
+	-make them snap to empty slots
 	-make select right one after swap
 	-make selecting work if there's nothing in inventory 0
 	-fix text
@@ -8,7 +11,6 @@
 -mechanics to fix 
 	-making petal swaps proper ui speed
 	-more consistent inventory.js variable names
-	-function for getting pos with n and which row
 	-fix discoloured "echo"
     -checks
     -lag when switching directions with mouse

@@ -232,6 +232,46 @@ class Flower {
         this.ws.send(JSON.stringify(["f", [this.hotbar[hotbarPetal], invPetal, this.inventory[invPetal], hotbarPetal]]));
     }
 
+	// weird swaps where they can both be in inventory or hotbar
+	weirdSwap(p1, p1InHotbar, p2, p2InHotbar) {
+
+		// checks
+		let p1Bar = p1InHotbar ? this.hotbar : this.inventory;
+		let p2Bar = p2InHotbar ? this.hotbar : this.inventory;
+		if (p1Bar[p1] === 0 || p2Bar[p2] === 0) return;
+		if (p1Bar[p1] === p2Bar[p2]) return;
+	
+		let p1Cooldown = p1InHotbar ? this._hotbarCooldowns : this._inventoryCooldowns;
+		let p2Cooldown = p2InHotbar ? this._hotbarCooldowns : this._inventoryCooldowns;
+		if (p1Cooldown[p1] > Date.now() || p2Cooldown[p2] > Date.now) return;
+	
+
+		// actual swapping
+		let oldP1id, oldP2id;
+		oldP1id = p1Bar[p1];
+		oldP2id = p2Bar[p2];
+		p1Bar[p1] = oldP2id;
+		p2Bar[p2] = oldP1id;
+
+        p1Cooldown[p1] = Date.now() + C.maxSwapCooldown;
+		p2Cooldown[p2] = Date.now() + C.maxSwapCooldown;
+
+		let oldP1, oldP2;
+		oldP1 = this.pubInfo.petals[p1];
+		oldP2 = this.pubInfo.petals[p2];
+
+		if (p1InHotbar) {
+        	this.pubInfo.petals[p1] = new Petal(this.hotbar[p1], oldP1.degree, 
+        	    this.petalDist, this.petalCentre, oldP1.ws, p1);
+			this.pubInfo.petals[p1].reload();
+		}
+		if (p2InHotbar) {
+        	this.pubInfo.petals[p2] = new Petal(this.hotbar[p2], oldP2.degree, 
+        	    this.petalDist, this.petalCentre, oldP2.ws, p2);
+			this.pubInfo.petals[p2].reload();
+		}
+	}
+
     // updates position based on mouse position/keys down
     update(mul, maxX, maxY) { // maxX and maxY are room limits
         // this.movement.acc is the acceleration on both axes (between -1 and 1)

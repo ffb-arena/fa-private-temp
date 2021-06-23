@@ -4,6 +4,20 @@ function lerp(begin, end, amount) {
     return begin + ((end - begin) * amount);
 }
 
+// gets a function that returns the left side of slot i, in hotbar if hotbar is true (else inventory)
+function getXPos(i, hotbar, xOffset = 0) {
+	const bar = hotbar ? me.info.hotbar : me.info.inventory;
+	const width = hotbar ? hbOutline : outlineWidth;
+	const spacing = hotbar ? spaceBetweenHB : spaceBetweenInvIcons;
+	const newNum = i - bar.length / 2;
+	return () => window.innerWidth / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
+}
+
+function getYPos(hotbar, yOffset = 0) {
+	const offset = hotbar ? 144 : 81;
+	return () => window.innerHeight - offset + yOffset;
+}
+
 // farthest right corner on a side (see HotbarReload._whichSide())
 // relative to the middle, using canvas coords
 const corners = [
@@ -277,46 +291,82 @@ class HoldingPetal {
 			{ pos: { x: this.pos.x + this.width / 2, y: this.pos.y + this.width / 2 }, width: this.width * fgPercent });
 	}
 
+	snap(x, y, baseWidth, n, fromHotbar) {
+		this.width = baseWidth + 10;
+		this.pos.x = x - 5;
+		this.pos.y = y - 5;
+		this.snapping = true;
+		this.snapN = n;
+		this.snapInHotbar = fromHotbar;
+	}
+
 	release() {
 		if (!this.id) return;
 
-		// making it zoom back to its spot
 		const xPercent = this.pos.x / window.innerWidth;
 		const yPercent = this.pos.y / window.innerHeight;
-
-		const endWidth = this.fromHotbar ? hbOutline : outlineWidth;
-		const spacing = this.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
-
-		const newN = this.n - ((this.fromHotbar ? me.info.hotbar.length : me.info.inventory.length) / 2);
-
-		const fromObject = {
+		const holdingRN = {
 			x: () => xPercent * window.innerWidth, 
 			y: () => yPercent * window.innerHeight 
 		};
 
-		const toObject = {
-			x: () => window.innerWidth / 2 + newN * endWidth + (newN - 0.5) * spacing + spacing,
-			y: this.fromHotbar ? () => window.innerHeight - 144 : () => window.innerHeight - 81,
+		const holdingOGSpot = {
+			x: getXPos(this.n, this.fromHotbar),
+			y: getYPos(this.fromHotbar),
 			n: this.n 
 		};
 
-		const distance = Math.sqrt(
-			Math.abs(this.pos.x - toObject.x()) ** 2
-			+
-			Math.abs(this.pos.y - toObject.y()) ** 2
-		);
+		if (this.snapping) {
+			// OMG IT'S A PETAL SWAP!!!!!
+			ws.send(JSON.stringify(["e", this.n, this.fromHotbar, this.snapN, this.snapInHotbar]));
 
-		const slider = new SlidingPetal(distance * 1.3,
-			fromObject, toObject,
-			this.width, endWidth, this.id);
+			let targetBar = this.snapInHotbar ? me.info.hotbar : me.info.inventory;
 
-		if (this.fromHotbar) {
-			aboveSlidingPetals[this.n] = slider;
+			let holdingSliding = this.snapInHotbar ? aboveSlidingPetals : belowSlidingPetals;
+			let otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
+
+			const holdingTarget = {
+				x: getXPos(this.snapN, this.snapInHotbar),
+				y: getYPos(this.snapInHotbar),
+				n: this.snapN
+			};
+			const holdingTargetWidth = this.snapInHotbar ? hbOutline : outlineWidth;
+			const OGHoldingWidth = this.fromHotbar ? hbOutline : outlineWidth;
+
+			// for the holding petal
+			holdingSliding[this.snapN] = new SlidingPetal(300, holdingRN, holdingTarget, 
+				this.width, holdingTargetWidth, this.id);
+			// for the other petal swapping with the holdingPetal
+			otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
+				holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
+
+			this.id = 0;
 		} else {
-			belowSlidingPetals[this.n] = slider;
-		}
+			// normal boring release
 
-		this.id = 0;
+			// making it zoom back to its spot
+			const endWidth = this.fromHotbar ? hbOutline : outlineWidth;
+			const spacing = this.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
+
+
+			const distance = Math.sqrt(
+				Math.abs(this.pos.x - holdingOGSpot.x()) ** 2
+				+
+				Math.abs(this.pos.y - holdingOGSpot.y()) ** 2
+			);
+
+			const slider = new SlidingPetal(distance * 0.5,
+				holdingRN, holdingOGSpot,
+				this.width, endWidth, this.id);
+
+			if (this.fromHotbar) {
+				aboveSlidingPetals[this.n] = slider;
+			} else {
+				belowSlidingPetals[this.n] = slider;
+			}
+
+			this.id = 0;
+		}
 	}
 }
 // petal that is being held
@@ -409,12 +459,7 @@ function drawInventory() {
 					pointerCursor = true;
 					if (holdingPetal.id) {
 						if (me.info.inventory[i] !== holdingPetal.id) {
-							holdingPetal.width = outlineWidth + 10;
-							holdingPetal.pos.x = x - 5;
-							holdingPetal.pos.y = y - 5;
-							holdingPetal.snapping = true;
-							holdingPetal.snapN = i;
-							holdingPetal.snapInHotbar = false;
+							holdingPetal.snap(x, y, outlineWidth, i, false)
 						}
 					} else if (me.info.justClicked) {
 						// new petal was selected
@@ -471,12 +516,7 @@ function drawInventory() {
 					pointerCursor = true;
 					if (holdingPetal.id) {
 						if (me.info.hotbar[i] !== holdingPetal.id) {
-							holdingPetal.width = hbOutline + 10;
-							holdingPetal.pos.x = x - 5;
-							holdingPetal.pos.y = y - 5;
-							holdingPetal.snapping = true;
-							holdingPetal.snapN = i;
-							holdingPetal.snapInHotbar = true;
+							holdingPetal.snap(x, y, hbOutline, i, true)
 						}
 					} else if (me.info.justClicked) {
 						// new petal was selected

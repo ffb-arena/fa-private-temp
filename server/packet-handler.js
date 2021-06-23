@@ -128,6 +128,11 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
         case "d": 
             rooms.get(myRoom).players[myID].swapPetalsChecks(packet[1], packet[2]);
             break;
+	
+		// weird swaps where they can both be in the hotbar/inventory
+		case "e":
+			rooms.get(myRoom).players[myID].weirdSwap(packet[1], packet[2], packet[3], packet[4]);
+			break
 
         // Ping
         case "ping":
