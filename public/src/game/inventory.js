@@ -325,10 +325,9 @@ class HoldingPetal {
 			// OMG IT'S A PETAL SWAP!!!!!
 			ws.send(JSON.stringify(["e", this.n, this.fromHotbar, this.snapN, this.snapInHotbar]));
 
-			let targetBar = this.snapInHotbar ? me.info.hotbar : me.info.inventory;
+			const targetBar = this.snapInHotbar ? me.info.hotbar : me.info.inventory;
 
 			let holdingSliding = this.snapInHotbar ? aboveSlidingPetals : belowSlidingPetals;
-			let otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
 
 			const holdingTarget = {
 				x: getXPos(this.snapN, this.snapInHotbar),
@@ -336,14 +335,24 @@ class HoldingPetal {
 				n: this.snapN
 			};
 			const holdingTargetWidth = this.snapInHotbar ? hbOutline : outlineWidth;
-			const OGHoldingWidth = this.fromHotbar ? hbOutline : outlineWidth;
 
 			// for the holding petal
 			holdingSliding[this.snapN] = new SlidingPetal(300, holdingRN, holdingTarget, 
 				this.width, holdingTargetWidth, this.id);
+
 			// for the other petal swapping with the holdingPetal
-			otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
-				holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
+			if (targetBar[this.snapN] === 0) {
+				if (this.fromHotbar) {
+					me.info.hotbar[this.n] = 0;
+				} else {
+					me.info.inventory[this.n] = 0;
+				}	
+			} else {
+				let otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
+				const OGHoldingWidth = this.fromHotbar ? hbOutline : outlineWidth;
+				otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
+					holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
+			}
 
 			fromCooldown[this.n] = Date.now() + me.swapCooldown;
 			toCooldown[this.snapN] = Date.now() + me.swapCooldown;
@@ -515,6 +524,30 @@ function drawInventory() {
     if (me.info.inventory.length === 0) return;
 	let y = window.innerHeight - 81;
     for (let i = 0; i < 8; i++) {
+
+		if (me.info.inventory[i] >= 0) {
+			if (
+				x < me.info.mouseX && me.info.mouseX < (x + outlineWidth)
+				&&
+				y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
+			) {
+				pointerCursor = true;
+				if (holdingPetal.id) {
+					if (me.info.inventory[i] !== holdingPetal.id) {
+						holdingPetal.snap(x, y, outlineWidth, i, false)
+					}
+				} else if (me.info.justClicked) {
+					// new petal was selected
+					holdingPetal.id = me.info.inventory[i];
+					holdingPetal.n = i;
+					holdingPetal.fromHotbar = false;
+					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+					me.info.inventory[i] = -2;
+					break;
+				}
+			}
+		}
+
         switch (me.info.inventory[i]) {
 
 			// petal is being dragged
@@ -531,26 +564,6 @@ function drawInventory() {
             
             // normal petal
             default: 
-				if (
-					x < me.info.mouseX && me.info.mouseX < (x + outlineWidth)
-					&&
-					y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
-				) {
-					pointerCursor = true;
-					if (holdingPetal.id) {
-						if (me.info.inventory[i] !== holdingPetal.id) {
-							holdingPetal.snap(x, y, outlineWidth, i, false)
-						}
-					} else if (me.info.justClicked) {
-						// new petal was selected
-						holdingPetal.id = me.info.inventory[i];
-						holdingPetal.n = i;
-						holdingPetal.fromHotbar = false;
-						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
-						me.info.inventory[i] = -2;
-						break;
-					}
-				}
                	const colours = rarityColours[rarities[me.info.inventory[i]]];
                	drawPetalIcon({ x: x, y: y },
                		petalNames[me.info.inventory[i]], me.info.inventory[i], 
@@ -572,6 +585,29 @@ function drawInventory() {
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
 	y = window.innerHeight - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
+		if (me.info.hotbar[i] >= 0) {
+			if (
+				x < me.info.mouseX && me.info.mouseX < (x + hbOutline)
+				&&
+				y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
+			) {
+				pointerCursor = true;
+				if (holdingPetal.id) {
+					if (me.info.hotbar[i] !== holdingPetal.id) {
+						holdingPetal.snap(x, y, hbOutline, i, true)
+					}
+				} else if (me.info.justClicked) {
+					// new petal was selected
+					holdingPetal.id = me.info.hotbar[i];
+					holdingPetal.n = i;
+					holdingPetal.fromHotbar = true;
+					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
+					me.info.hotbar[i] = -2;
+					break;
+				}
+			}
+		}
+
         switch (me.info.hotbar[i]) {
 
 			// petal is being dragged
@@ -588,26 +624,6 @@ function drawInventory() {
 
             // normal petal
             default: 
-				if (
-					x < me.info.mouseX && me.info.mouseX < (x + hbOutline)
-					&&
-					y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
-				) {
-					pointerCursor = true;
-					if (holdingPetal.id) {
-						if (me.info.hotbar[i] !== holdingPetal.id) {
-							holdingPetal.snap(x, y, hbOutline, i, true)
-						}
-					} else if (me.info.justClicked) {
-						// new petal was selected
-						holdingPetal.id = me.info.hotbar[i];
-						holdingPetal.n = i;
-						holdingPetal.fromHotbar = true;
-						holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
-						me.info.hotbar[i] = -2;
-						break;
-					}
-				}
                 const colours = rarityColours[rarities[me.info.hotbar[i]]];
                 drawPetalIcon({ x: x, y: y },
                     petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,

@@ -221,7 +221,6 @@ class Flower {
 		// checks
 		let p1Bar = p1InHotbar ? this.hotbar : this.inventory;
 		let p2Bar = p2InHotbar ? this.hotbar : this.inventory;
-		if (p1Bar[p1] === 0 || p2Bar[p2] === 0) return;
 		if (p1Bar[p1] === p2Bar[p2]) return;
 	
 		let p1Cooldown = p1InHotbar ? this._hotbarCooldowns : this._inventoryCooldowns;

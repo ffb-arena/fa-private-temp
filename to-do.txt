@@ -1,5 +1,4 @@
 -inventory
-	-make them snap to empty slots
     -make keyboard switching work if hotbar is empty
 	-make select right one after swap
 	-make selecting work if there's nothing in inventory 0
@@ -19,6 +18,7 @@
         -player hurt animations
         -make petals on petal background turn clockwise
         -don't start petal background until loading is stopped (also better loading screen)
+		-make more petals when not on tab
 
     physics:
         -petal bouncing (also on spawn)
