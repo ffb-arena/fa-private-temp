@@ -316,7 +316,12 @@ class HoldingPetal {
 			n: this.n 
 		};
 
-		if (this.snapping) {
+		let isSwap = !!this.snapping;
+		let fromCooldown = this.fromHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;
+		let toCooldown = this.snapInHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;	
+		if (fromCooldown[this.n] > Date.now() || toCooldown[this.snapN] > Date.now()) isSwap = false;
+
+		if (isSwap) {
 			// OMG IT'S A PETAL SWAP!!!!!
 			ws.send(JSON.stringify(["e", this.n, this.fromHotbar, this.snapN, this.snapInHotbar]));
 
@@ -340,6 +345,8 @@ class HoldingPetal {
 			otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
 				holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
 
+			fromCooldown[this.n] = Date.now() + me.swapCooldown;
+			toCooldown[this.snapN] = Date.now() + me.swapCooldown;
 			this.id = 0;
 		} else {
 			// normal boring release
@@ -375,6 +382,79 @@ let holdingPetal = new HoldingPetal();
 // if the player is stopped or not
 let playerStopped = false;
 
+// switches petals
+function swapPetals(invSlot, hotbarSlot) {
+	ws.send(JSON.stringify(["d", invSlot, hotbarSlot]));
+	let invID = me.info.inventory[invSlot];
+	let hotbarID = me.info.hotbar[hotbarSlot];
+
+	if (invID === -1) {
+		// pain
+		invID = belowSlidingPetals[invSlot].petalID;
+	} else if (invID === -2) {
+		invID = holdingPetal.id;
+	}
+	if (hotbarID === -1) {
+		hotbarID = aboveSlidingPetals[hotbarSlot].petalID;
+	} else if (hotbarID === -2) {
+		hotbarID = holdingPetal.id;
+	}
+	
+	const invInfo = {
+	    x: getXPos(invSlot, false),
+	    y: getYPos(false),
+	    n: invSlot
+	};
+	
+	const hbInfo = {
+	    x: getXPos(hotbarSlot, true),
+	    y: getYPos(true),
+	    n: hotbarSlot
+	};
+	
+	
+	// checking if any of them are being held, or are sliding
+	switch (me.info.inventory[invSlot]) {
+		// petal is being held
+		case -2:
+			holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
+			holdingPetal.n = hotbarSlot;
+			holdingPetal.release();
+			break;
+		// petal is sliding
+		case -1:
+				
+		// petal is normal
+		default:
+			aboveSlidingPetals[invSlot] = new SlidingPetal(300, invInfo,
+			    hbInfo, outlineWidth, hbOutline, invID);
+			break;
+	}
+	// same as above, but for hotbar
+	switch (me.info.hotbar[hotbarSlot]) {
+		case -2:
+			holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
+			holdingPetal.n = invSlot;
+			holdingPetal.release();
+			break;
+		case -1:
+	
+		default:
+			belowSlidingPetals[hotbarSlot] = new SlidingPetal(300, hbInfo,
+			    invInfo, hbOutline, outlineWidth, hotbarID);
+			break;
+	}
+	
+	me.info.inventory[invSlot] = -1;
+	me.info.hotbar[hotbarSlot] = -1;
+	
+	me.info.inventoryCooldowns[invSlot] = Date.now() + me.swapCooldown;
+	me.info.hotbarCooldowns[hotbarSlot] = Date.now() + me.swapCooldown;
+	
+	// TODO:
+	// FIND NEXT SELECTED PETAL
+
+}
 
 // draws inventory and stuff
 function drawInventory() {

@@ -114,10 +114,6 @@ class Flower {
                 this.keys.leftDown = true;
                 break;
 
-            case "KeyX":
-                this._x();
-                break;
-
             case "ArrowUp":
                 this.keys.upArrow = true;
                 break;
@@ -195,19 +191,8 @@ class Flower {
         }
     }
 
-    // when x is pressed
-    _x() {
-		for (let i = 0; i < this.petalNum; i++) {
-            if (this._inventoryCooldowns[i] > Date.now() || this._hotbarCooldowns[i] > Date.now()) continue;
-            if (this.inventory[i] === this.hotbar[i]) continue;
-
-            this._swapPetals(i, i);
-		}
-    }
-
     // swapping petals checks
     swapPetalsChecks(invPetal, hotbarPetal) {
-        if (this.inventory[invPetal] === 0) return;
         if (this.inventory[invPetal] === this.hotbar[hotbarPetal]) return;
         if (this._inventoryCooldowns[invPetal] > Date.now() || this._hotbarCooldowns[hotbarPetal] > Date.now()) return;
 
@@ -228,8 +213,6 @@ class Flower {
         this.pubInfo.petals[hotbarPetal] = new Petal(this.hotbar[hotbarPetal], oldPetal.degree, 
             this.petalDist, this.petalCentre, oldPetal.ws, hotbarPetal);
         this.pubInfo.petals[hotbarPetal].reload();
-
-        this.ws.send(JSON.stringify(["f", [this.hotbar[hotbarPetal], invPetal, this.inventory[invPetal], hotbarPetal]]));
     }
 
 	// weird swaps where they can both be in inventory or hotbar

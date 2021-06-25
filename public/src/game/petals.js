@@ -133,11 +133,3 @@ const petalNames = {
 	2: "Fast",
 	6942: "haha"
 };
-
-// petal radii (for drawing the icon in inventory/hotbar)
-const radii = {
-	1: 10,
-	2: 8,
-	6942: 16
-};
-

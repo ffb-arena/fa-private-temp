@@ -20,7 +20,7 @@ const WebSocket = require("ws");
 const debug = false;
 
 // minifying
-const minify = false;
+const minify = !!process.env.PORT;
 
 if (minify) {
     console.log("Minifying code...");

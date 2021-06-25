@@ -127,18 +127,27 @@ ws.onmessage = message => {
 
             hotbarReloads = [];
             belowSlidingPetals = [];
+			me.info.hotbarCooldowns = [];
+			me.info.inventoryCooldowns = [];
             for (let i = 0; i < nOfPetals; i++) {
                 hotbarReloads.push(new HotbarReload(0, 0, 0));
                 belowSlidingPetals.push(undefined);
+				me.info.hotbarCooldowns.push(Date.now());
             }
 
             aboveSlidingPetals = [];
             for (let i = 0; i < 8; i++) {
                 aboveSlidingPetals.push(undefined);
+				me.info.inventoryCooldowns.push(Date.now());
             }
 
-            me.info.hotbar = msg[2];
-            me.info.inventory = msg[3];
+			me.swapCooldown = msg[2];
+
+            me.info.hotbar = msg[3];
+            me.info.inventory = msg[4];
+
+			// setting radii (for petal icons)
+			radii = msg[5];
             break;
 
         // Game data
@@ -178,66 +187,6 @@ ws.onmessage = message => {
 				}, 
                 hbOutline * fgPercent); 
 			break;
-
-        // petals switching places
-        case "f":
-            // format:
-            // msg[1][0]: petal id in inventory switching to hotbar
-            // msg[1][1]: which inventory slot it's currently in
-            // msg[1][2]: petal id of the hotbar switching to inventory
-            // msg[1][3]: which hotbar slot it's currently in
-
-            const invInfo = {
-                x: getXPos(msg[1][1], false),
-                y: getYPos(false),
-                n: msg[1][1]
-            };
-
-            const hbInfo = {
-                x: getXPos(msg[1][3], true),
-                y: getYPos(true),
-                n: msg[1][3]
-            };
-
-
-			// checking if any of them are being held, or are sliding
-			switch (me.info.inventory[msg[1][1]]) {
-				// petal is being held
-				case -2:
-					holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
-					holdingPetal.n = msg[1][1];
-					holdingPetal.release();
-					break;
-				// petal is sliding
-				case -1:
-						
-				// petal is normal
-				default:
-            		aboveSlidingPetals[msg[1][1]] = new SlidingPetal(300, invInfo,
-            		    hbInfo, outlineWidth, hbOutline, msg[1][0]);
-					break;
-			}
-			// same as above, but for hotbar
-			switch (me.info.hotbar[msg[1][3]]) {
-				case -2:
-					holdingPetal.fromHotbar = !holdingPetal.fromHotbar;
-					holdingPetal.n = msg[1][1];
-					holdingPetal.release();
-					break;
-				case -1:
-
-				default:
-            		belowSlidingPetals[msg[1][1]] = new SlidingPetal(300, hbInfo,
-            		    invInfo, hbOutline, outlineWidth, msg[1][2]);
-					break;
-			}
-
-            me.info.inventory[msg[1][1]] = -1;
-            me.info.hotbar[msg[1][3]] = -1;
-
-            // TODO:
-            // FIND NEXT SELECTED PETAL
-            break;
 
         // debug info
         case "z":

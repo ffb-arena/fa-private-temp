@@ -1,36 +1,38 @@
 -inventory
-	-add cooldowns on client
-	-do rest of clientsideisation
-	-heartbeat packet
 	-make them snap to empty slots
+    -make keyboard switching work if hotbar is empty
 	-make select right one after swap
 	-make selecting work if there's nothing in inventory 0
 	-fix text
 -petal stats
 
 -mechanics to fix 
-	-making petal swaps proper ui speed
-	-more consistent inventory.js variable names
-	-fix discoloured "echo"
-    -checks
-    -lag when switching directions with mouse
-    -random disconnects
-    -petal lag is elliptical???
-    -petal lag in general
-    -wasd movement
-    -scuffed still knockback (not consistent)
-    -knockback in general
-    -bug where collision where both are still
-    -collisions sometimes NaN positions
-    -random 0, 0 debug info
-    -petal death
-    -faces
-    -player hurt animations
-    -petal bouncing (also on spawn)
-    -yy opposite knockback
-    -on mouse stop, don't stop player immediately
-    -make petals on petal background turn clockwise
-	-don't start petal background until loading is stopped (also better loading screen)
+    code and bugs:
+        -checks
+        -random disconnects
+        -more consistent inventory.js variable names
+
+    rendering:
+        -making petal swaps proper ui speed
+        -fix discoloured "echo"
+        -faces
+        -player hurt animations
+        -make petals on petal background turn clockwise
+        -don't start petal background until loading is stopped (also better loading screen)
+
+    physics:
+        -petal bouncing (also on spawn)
+        -on mouse stop, don't stop player immediately
+        -petal lag is elliptical???
+        -petal lag in general
+        -wasd movement
+        -scuffed still knockback (not consistent)
+        -knockback in general
+        -bug where collision where both are still
+        -collisions sometimes NaN positions
+        -random 0, 0 debug info
+        -lag when switching directions with mouse
 
 -far future
     -tdm
+    -yy opposite knockback

@@ -46,8 +46,9 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetal;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetal, radii;
 me = {
+	swapCooldown: undefined,
     roomInfo: {
         x: 0,
         y: 0
@@ -61,7 +62,9 @@ me = {
 		justClicked: false,
         level: undefined,
         hotbar: [],
-        inventory: []
+        inventory: [],
+		hotbarCooldowns: [],
+		inventoryCooldowns: []
     },
     settings: {
         keyboard: false,
@@ -72,6 +75,7 @@ allPlayers = [];
 debug = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 deadPetals = [];
+radii = {};
 
 stopText = "Move mouse here to disable movement";
 
@@ -125,6 +129,19 @@ function addEventListeners() {
             deathScreen = [];
         }
 
+		// swapping all petals
+		if (key.code === "KeyX") {
+			unselectTime = Date.now() + 5000;
+			for (let i = 0; i < me.info.hotbar.length; i++) {
+				const inventoryCooldown = me.info.inventoryCooldowns[i] < Date.now();
+				const hotbarCooldown = me.info.hotbarCooldowns[i] < Date.now();
+				const isDiffPetals = me.info.hotbar[i] !== me.info.inventory[i];	
+				if (inventoryCooldown && hotbarCooldown && isDiffPetals) {
+					swapPetals(i, i);
+				}
+			}
+		}
+
 		// hiding numbers
 		if (key.code === "Escape") {
 			numInfo = false;
@@ -153,12 +170,17 @@ function addEventListeners() {
 		// switching petals
 		for (let i = 1; i < me.info.hotbar.length + 1; i++) {
 			if (key.code === `Digit${i}`) {
+				const hotbarSlot = i - 1;
 				if (!numInfo) {
 					numInfo = true;
 					selectedPetal = 0;
 				}
-				// send message to swap selectedPetal and whichever digit was pressed
-				ws.send(JSON.stringify(["d", selectedPetal, i - 1]));
+				const inventoryCooldown = me.info.inventoryCooldowns[selectedPetal] < Date.now();
+				const hotbarCooldown = me.info.hotbarCooldowns[hotbarSlot] < Date.now();
+				const isDiffPetals = me.info.hotbar[hotbarSlot] !== me.info.inventory[selectedPetal];	
+				if (inventoryCooldown && hotbarCooldown && isDiffPetals) {
+					swapPetals(selectedPetal, hotbarSlot);
+				}
 				unselectTime = Date.now() + 5000;
 			}
 		}
