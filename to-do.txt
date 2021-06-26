@@ -1,8 +1,6 @@
 -inventory
-    -make keyboard switching work if hotbar is empty
-	-make select right one after swap
-	-make selecting work if there's nothing in inventory 0
 	-fix text
+
 -petal stats
 
 -mechanics to fix 

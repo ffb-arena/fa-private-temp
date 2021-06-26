@@ -109,6 +109,26 @@ window.addEventListener("resize", () => {
     }
 });
 
+// checkCurrent is optional param
+// if present (and truthy), it means to check
+// whatever selectedPetal currently is
+// otherwise, it starts checking at selectedPetal + 1
+function updateSelectedPetal(interval, checkCurrent) {
+	numInfo = true;
+	if (checkCurrent) {
+		if (me.info.inventory[selectedPetal] !== 0) return;
+	}
+	for (let i = 0; i < 8; i++) {
+		selectedPetal += interval;
+		if (selectedPetal >= 8) selectedPetal %= 8;
+		while (selectedPetal < 0) selectedPetal += 8;
+		if (me.info.inventory[selectedPetal] !== 0) return;
+	}
+	
+	// if the hotbar is completely empty
+	numInfo = false;
+}
+
 // event listeners only get added when ws opens
 function addEventListeners() {
     document.addEventListener("keydown", key => {
@@ -138,6 +158,7 @@ function addEventListeners() {
 				const isDiffPetals = me.info.hotbar[i] !== me.info.inventory[i];	
 				if (inventoryCooldown && hotbarCooldown && isDiffPetals) {
 					swapPetals(i, i);
+					updateSelectedPetal(1, true);
 				}
 			}
 		}
@@ -150,18 +171,13 @@ function addEventListeners() {
 		if (key.code === "KeyQ" || key.code === "KeyE") {
 			if (!numInfo) {
 				numInfo = true;
-				selectedPetal = 0
+				selectedPetal = 0;
+				updateSelectedPetal(1, true);
 			} else {
 				if (key.code === "KeyQ") {
-					do {
-						selectedPetal--;
-						if (selectedPetal === -1) selectedPetal = 7;
-					} while (me.info.inventory[selectedPetal] === 0)
+					updateSelectedPetal(-1);
 				} else {
-					do {
-						selectedPetal++;
-						if (selectedPetal === 8) selectedPetal = 0;
-					} while (me.info.inventory[selectedPetal] === 0)
+					updateSelectedPetal(1);
 				}	
 			}
 			unselectTime = Date.now() + 5000; // unselect in 5000 ms
@@ -180,6 +196,7 @@ function addEventListeners() {
 				const isDiffPetals = me.info.hotbar[hotbarSlot] !== me.info.inventory[selectedPetal];	
 				if (inventoryCooldown && hotbarCooldown && isDiffPetals) {
 					swapPetals(selectedPetal, hotbarSlot);
+					updateSelectedPetal(1, true);
 				}
 				unselectTime = Date.now() + 5000;
 			}

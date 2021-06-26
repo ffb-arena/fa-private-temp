@@ -435,7 +435,7 @@ function swapPetals(invSlot, hotbarSlot) {
 				
 		// petal is normal
 		default:
-			aboveSlidingPetals[invSlot] = new SlidingPetal(300, invInfo,
+			aboveSlidingPetals[hotbarSlot] = new SlidingPetal(300, invInfo,
 			    hbInfo, outlineWidth, hbOutline, invID);
 			break;
 	}
@@ -449,13 +449,22 @@ function swapPetals(invSlot, hotbarSlot) {
 		case -1:
 	
 		default:
-			belowSlidingPetals[hotbarSlot] = new SlidingPetal(300, hbInfo,
+			belowSlidingPetals[invSlot] = new SlidingPetal(300, hbInfo,
 			    invInfo, hbOutline, outlineWidth, hotbarID);
 			break;
 	}
-	
-	me.info.inventory[invSlot] = -1;
+
 	me.info.hotbar[hotbarSlot] = -1;
+	me.info.inventory[invSlot] = -1;
+
+	if (invID === 0) {
+		aboveSlidingPetals[hotbarSlot] = undefined;
+		me.info.hotbar[hotbarSlot] = 0;
+	} else if (hotbarID === 0) {
+		belowSlidingPetals[invSlot] = undefined;
+		me.info.inventory[invSlot] = 0;
+	}
+	
 	
 	me.info.inventoryCooldowns[invSlot] = Date.now() + me.swapCooldown;
 	me.info.hotbarCooldowns[hotbarSlot] = Date.now() + me.swapCooldown;
