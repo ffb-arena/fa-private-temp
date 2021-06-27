@@ -1,6 +1,3 @@
--inventory
-	-fix text
-
 -petal stats
 
 -mechanics to fix 

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm install && node index"
+    "start": "node index"
   },
   "author": "Garklein",
   "license": "ISC",

@@ -220,7 +220,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 	}
 
     // text
-    florrText(name, width / 4.5, { x: pos.x + width / 2, y: pos.y + width * 0.7 }, width / 120, c);
+    florrText(name, width / 4.5, { x: pos.x + width / 2, y: pos.y + width * 0.7 }, c);
 
     c.globalAlpha = 1;
 
@@ -362,7 +362,6 @@ class HoldingPetal {
 
 			// making it zoom back to its spot
 			const endWidth = this.fromHotbar ? hbOutline : outlineWidth;
-			const spacing = this.fromHotbar ? spaceBetweenHB : spaceBetweenInvIcons;
 
 
 			const distance = Math.sqrt(
@@ -468,10 +467,6 @@ function swapPetals(invSlot, hotbarSlot) {
 	
 	me.info.inventoryCooldowns[invSlot] = Date.now() + me.swapCooldown;
 	me.info.hotbarCooldowns[hotbarSlot] = Date.now() + me.swapCooldown;
-	
-	// TODO:
-	// FIND NEXT SELECTED PETAL
-
 }
 
 // draws inventory and stuff
@@ -523,7 +518,7 @@ function drawInventory() {
 
     	// stop moving text
     	florrText(stopText, 11.9,
-    	    { x: window.innerWidth / 2, y: window.innerHeight - 15 }, 0.3, ctx);
+    	    { x: window.innerWidth / 2, y: window.innerHeight - 15 }, ctx);
 	}
 
     // inventory boxes (+ detecting if cursor is hovering over them)
@@ -668,7 +663,7 @@ function drawInventory() {
 			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbOutline / 2);
 
         for (let i = 0; i < me.info.hotbar.length; i++) {
-            florrText(`[${i + 1}]`, 14, { x: x, y: window.innerHeight - 157 }, 0.5, ctx);
+            florrText(`[${i + 1}]`, 14, { x: x, y: window.innerHeight - 157 }, ctx);
             x += spaceBetweenHB + hbOutline;
         }
     }
