@@ -46,6 +46,7 @@ inputY.value = 20;
 
 levelInput.value = 45;
 
+
 // Creating Games
 make.addEventListener("click", () => {
     join.hidden = true;
@@ -181,6 +182,40 @@ function setLevelText() {
     bodyDamage.style.width = `${width}px`;
 }
 setLevelText();
+
+function drawGallery(radii) {
+	if (!radii) return;
+	const galleryCanvasWidth = 260; 
+	const galleryIconWidth = 50;
+	const galleryIconsPerRow = 4;
+	const galleryCanvas = document.getElementById("gallery-canvas");
+	const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
+	const galleryCtx = galleryCanvas.getContext("2d")
+	
+	// drawing the gallery
+	let biggestPetalIndex = 0;
+	for (let key in petalNames) {
+		key = +key;
+		if (key < 0 || 100 < key) continue;
+		biggestPetalIndex = Math.max(biggestPetalIndex, key);
+	}
+	galleryCanvas.height = Math.floor((biggestPetalIndex - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
+	galleryCtx.textAlign = "center";
+	for (let key in petalNames) {
+		key = +key;
+		// dev petals
+		if (key < 0 || 100 < key) continue;
+	
+		const row = (key - 1) % galleryIconsPerRow;
+		const column = Math.floor((key - 1) / 3);
+		const x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
+		const y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
+	
+		const colours = rarityColours[rarities[key]];
+		drawPetalIcon({ x: x, y: y }, petalNames[key], key, galleryIconWidth, 
+			colours.fg, colours.bg, 1, galleryCtx);
+	}
+}
 
 
 

@@ -10,7 +10,7 @@ p {
 }
 
 /* fixing focus box on chrome */
-*,*:focus,*:hover{
+*, *:focus, *:hover{
     outline:none;
 }
 
@@ -215,138 +215,65 @@ input[type=number] {
     background-color: #77addd;
 }
 
-/* First thing you see */
-#join {
-    cursor: pointer;
-    position: absolute;
+/* UI buttons */
+.menu-btn {
     background-color: #5a9fdb;
-    width: 140px;
+    cursor: pointer;
     height: 37px;
     font-size: 20px;
     border: 5px solid #4981b1;
     border-radius: 6px;
+	position: fixed;
+	letter-spacing: -1px;
+}
+.menu-btn:hover {
+    background-color: #77addd;
+}
+
+#join {
+    width: 140px;
     margin-top: 5px;
     margin-left: 5px;
-    position: fixed;
     left: 0;
-    letter-spacing: -1px;
-}
-
-
-#join:hover {
-    background-color: #77addd;
 }
 #make {
-    cursor: pointer;
-    position: absolute;
-    background-color: #5a9fdb;
     width: 140px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
     margin-top: 5px;
     margin-left: 150px;
-    position: fixed;
     left: 0;
-    letter-spacing: -1px;
 }
-#make:hover {
-    background-color: #77addd;
-}
-/* UI buttons */
 #settings-btn {
-    position: absolute;
-    cursor: pointer;
-    background-color: #5a9fdb;
-    width: 100px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
+    width: 120px;
     margin-bottom: 5px;
-    margin-left : 5px;
-    position: fixed;
+    margin-left: 5px;
     bottom: 0;
-    letter-spacing: -1px;
-}
-#settings-btn:hover{
-    background-color: #77addd;
 }
 #changelog-btn {
-    position: absolute;
-    cursor: pointer;
-    background-color: #5a9fdb;
     width: 120px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
     margin-bottom: 5px;
     margin-left: 128px;
-    position: fixed;
     bottom: 0;
-    letter-spacing: -1px;
-}
-#changelog-btn:hover{
-    background-color: #77addd;
-}
-#settings-btn {
-    position: absolute;
-    cursor: pointer;
-    background-color: #5a9fdb;
-    width: 120px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
-    margin-bottom: 5px;
-    margin-left : 5px;
-    position: fixed;
-    bottom: 0;
-    letter-spacing: -1px;
-}
-#settings-btn:hover{
-    background-color: #77addd;
 }
 #level-btn {
-    position: absolute;
-    cursor: pointer;
-    background-color: #5a9fdb;
     width: 120px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
     margin-bottom: 5px;
     margin-left: 251px;
-    position: fixed;
     bottom: 0;
-    letter-spacing: -1px;
 }
-#level-btn:hover{
-    background-color: #77addd;
-}
-
 #gallery-btn {
-    position: absolute;
-    cursor: pointer;
-    background-color: #5a9fdb;
     width: 120px;
-    height: 37px;
-    font-size: 20px;
-    border: 5px solid #4981b1;
-    border-radius: 6px;
     margin-bottom: 5px;
-    margin-right : 5px;
-    position: fixed;
+    margin-right: 5px;
     bottom: 0;
     right: 0;
 }
-#gallery-btn:hover{
-    background-color: #77addd;
+#loadout-btn {
+    width: 120px;
+    margin-bottom: 5px;
+    margin-right: 128px;
+    bottom: 0;
+    right: 0;
 }
-
 
 /* Joining games */
 #input-join {
@@ -600,11 +527,11 @@ input[type=number] {
     grid-gap: 10px;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
-  
-  .myGallery img {
-    width: 22%;
-  }
 
+#gallery-canvas {
+	width: 260px;	
+}
+  
 /* .centered_tab {
     float:none /*to make sure there is no active float*/
 

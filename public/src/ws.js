@@ -105,6 +105,10 @@ ws.onmessage = message => {
                         systemText.hidden = false;
                         roomID.hidden = false;
                         roomContainer.hidden = false;
+
+						// setting radii (for petal icons)
+						if (msg[6]) radii = msg[6];
+						drawGallery(msg[6]);
                     } else {
                         back.hidden = true;
 
@@ -145,9 +149,6 @@ ws.onmessage = message => {
 
             me.info.hotbar = msg[3];
             me.info.inventory = msg[4];
-
-			// setting radii (for petal icons)
-			radii = msg[5];
             break;
 
         // Game data
@@ -163,6 +164,7 @@ ws.onmessage = message => {
         case "c":
             deathScreen[0] = msg[1];
             deathScreen[1] = msg[2];
+			numInfo = false;
             break;
 
         // dead petals

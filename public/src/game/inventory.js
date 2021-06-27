@@ -547,7 +547,6 @@ function drawInventory() {
 					holdingPetal.fromHotbar = false;
 					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
 					me.info.inventory[i] = -2;
-					break;
 				}
 			}
 		}
@@ -607,7 +606,6 @@ function drawInventory() {
 					holdingPetal.fromHotbar = true;
 					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
 					me.info.hotbar[i] = -2;
-					break;
 				}
 			}
 		}

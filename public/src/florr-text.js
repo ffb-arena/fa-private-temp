@@ -1,5 +1,6 @@
 function florrText(text, fontSize, centre, c) {
     c.globalAlpha = 1;
+	console.log(c.textAlign);
 
     c.font = `${fontSize}px Ubuntu`;
 	c.fillStyle = "#ffffff";

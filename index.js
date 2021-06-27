@@ -9,6 +9,7 @@ const Room = require("./server/room.js");
 const C = require("./server/consts.js");
 const files = require("./server/files.js");
 const ph = require("./server/packet-handler.js");
+const PS = require("./server/player/petal-stats.js");
 
 const http = require("http");
 const path = require("path");
@@ -123,7 +124,12 @@ wss.on('connection', function connection(ws) {
     bruh = false;
 
     rooms.get("").connected++;
-    ws.send(JSON.stringify(["a", "b", "a", "", rooms.get("").info, true]));
+
+	let radii = {};
+	for (const petalID in PS) {
+		radii[petalID] = PS[petalID].radius;
+	}
+    ws.send(JSON.stringify(["a", "b", "a", "", rooms.get("").info, true, radii]));
 
     // Closed tab or reloading
     ws.on("close", () => {

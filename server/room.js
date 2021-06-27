@@ -2,7 +2,6 @@ const F = require("./functions.js");
 const Flower = require("./player/flower.js");
 const C = require("./consts.js");
 const handleCollision = require("./player/collisions.js");
-const PS = require("./player/petal-stats.js");
 
 class Room {
     constructor(w, h, debug) {
@@ -47,13 +46,8 @@ class Room {
         this.players[newID] = new Flower(newID, x, y, level, name, bruh, ws);
 
         // sending init package
-		let radii = {};
-		for (const petalID in PS) {
-			radii[petalID] = PS[petalID].radius;
-		}
         ws.send(JSON.stringify(["i", level, C.maxSwapCooldown, 
-			this.players[newID].hotbar, this.players[newID].inventory,
-			radii]));
+			this.players[newID].hotbar, this.players[newID].inventory]));
 
         return [newID, myName];
     }

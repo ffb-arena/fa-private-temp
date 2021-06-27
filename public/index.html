@@ -27,14 +27,15 @@
             <h3 style="font-family:ubuntu;" id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         </div>
         
-        <button id="settings-btn" class="florrfont noselect" onclick="toggleFunc('settings-container')">settings</button>
-        <button id="changelog-btn" class="florrfont noselect" onclick="toggleFunc('changelog-container')">changelog</button>
-        <button id="level-btn" class="florrfont noselect" onclick="toggleFunc('level')">level</button>
-        <button id="gallery-btn" class="florrfont noselect" onclick="toggleFunc('gallery-container')">gallery</button>
+        <button id="settings-btn" class="florrfont noselect menu-btn" onclick="toggleFunc('settings-container')">settings</button>
+        <button id="changelog-btn" class="florrfont noselect menu-btn" onclick="toggleFunc('changelog-container')">changelog</button>
+        <button id="level-btn" class="florrfont noselect menu-btn" onclick="toggleFunc('level')">level</button>
+        <button id="loadout-btn" class="florrfont noselect menu-btn" onclick="toggleFunc('loadout')">loadout</button>
+        <button id="gallery-btn" class="florrfont noselect menu-btn" onclick="toggleFunc('gallery-container')">gallery</button>
 
         <div id="start">
-            <button class="florrfont noselect" id="join">join a room</button>
-            <button class="florrfont noselect" id="make">create room</button>
+            <button class="florrfont noselect menu-btn" id="join">join a room</button>
+            <button class="florrfont noselect menu-btn" id="make">create room</button>
         </div>
         
         <div id="creating">
@@ -83,7 +84,7 @@
             <div class="list florrfont">
                 <ul >
                     <li id="version-number" class="florrfont-big text-center">Version Number</li>
-                    <li class="florrfont-big text-center">26-6-21 alpha @ 7:32 AM EST</li>
+                    <li class="florrfont-big text-center">27-6-21 alpha @ 4:03 PM EST</li>
                     <li class="changelog-separator"></li>
                     <li class="florrfont-big">April 28th 2021</li>
                     <li class="florrfont-small">-New Changelog</li>
@@ -112,38 +113,7 @@
               
             <div id="Petals" class="tabcontent myGallery active">
                 <div class="myGallery">
-                    <img src="images/petal-icons/basic.png" />
-                    <img src="images/petal-icons/fast.png">
-                    <img src="images/petal-icons/heavy.png" />
-                    <img src="images/petal-icons/iris.png">
-                    <img src="images/petal-icons/leaf.png" />
-                    <img src="images/petal-icons/rose.png">
-                    <img src="images/petal-icons/stinger.png" />
-                    <img src="images/petal-icons/twin.png">
-                    <img src="images/petal-icons/bubble.png" />
-                    <img src="images/petal-icons/cactus.png">
-                    <img src="images/petal-icons/dandelion.png" />
-                    <img src="images/petal-icons/faster.png">
-                    <img src="images/petal-icons/honey.png" />
-                    <img src="images/petal-icons/missile.png">
-                    <img src="images/petal-icons/peas.png" />
-                    <img src="images/petal-icons/rock.png">
-                    <img src="images/petal-icons/rrose.png" />
-                    <img src="images/petal-icons/web.png">
-                    <img src="images/petal-icons/wing.png" />
-                    <img src="images/petal-icons/ecactus.png">
-                    <img src="images/petal-icons/egg.png" />
-                    <img src="images/petal-icons/heaviest.png">
-                    <img src="images/petal-icons/epeas.png" />
-                    <img src="images/petal-icons/pollen.png">
-                    <img src="images/petal-icons/erose.png" />
-                    <img src="images/petal-icons/triplet.png">
-                    <img src="images/petal-icons/yin-yang.png" />
-                    <img src="images/petal-icons/antennae.png">
-                    <img src="images/petal-icons/tringer.png" />
-                    <img src="images/petal-icons/legg.png">
-                    <img src="images/petal-icons/lweb.png" />
-                    <img src="images/petal-icons/square.png">
+					<canvas id="gallery-canvas"></canvas>
                 </div>
               
                 <div id="Mobs" class="tabcontent">
