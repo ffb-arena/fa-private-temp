@@ -1,4 +1,12 @@
 const petalStats = {
+	// haha's dev petal
+	"-3": {
+        radius: 16,
+        cooldown: 50,
+        damage: 30,
+        health: 30,
+    },
+
     0: {
         radius: 0,
         cooldown: 0,
@@ -20,15 +28,7 @@ const petalStats = {
 		cooldown: 500,
 		damage: 8,
 		health: 5
-	},
-	
-	// haha's dev petal
-	6942: {
-        radius: 16,
-        cooldown: 50,
-        damage: 30,
-        health: 30,
-    }
+	}
 };
 
 module.exports = petalStats;

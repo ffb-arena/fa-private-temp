@@ -2,14 +2,18 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let levelOn = true;
+let levelHidden = true;
+let galleryHidden = true;
 function toggleFunc(element) {
     const x = document.getElementById(element);
     x.hidden = !x.hidden;
     switch (element) {
         case "level":
-            levelOn = !levelOn;
+            levelHidden = !levelHidden;
             break;
+		case "gallery-container":
+			galleryHidden = !galleryHidden;
+			break;
         case "settings-container":
             changelogContainer.hidden = true;
             break;
@@ -289,7 +293,6 @@ function mainLoop() {
         if (!deathScreen.length) {
             drawInventory();
         } else {
-            clearText(); // from src/game/rendering.js
 			numInfo = false;
 
             ctx.globalAlpha = 0.5;

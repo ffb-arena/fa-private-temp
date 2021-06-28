@@ -5,8 +5,10 @@
         -checks
         -random disconnects
         -more consistent inventory.js variable names
+		-localStorage names/loadout/level
 
     rendering:
+		-fix movement helper
         -making petal swaps proper ui speed
         -fix discoloured "echo"
         -faces

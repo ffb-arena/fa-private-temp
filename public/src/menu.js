@@ -9,6 +9,9 @@ const createSubmit = document.getElementById("create-submit");
 const changelog = document.getElementById("changelog-btn")
 const gallery = document.getElementById("gallery-btn")
 const levelBtn = document.getElementById("level-btn");
+const level = document.getElementById("level");
+const loadoutBtn = document.getElementById("loadout-btn");
+const galleryContainer = document.getElementById("gallery-container");
 
 const nname = document.getElementById("name");
 const back = document.getElementById("back");
@@ -53,7 +56,7 @@ changelog.addEventListener("click", () => toggleFunc("changelog-container"));
 gallery.addEventListener("click", () => toggleFunc("gallery-container"));
 document.getElementById("settings-btn").addEventListener("click", () => toggleFunc("settings-container"));
 levelBtn.addEventListener("click", () => toggleFunc("level"));
-document.getElementById("loadout-btn").addEventListener("click", () => toggleFunc("loadout"));
+loadoutBtn.addEventListener("click", () => toggleFunc("loadout-container"));
 
 
 // Creating Games
@@ -115,8 +118,11 @@ nname.addEventListener("keydown", (key) => {
         gallery.hidden = true;
         make.hidden = true;
         join.hidden = true;
-        document.getElementById("level").hidden = true;
+		loadoutBtn.hidden = true;
+        level.hidden = true;
         levelBtn.hidden = true;
+		galleryContainer.hidden = true;
+
         ws.send(JSON.stringify(["b", nname.value, levelInput.value]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
@@ -205,7 +211,7 @@ function drawGallery(radii) {
 	let biggestPetalIndex = 0;
 	for (let key in petalNames) {
 		key = +key;
-		if (key < 0 || 100 < key) continue;
+		if (key < 0) continue;
 		biggestPetalIndex = Math.max(biggestPetalIndex, key);
 	}
 	galleryCanvas.height = Math.floor((biggestPetalIndex - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
@@ -213,7 +219,7 @@ function drawGallery(radii) {
 	for (let key in petalNames) {
 		key = +key;
 		// dev petals
-		if (key < 0 || 100 < key) continue;
+		if (key < 0) continue;
 	
 		const row = (key - 1) % galleryIconsPerRow;
 		const column = Math.floor((key - 1) / 3);
@@ -250,6 +256,8 @@ function returnToMenu() {
     gallery.hidden = false;
     make.hidden = false;
     join.hidden = false;
-    document.getElementById("level").hidden = levelOn;
+    level.hidden = levelHidden;
+	galleryContainer.hidden = galleryHidden;
     levelBtn.hidden = false;
+	loadoutBtn.hidden = false;
 }
