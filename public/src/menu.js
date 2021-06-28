@@ -8,6 +8,7 @@ const joinSubmit = document.getElementById("join-submit");
 const createSubmit = document.getElementById("create-submit");
 const changelog = document.getElementById("changelog-btn")
 const gallery = document.getElementById("gallery-btn")
+const levelBtn = document.getElementById("level-btn");
 
 const nname = document.getElementById("name");
 const back = document.getElementById("back");
@@ -45,6 +46,14 @@ inputX.value = 20;
 inputY.value = 20;
 
 levelInput.value = 45;
+
+
+// setting popup event listeners
+changelog.addEventListener("click", () => toggleFunc("changelog-container"));
+gallery.addEventListener("click", () => toggleFunc("gallery-container"));
+document.getElementById("settings-btn").addEventListener("click", () => toggleFunc("settings-container"));
+levelBtn.addEventListener("click", () => toggleFunc("level"));
+document.getElementById("loadout-btn").addEventListener("click", () => toggleFunc("loadout"));
 
 
 // Creating Games
@@ -107,7 +116,7 @@ nname.addEventListener("keydown", (key) => {
         make.hidden = true;
         join.hidden = true;
         document.getElementById("level").hidden = true;
-        document.getElementById("level-btn").hidden = true;
+        levelBtn.hidden = true;
         ws.send(JSON.stringify(["b", nname.value, levelInput.value]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
@@ -242,5 +251,5 @@ function returnToMenu() {
     make.hidden = false;
     join.hidden = false;
     document.getElementById("level").hidden = levelOn;
-    document.getElementById("level-btn").hidden = false;
+    levelBtn.hidden = false;
 }
