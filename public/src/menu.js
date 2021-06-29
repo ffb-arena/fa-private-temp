@@ -228,7 +228,7 @@ function drawGallery(radii) {
 	
 		const colours = rarityColours[rarities[key]];
 		drawPetalIcon({ x: x, y: y }, petalNames[key], key, galleryIconWidth, 
-			colours.fg, colours.bg, 1, galleryCtx);
+			colours.bg, colours.fg, 1, galleryCtx);
 	}
 }
 
