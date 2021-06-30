@@ -8,6 +8,7 @@
 		-localStorage names/loadout/level
 
     rendering:
+		-make gallery and loadout scale with scroll bar
 		-fix movement helper
         -making petal swaps proper ui speed
         -fix discoloured "echo"
@@ -16,8 +17,10 @@
         -make petals on petal background turn clockwise
         -don't start petal background until loading is stopped (also better loading screen)
 		-make more petals when not on tab
+		-SUCK IT UP AND LEARN HOW TO LERP
 
     physics:
+		-petals always evenly spaced
         -petal bouncing (also on spawn)
         -on mouse stop, don't stop player immediately
         -petal lag is elliptical???

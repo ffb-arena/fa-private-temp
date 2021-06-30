@@ -111,6 +111,10 @@ const petals = {
 
 // rarity colours
 const rarityColours = {
+	"empty": {
+		bg: "#dedede",
+		fg: "#ffffff"
+	},
     "common": {
         bg: "#68c058",
         fg: "#82ec71"
@@ -124,13 +128,14 @@ const rarityColours = {
 // which petals are which rarity
 const rarities = {
 	"-3": "haha",
-    0: undefined,
+    0: "empty",
     1: "common",
 	2: "common",
 };
 
 const petalNames = {
 	"-3": "haha",
+	0: "",
     1: "Basic",
 	2: "Fast",
 };

@@ -12,6 +12,7 @@ const levelBtn = document.getElementById("level-btn");
 const level = document.getElementById("level");
 const loadoutBtn = document.getElementById("loadout-btn");
 const galleryContainer = document.getElementById("gallery-container");
+const loadoutContainer = document.getElementById("loadout-container");
 
 const nname = document.getElementById("name");
 const back = document.getElementById("back");
@@ -122,6 +123,7 @@ nname.addEventListener("keydown", (key) => {
         level.hidden = true;
         levelBtn.hidden = true;
 		galleryContainer.hidden = true;
+		loadoutContainer.hidden = true;
 
         ws.send(JSON.stringify(["b", nname.value, levelInput.value]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
@@ -233,6 +235,16 @@ function drawGallery(radii) {
 }
 
 
+const loadoutCanvas = document.getElementById("loadout-canvas");
+const ldCtx = loadoutCanvas.getContext("2d");
+const ldWidth = 250;
+const ldHeight = 470;
+const iconWidth = 50;
+const iconXSpace = (ldWidth - iconWidth * 2) / 2;
+const iconYSpace = (ldHeight - iconWidth * 2) / 8;
+function drawLoadout() {
+
+}
 
 
 // returning to menu stuff
@@ -258,6 +270,7 @@ function returnToMenu() {
     join.hidden = false;
     level.hidden = levelHidden;
 	galleryContainer.hidden = galleryHidden;
+	loadoutContainer.hidden = loadoutHidden;
     levelBtn.hidden = false;
 	loadoutBtn.hidden = false;
 }

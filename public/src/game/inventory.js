@@ -529,7 +529,9 @@ function drawInventory() {
 	let y = window.innerHeight - 81;
     for (let i = 0; i < 8; i++) {
 
-		if (me.info.inventory[i] >= 0) {
+		let id = me.info.inventory[i];
+
+		if (id >= 0) {
 			if (
 				x < me.info.mouseX && me.info.mouseX < (x + outlineWidth)
 				&&
@@ -537,12 +539,12 @@ function drawInventory() {
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
-					if (me.info.inventory[i] !== holdingPetal.id) {
+					if (id !== holdingPetal.id) {
 						holdingPetal.snap(x, y, outlineWidth, i, false)
 					}
 				} else if (me.info.justClicked) {
 					// new petal was selected
-					holdingPetal.id = me.info.inventory[i];
+					holdingPetal.id = id;
 					holdingPetal.n = i;
 					holdingPetal.fromHotbar = false;
 					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
@@ -551,34 +553,17 @@ function drawInventory() {
 			}
 		}
 
-        switch (me.info.inventory[i]) {
-
-			// petal is being dragged
-			case -2:
-
-            // petal is a slidingPetal
-            case -1:
-
-            // empty slot
-            case 0:
-                drawPetalIcon({ x: x, y: y },
-                    "", 0, outlineWidth, "#dedede", "#ffffff", 0.5, ctx);
-                break;
-            
-            // normal petal
-            default: 
-               	const colours = rarityColours[rarities[me.info.inventory[i]]];
-               	drawPetalIcon({ x: x, y: y },
-               		petalNames[me.info.inventory[i]], me.info.inventory[i], 
-					outlineWidth, colours.bg, colours.fg, 0.9, ctx);
-				// if the petal is selected in the inventory
-				if (numInfo && selectedPetal === i) {	
-					ctx.lineWidth = 1.6;
-					ctx.strokeStyle = colours.fg;
-					ctx.strokeRect(x, y, outlineWidth, outlineWidth);
-				}
-                break;
-        }
+		id = Math.max(id, 0);
+       	const colours = rarityColours[rarities[id]];
+       	drawPetalIcon({ x: x, y: y },
+      		petalNames[id], id, 
+			outlineWidth, colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx);
+		// if the petal is selected in the inventory
+		if (numInfo && selectedPetal === i) {	
+			ctx.lineWidth = 1.6;
+			ctx.strokeStyle = colours.fg;
+			ctx.strokeRect(x, y, outlineWidth, outlineWidth);
+		}
 
         x += spaceBetweenInvIcons + outlineWidth;
     }
@@ -588,7 +573,10 @@ function drawInventory() {
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
 	y = window.innerHeight - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
-		if (me.info.hotbar[i] >= 0) {
+
+		let id = me.info.hotbar[i];
+	
+		if (id >= 0) {
 			if (
 				x < me.info.mouseX && me.info.mouseX < (x + hbOutline)
 				&&
@@ -596,12 +584,12 @@ function drawInventory() {
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
-					if (me.info.hotbar[i] !== holdingPetal.id) {
+					if (id !== holdingPetal.id) {
 						holdingPetal.snap(x, y, hbOutline, i, true)
 					}
 				} else if (me.info.justClicked) {
 					// new petal was selected
-					holdingPetal.id = me.info.hotbar[i];
+					holdingPetal.id = id;
 					holdingPetal.n = i;
 					holdingPetal.fromHotbar = true;
 					holdingPetal.updatePos(me.info.mouseX, me.info.mouseY);
@@ -610,28 +598,13 @@ function drawInventory() {
 			}
 		}
 
-        switch (me.info.hotbar[i]) {
-
-			// petal is being dragged
-			case -2:
-
-            // petal is a slidingPetal
-            case -1:
-        
-            // empty slot
-            case 0:
-                drawPetalIcon({ x: x, y: y },
-                    "", 0, hbOutline, "#dedede", "#ffffff", 0.5, ctx);
-                break;
-
-            // normal petal
-            default: 
-                const colours = rarityColours[rarities[me.info.hotbar[i]]];
-                drawPetalIcon({ x: x, y: y },
-                    petalNames[me.info.hotbar[i]], me.info.hotbar[i], hbOutline,
-                    colours.bg, colours.fg, 0.9, ctx, i);
-                break;
-        }
+		// if the petal is -1 or -2, render an empty slot
+		// (-1 = sliding, -2 = holding)
+		id = Math.max(id, 0);
+        const colours = rarityColours[rarities[id]];
+        drawPetalIcon({ x: x, y: y },
+            petalNames[id],	id, hbOutline,
+            colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx, id === 0 ? undefined : i);
 
         x += spaceBetweenHB + hbOutline;
     }

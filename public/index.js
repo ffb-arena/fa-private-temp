@@ -4,6 +4,7 @@ const ctx = canvas.getContext("2d");
 
 let levelHidden = true;
 let galleryHidden = true;
+let loadoutHidden = true;
 function toggleFunc(element) {
     const x = document.getElementById(element);
     x.hidden = !x.hidden;
@@ -14,6 +15,8 @@ function toggleFunc(element) {
 		case "gallery-container":
 			galleryHidden = !galleryHidden;
 			break;
+		case "loadout-container":
+			loadoutHidden = !loadoutHidden;
         case "settings-container":
             changelogContainer.hidden = true;
             break;
