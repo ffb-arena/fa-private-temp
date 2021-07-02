@@ -3,7 +3,8 @@ const C = require("../consts.js");
 const F = require("../functions.js");
 
 class Flower {
-    constructor(id, x, y, level, name, bruh, ws) {
+    constructor(id, x, y, level, name, bruh, inv, hb, ws) {
+		console.log(inv, hb);
         const nOfPetals = 5 + Math.floor(level / 15);
         const maxHealth = 100 + (level - 1) * 50/44;
         this.pubInfo = {
@@ -23,13 +24,11 @@ class Flower {
 
         this.hotbar = [];
         for (let i = 0; i < nOfPetals; i++) {
-            this.hotbar.push(1);
+            this.hotbar.push(hb[i]);
         };
         this.inventory = [];
-		this.inventory.push(2);
-		this.inventory.push(1);
-        for (let i = 0; i < 6; i++) {
-            this.inventory.push(0);
+        for (let i = 0; i < 8; i++) {
+            this.inventory.push(inv[i]);
         };
 
         this.level = level;

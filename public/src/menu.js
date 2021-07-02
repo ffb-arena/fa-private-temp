@@ -125,7 +125,7 @@ nname.addEventListener("keydown", (key) => {
 		galleryContainer.hidden = true;
 		loadoutContainer.hidden = true;
 
-        ws.send(JSON.stringify(["b", nname.value, levelInput.value]));
+        ws.send(JSON.stringify(["b", nname.value, levelInput.value, loadout.inv, loadout.hb]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }
 });
@@ -270,7 +270,7 @@ function drawLoadout() {
 		const id = loadout.hb[i];
         const colours = rarityColours[rarities[id]];
 		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
-			colours.bg, colours.fg,	1, ldCtx);
+			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
 	// inventory
 	for (let i = 0; i < 8; i++) {
@@ -279,7 +279,7 @@ function drawLoadout() {
 		const id = loadout.inv[i];
         const colours = rarityColours[rarities[id]];
 		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
-			colours.bg, colours.fg,	1, ldCtx);
+			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
 }
 

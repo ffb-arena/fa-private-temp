@@ -31,7 +31,7 @@ class Room {
         this.debug = debug;
     }
 
-    spawnPlayer(myName, msgName, level, bruh, ws) {
+    spawnPlayer(myName, msgName, level, bruh, inv, hb, ws) {
         try {
             level = parseInt(level);
         } catch {
@@ -43,7 +43,7 @@ class Room {
         const y = Math.random() * this.info.y;
         if (!myName) myName = C.names[Math.abs(Math.round(Math.random() * C.names.length) - 1)];
         const name = msgName || myName;
-        this.players[newID] = new Flower(newID, x, y, level, name, bruh, ws);
+        this.players[newID] = new Flower(newID, x, y, level, name, bruh, inv, hb, ws);
 
         // sending init package
         ws.send(JSON.stringify(["i", level, C.maxSwapCooldown, 

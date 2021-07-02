@@ -72,6 +72,8 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
                     packet[1].slice(0, 20), 
                     packet[2],
                     bruh, 
+					packet[3],
+					packet[4],
                     ws
                 );
             }

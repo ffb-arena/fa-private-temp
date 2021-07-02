@@ -85,7 +85,7 @@ deadPetals = [];
 radii = {};
 loadout = {
 	hb: [1, 1, 1, 1, 1, 1, 1, 1],
-	inv: [1, 1, 1, 1, 1, 1, 1, 1]
+	inv: [2, 1, 0, 0, 0, 0, 0, 0]
 };
 
 stopText = "Move mouse here to disable movement";
