@@ -223,30 +223,39 @@ function drawGallery(radii) {
 	const galleryCanvas = document.getElementById("gallery-canvas");
 	const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
 	const galleryCtx = galleryCanvas.getContext("2d")
-	
-	// drawing the gallery
-	let biggestPetalIndex = 0;
-	for (let key in petalNames) {
-		key = +key;
-		if (key < 0) continue;
-		biggestPetalIndex = Math.max(biggestPetalIndex, key);
+
+	// creating a sorted list
+	let sorted = [];
+	for (let id in petalNames) {
+		// dev petal
+		if (id <= 0) continue;
+		sorted.push(id);
 	}
-	galleryCanvas.height = Math.floor((biggestPetalIndex - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
+	sorted.sort((id1, id2) => {
+		const rarity1 = rarities[id1];
+		const rarity2 = rarities[id2];
+		if (rarity1 === rarity2) {
+			// same rarity, sort alphabetically
+			const name1 = petalNames[id1];
+			const name2 = petalNames[id2];
+			return name1 > name2 ? 1 : -1;
+		}
+		return rarityTiers[rarity1] < rarityTiers[rarity2] ? -1 : 1;
+	});
+
+	// drawing the gallery
+	galleryCanvas.height = Math.floor((sorted.length - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
 	galleryCtx.textAlign = "center";
-	for (let key in petalNames) {
-		key = +key;
-		// dev petals
-		if (key < 0) continue;
-	
-		const row = (key - 1) % galleryIconsPerRow;
-		const column = Math.floor((key - 1) / galleryIconsPerRow);
+	sorted.forEach((v, i) => {
+		const row = (i - 1) % galleryIconsPerRow;
+		const column = Math.floor((i - 1) / galleryIconsPerRow);
 		const x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
 		const y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
 	
-		const colours = rarityColours[rarities[key]];
-		drawPetalIcon({ x: x, y: y }, petalNames[key], key, galleryIconWidth, 
+		const colours = rarityColours[rarities[v]];
+		drawPetalIcon({ x: x, y: y }, petalNames[v], v, galleryIconWidth, 
 			colours.bg, colours.fg, 1, galleryCtx);
-	}
+	});
 }
 
 

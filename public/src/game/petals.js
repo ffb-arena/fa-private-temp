@@ -261,3 +261,12 @@ const petalNames = {
     7: "Rose",
     13: "Faster"
 };
+
+const rarityTiers = {
+	"common": 0,
+	"unusual": 1,
+	"rare": 2,
+	"epic": 3,
+	"legendary": 4,
+	"unique": 5
+};

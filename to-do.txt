@@ -1,3 +1,4 @@
+-fix gallery size
 -petal stats
 
 -mechanics to fix 
