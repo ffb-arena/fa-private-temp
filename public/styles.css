@@ -489,8 +489,8 @@ input[type=number] {
 /* loadout */
 #loadout-container {
 	position: absolute;
-	width: 250px;
-	height: 530px;
+	width: 170px;
+	height: 560px;
 	top: 50%;
 	right: 310px;
     transform: translate(0, -50%);
@@ -510,16 +510,13 @@ input[type=number] {
     -webkit-text-stroke: 1px black;
 }
 #loadout-canvas {
-	outline: solid;
-	width: 250px;
 	position: fixed;
 	top: 60px;
-	height: 470px;
 }
 #loadout-hb {
     position: fixed;
     top: 8%;
-	left: 75%;
+	left: 25%;
     transform: translate(-50%, 0);
 
     color: #ffffff;
@@ -528,7 +525,7 @@ input[type=number] {
 #loadout-inv {
     position: fixed;
     top: 8%;
-	left: 25%;
+	left: 75%;
     transform: translate(-50%, 0);
 
     color: #ffffff;

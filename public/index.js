@@ -53,7 +53,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetal, radii;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetals, radii, loadout, nOfPetals;
 me = {
 	swapCooldown: undefined,
     roomInfo: {
@@ -83,6 +83,10 @@ debug = [];
 res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
 deadPetals = [];
 radii = {};
+loadout = {
+	hb: [1, 1, 1, 1, 1, 1, 1, 1],
+	inv: [1, 1, 1, 1, 1, 1, 1, 1]
+};
 
 stopText = "Move mouse here to disable movement";
 

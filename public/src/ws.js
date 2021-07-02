@@ -109,6 +109,7 @@ ws.onmessage = message => {
 						// setting radii (for petal icons)
 						if (msg[6]) radii = msg[6];
 						drawGallery(msg[6]);
+						drawLoadout();
                     } else {
                         back.hidden = true;
 

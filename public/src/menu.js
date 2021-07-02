@@ -174,6 +174,8 @@ helper.addEventListener("click", () => {
 // level selector stuff
 function setLevelText() {
     const level = levelInput.value;
+	nOfPetals = 5 + Math.floor(level / 15);
+
     ctx.font = "1.5vw Ubuntu";
 
     let text = `Level ${level}`;
@@ -183,7 +185,7 @@ function setLevelText() {
     levelText.style.width = `${width}px`;
 
     ctx.font = "1.1vw Ubuntu";
-    text = `# of petals: ${5 + Math.floor(level / 15)}`;
+    text = `# of petals: ${nOfPetals}`;
     width = ctx.measureText(text).width + 1;
     petalNum.innerHTML = text;
     petalNum.style.width = `${width}px`;
@@ -197,6 +199,19 @@ function setLevelText() {
     width = ctx.measureText(text).width + 1;
     bodyDamage.innerHTML = text;
     bodyDamage.style.width = `${width}px`;
+
+	if (nOfPetals !== loadout.hb.length) {
+		if (nOfPetals > loadout.hb.length) {
+			for (let i = 0; i < nOfPetals - loadout.hb.length; i++) {
+				loadout.hb.push(0);
+			}
+		} else {
+			for (let i = 0; i < loadout.hb.length - nOfPetals; i++) {
+				loadout.hb.pop();
+			}
+		}
+		drawLoadout();
+	}
 }
 setLevelText();
 
@@ -237,13 +252,35 @@ function drawGallery(radii) {
 
 const loadoutCanvas = document.getElementById("loadout-canvas");
 const ldCtx = loadoutCanvas.getContext("2d");
-const ldWidth = 250;
-const ldHeight = 470;
+const ldWidth = 170;
+const ldHeight = 500;
+loadoutCanvas.width = ldWidth;
+loadoutCanvas.height = ldHeight;
+ldCtx.textAlign = "center";
 const iconWidth = 50;
 const iconXSpace = (ldWidth - iconWidth * 2) / 2;
-const iconYSpace = (ldHeight - iconWidth * 2) / 8;
-function drawLoadout() {
+const iconYSpace = (ldHeight - iconWidth * 8) / 8;
 
+function drawLoadout() {
+	ldCtx.clearRect(0, 0, ldWidth, ldHeight);
+	// hotbar
+	for (let i = 0; i < loadout.hb.length; i++) {
+		const x = iconXSpace / 2;
+		const y = iconYSpace / 2 + i * (iconYSpace + iconWidth);
+		const id = loadout.hb[i];
+        const colours = rarityColours[rarities[id]];
+		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
+			colours.bg, colours.fg,	1, ldCtx);
+	}	
+	// inventory
+	for (let i = 0; i < 8; i++) {
+		const x = iconXSpace / 2 + iconWidth + iconXSpace;
+		const y = iconYSpace / 2 + i * (iconYSpace + iconWidth);
+		const id = loadout.inv[i];
+        const colours = rarityColours[rarities[id]];
+		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
+			colours.bg, colours.fg,	1, ldCtx);
+	}	
 }
 
 
