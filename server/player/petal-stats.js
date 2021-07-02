@@ -28,7 +28,38 @@ const petalStats = {
 		cooldown: 500,
 		damage: 8,
 		health: 5
-	}
+	},
+
+    // heavy
+	3: {
+		radius: 12,
+		cooldown: 5500,
+		damage: 20,
+		health: 20
+	},
+    // iris
+    4:{
+        radius: 6,
+		cooldown: 5500,
+		damage: 20,
+		health: 20
+    },
+    // rose
+    5:{
+        radius: 11,
+		cooldown: 3000,
+		damage: 20,
+		health: 20
+    },
+    //faster
+    6: {
+		radius: 8,
+		cooldown: 500,
+		damage: 8,
+		health: 5
+	},
+
+
 };
 
 module.exports = petalStats;

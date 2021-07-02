@@ -27,8 +27,15 @@ class Flower {
             this.hotbar.push(hb[i]);
         };
         this.inventory = [];
+<<<<<<< Updated upstream
         for (let i = 0; i < 8; i++) {
             this.inventory.push(inv[i]);
+=======
+		this.inventory.push(3);
+		this.inventory.push(4);
+        for (let i = 0; i < 6; i++) {
+            this.inventory.push(0);
+>>>>>>> Stashed changes
         };
 
         this.level = level;
