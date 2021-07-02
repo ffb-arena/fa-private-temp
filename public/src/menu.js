@@ -239,7 +239,7 @@ function drawGallery(radii) {
 		if (key < 0) continue;
 	
 		const row = (key - 1) % galleryIconsPerRow;
-		const column = Math.floor((key - 1) / 3);
+		const column = Math.floor((key - 1) / galleryIconsPerRow);
 		const x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
 		const y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
 	

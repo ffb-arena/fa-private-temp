@@ -162,7 +162,7 @@ const petals = {
         c.closePath();
     },
     // rose
-    5: (p, c, ratio, radius) => {
+    7: (p, c, ratio, radius) => {
         radius = radius || p.radius;
         ratio = ratio || 1;
 
@@ -186,31 +186,31 @@ const petals = {
         c.fill();
         c.closePath();
     },
-     // faster
-     6: (p, c, ratio, radius) => {
-        radius = radius || p.radius;
-        ratio = ratio || 1;
+    // faster
+    13: (p, c, ratio, radius) => {
+       radius = radius || p.radius;
+       ratio = ratio || 1;
 
-        c.beginPath();
-        c.fillStyle = "#c2c2c2";
-        c.arc(
-            p.x,
-            p.y,
-            radius * ratio, 0, 2 * Math.PI
-        );
-        c.fill();
-        c.closePath();
+       c.beginPath();
+       c.fillStyle = "#c2c2c2";
+       c.arc(
+           p.x,
+           p.y,
+           radius * ratio, 0, 2 * Math.PI
+       );
+       c.fill();
+       c.closePath();
 
-        c.beginPath();
-        c.fillStyle = "#ffffff";
-        c.arc(
-            p.x,
-            p.y,
-            radius * 0.8 * ratio, 0, 2 * Math.PI
-        );
-        c.fill();
-        c.closePath();
-    },
+       c.beginPath();
+       c.fillStyle = "#ffffff";
+       c.arc(
+           p.x,
+           p.y,
+           radius * 0.8 * ratio, 0, 2 * Math.PI
+       );
+       c.fill();
+       c.closePath();
+   },
     
 };
 
@@ -247,8 +247,8 @@ const rarities = {
 	2: "common",
     3: "common",
     4: "unusual",
-    5: "unusual",
-    6: "rare"
+    7: "unusual",
+    13: "rare"
 };
 
 const petalNames = {
@@ -258,6 +258,6 @@ const petalNames = {
 	2: "Fast",
     3: "Heavy",
     4: "Iris",
-    5: "Rose",
-    6: "Faster"
+    7: "Rose",
+    13: "Faster"
 };
