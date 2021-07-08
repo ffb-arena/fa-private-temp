@@ -485,7 +485,6 @@ input[type=number] {
     overflow-x: hidden;
 }
 
-
 /* loadout */
 #loadout-container {
 	position: absolute;
@@ -577,9 +576,6 @@ input[type=number] {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 
-#gallery-canvas {
-	width: 260px;	
-}
   
 /* .centered_tab {
     float:none /*to make sure there is no active float*/

@@ -481,9 +481,9 @@ function drawInventory() {
 	if (!me.settings.keyboard) {
     	// changes the size of stop moving rectangle
 		if (
-			(window.innerWidth / 2 - boxWidth / 2 < me.info.mouseX && me.info.mouseX < window.innerWidth / 2 + boxWidth / 2
-			&&
-			window.innerHeight - boxHeight < me.info.mouseY && me.info.mouseY < window.innerHeight)
+			pointInBox(
+				{ x: me.info.mouseX, y: me.info.mouseY }, 
+				{ x: window.innerWidth / 2 - boxWidth / 2, y: window.innerHeight - boxHeight, width: boxWidth, height: boxHeight })
 			||
 			(playerStopped && holdingPetal.id)
 		) {
@@ -532,10 +532,9 @@ function drawInventory() {
 		let id = me.info.inventory[i];
 
 		if (id >= 0) {
-			if (
-				x < me.info.mouseX && me.info.mouseX < (x + outlineWidth)
-				&&
-				y < me.info.mouseY && me.info.mouseY < (y + outlineWidth)
+			if (pointInBox(
+				{ x: me.info.mouseX, y: me.info.mouseY },
+				{ x: x, y: y, width: outlineWidth })
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
@@ -577,10 +576,9 @@ function drawInventory() {
 		let id = me.info.hotbar[i];
 	
 		if (id >= 0) {
-			if (
-				x < me.info.mouseX && me.info.mouseX < (x + hbOutline)
-				&&
-				y < me.info.mouseY && me.info.mouseY < (y + hbOutline)
+			if (pointInBox(
+				{ x: me.info.mouseX, y: me.info.mouseY },
+				{ x: x, y: y, width: hbOutline })
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
@@ -655,8 +653,8 @@ function drawInventory() {
 	me.info.justClicked = false;
 	// setting correct cursor
 	if (pointerCursor) {
-		canvas.style.cursor = "pointer";
+		body.style.cursor = "pointer";
 	} else {
-		canvas.style.cursor = "auto";
+		body.style.cursor = "auto";
 	}
 }

@@ -20,6 +20,8 @@
         -don't start petal background until loading is stopped (also better loading screen)
 		-make more petals when not on tab
 		-SUCK IT UP AND LEARN HOW TO LERP
+		-container for menu for easier hiding
+		-use florrText on death screen
 
     physics:
 		-petals always evenly spaced

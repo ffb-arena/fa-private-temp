@@ -4,7 +4,6 @@ const F = require("../functions.js");
 
 class Flower {
     constructor(id, x, y, level, name, bruh, inv, hb, ws) {
-		console.log(inv, hb);
         const nOfPetals = 5 + Math.floor(level / 15);
         const maxHealth = 100 + (level - 1) * 50/44;
         this.pubInfo = {

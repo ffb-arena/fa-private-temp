@@ -90,6 +90,14 @@ loadout = {
 
 stopText = "Move mouse here to disable movement";
 
+function pointInBox(point, box) {
+	return (
+		box.x < point.x && point.x < box.x + box.width
+		&&
+		box.y < point.y && point.y < box.y + (box.height || box.width)
+	);
+}
+
 // Event Listeners
 window.addEventListener("contextmenu", c => {
     c.preventDefault();
@@ -229,8 +237,40 @@ function addEventListeners() {
 
 
     document.addEventListener("mousemove", pos => {
+        me.info.mouseX = pos.x;
+        me.info.mouseY = pos.y;
         if (!title.hidden) {
             setLevelText(); // from src/menu.js
+
+			// inventory dragging stuff
+			let galleryCoords = galleryCanvas.getBoundingClientRect();
+			let loadoutCoords = loadoutCanvas.getBoundingClientRect();
+			let pointerCursor = false;
+			if (pointInBox(pos, galleryCoords)) {
+				const XOffset = spaceBetweenGalleryIcons / 2 + galleryCoords.x;
+				const YOffset = spaceBetweenGalleryIcons / 2 + galleryCoords.y;
+				if (
+					((pos.x - XOffset) % (galleryIconWidth + spaceBetweenGalleryIcons)) < galleryIconWidth 
+					&& 
+					((pos.y - YOffset) % (galleryIconWidth + spaceBetweenGalleryIcons)) < galleryIconWidth
+				) {
+					const row = Math.floor((pos.y - YOffset) / (galleryIconWidth + spaceBetweenGalleryIcons));
+					const column = Math.floor((pos.x - XOffset) / (galleryIconWidth + spaceBetweenGalleryIcons));
+					if (row < 0 || column < 0) return;
+					const index = row * galleryIconsPerRow + column;
+					if (index >= sorted.length) return;
+	
+					console.log(`Hovering over ${petalNames[sorted[index]]}`);
+					pointerCursor = true;
+				}
+			} else if (pointInBox(pos, loadoutCoords)) {
+				console.log("in loadout");
+			}
+			if (pointerCursor) {
+				body.style.cursor = "pointer";
+			} else {
+				body.style.cursor = "auto";
+			}
         } else {
 			ws.send(JSON.stringify([
 				"c", 
@@ -240,8 +280,6 @@ function addEventListeners() {
 				res
 			]));    
 		}
-        me.info.mouseX = pos.x;
-        me.info.mouseY = pos.y;
     });
 }
 
@@ -301,31 +339,7 @@ function mainLoop() {
             drawInventory();
         } else {
 			numInfo = false;
-
-            ctx.globalAlpha = 0.5;
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
-            ctx.globalAlpha = 1;
-
-            ctx.lineWidth = 7 * res;
-            ctx.strokeStyle = "#000000";
-            ctx.fillStyle = "#ffffff";
-            ctx.font = "30px Ubuntu"
-            ctx.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-            ctx.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-
-            ctx.lineWidth = 3 * res;
-            ctx.strokeStyle = "#000000";
-            ctx.font = "15px Ubuntu"
-            
-            ctx.strokeText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
-            ctx.fillText(`Time alive: ${deathScreen[0]}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
-
-            ctx.strokeText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
-            ctx.fillText(`Level: ${deathScreen[1]}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
-
-            ctx.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
-            ctx.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
+			drawDeathScreen(ctx, deathScreen[0], deathScreen[1]);
         }
     }
 

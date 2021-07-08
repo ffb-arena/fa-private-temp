@@ -37,6 +37,11 @@ const health = document.getElementById("health");
 const bodyDamage = document.getElementById("body-damage");
 const petalNum = document.getElementById("petal-num");
 
+// icon links
+const github = document.getElementById("Github");
+const discord = document.getElementById("Discord");
+const florr = document.getElementById("Florr");
+
 roomSettingsContainer.hidden = true;
 settingsContainer.hidden = true;
 changelogContainer.hidden = true;
@@ -110,10 +115,10 @@ nname.addEventListener("keydown", (key) => {
         nname.hidden = true;
         back.hidden = true;
         roomID.hidden = true;
-
-        document.getElementById("Discord").hidden = true;
-        document.getElementById("Github").hidden = true;
-        document.getElementById("Florr").hidden = true;
+		
+		discord.hidden = true;
+		github.hidden = true;
+		florr.hidden = true;
         changelogContainer.hidden = true;
         changelog.hidden = true;
         gallery.hidden = true;
@@ -215,17 +220,19 @@ function setLevelText() {
 }
 setLevelText();
 
+const galleryCanvas = document.getElementById("gallery-canvas");
+const galleryCanvasWidth = 260; 
+const galleryIconWidth = 50;
+const galleryIconsPerRow = 4;
+galleryCanvas.width = galleryCanvasWidth;
+const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
+let sorted = [];
+const galleryCtx = galleryCanvas.getContext("2d")
 function drawGallery(radii) {
 	if (!radii) return;
-	const galleryCanvasWidth = 260; 
-	const galleryIconWidth = 50;
-	const galleryIconsPerRow = 4;
-	const galleryCanvas = document.getElementById("gallery-canvas");
-	const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
-	const galleryCtx = galleryCanvas.getContext("2d")
 
 	// creating a sorted list
-	let sorted = [];
+	sorted = [];
 	for (let id in petalNames) {
 		// dev petal
 		if (id <= 0) continue;
@@ -247,8 +254,8 @@ function drawGallery(radii) {
 	galleryCanvas.height = Math.floor((sorted.length - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
 	galleryCtx.textAlign = "center";
 	sorted.forEach((v, i) => {
-		const row = (i - 1) % galleryIconsPerRow;
-		const column = Math.floor((i - 1) / galleryIconsPerRow);
+		const row = i % galleryIconsPerRow;
+		const column = Math.floor(i / galleryIconsPerRow);
 		const x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
 		const y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
 	
@@ -266,30 +273,59 @@ const ldHeight = 500;
 loadoutCanvas.width = ldWidth;
 loadoutCanvas.height = ldHeight;
 ldCtx.textAlign = "center";
-const iconWidth = 50;
-const iconXSpace = (ldWidth - iconWidth * 2) / 2;
-const iconYSpace = (ldHeight - iconWidth * 8) / 8;
+const ldIconWidth = 50;
+const ldIconXSpace = (ldWidth - ldIconWidth * 2) / 2;
+const ldIconYSpace = (ldHeight - ldIconWidth * 8) / 8;
 
 function drawLoadout() {
 	ldCtx.clearRect(0, 0, ldWidth, ldHeight);
 	// hotbar
 	for (let i = 0; i < loadout.hb.length; i++) {
-		const x = iconXSpace / 2;
-		const y = iconYSpace / 2 + i * (iconYSpace + iconWidth);
+		const x = ldIconXSpace / 2;
+		const y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
 		const id = loadout.hb[i];
         const colours = rarityColours[rarities[id]];
-		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
+		drawPetalIcon({ x: x, y: y }, petalNames[id], id, ldIconWidth,
 			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
 	// inventory
 	for (let i = 0; i < 8; i++) {
-		const x = iconXSpace / 2 + iconWidth + iconXSpace;
-		const y = iconYSpace / 2 + i * (iconYSpace + iconWidth);
+		const x = ldIconXSpace / 2 + ldIconWidth + ldIconXSpace;
+		const y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
 		const id = loadout.inv[i];
         const colours = rarityColours[rarities[id]];
-		drawPetalIcon({ x: x, y: y }, petalNames[id], id, iconWidth,
+		drawPetalIcon({ x: x, y: y }, petalNames[id], id, ldIconWidth,
 			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
+}
+
+
+// death screen
+function drawDeathScreen(c, time, level) {
+	c.globalAlpha = 0.5;
+	c.fillStyle = "#000000";
+	c.fillRect(0, 0, window.innerWidth, window.innerHeight);
+	c.globalAlpha = 1;
+	
+	c.lineWidth = 7 * res;
+	c.strokeStyle = "#000000";
+	c.fillStyle = "#ffffff";
+	c.font = "30px Ubuntu"
+	c.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+	c.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+	
+	c.lineWidth = 3 * res;
+	c.strokeStyle = "#000000";
+	c.font = "15px Ubuntu"
+	
+	c.strokeText(`Time alive: ${time}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+	c.fillText(`Time alive: ${time}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+	
+	c.strokeText(`Level: ${level}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+	c.fillText(`Level: ${level}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+	
+	c.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
+	c.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
 }
 
 
@@ -306,10 +342,10 @@ function returnToMenu() {
     systemText.hidden = false;
     nname.hidden = false;
     roomID.hidden = false;
-
-    document.getElementById("Discord").hidden = false;
-    document.getElementById("Github").hidden = false;
-    document.getElementById("Florr").hidden = false;
+	
+	discord.hidden = false;
+	florr.hidden = false;
+	github.hidden = false;
     changelog.hidden = false;
     gallery.hidden = false;
     make.hidden = false;
