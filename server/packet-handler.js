@@ -69,11 +69,11 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
             if (myID === undefined) {
                 [myID, myName] = rooms.get(myRoom).spawnPlayer(
                     myName, 
-                    packet[1].slice(0, 20), 
-                    packet[2],
+                    packet[1], // name
+                    packet[2], // requested level
                     bruh, 
-					packet[3],
-					packet[4],
+					packet[3], // inventory array
+					packet[4], // hotbar array
                     ws
                 );
             }

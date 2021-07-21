@@ -264,8 +264,30 @@ function addEventListeners() {
 					pointerCursor = true;
 				}
 			} else if (pointInBox(pos, loadoutCoords)) {
-				console.log("in loadout");
+				const XOffset = ldIconXSpace / 2 + loadoutCoords.x;
+				const YOffset = ldIconYSpace / 2 + loadoutCoords.y;
+				if (
+					((pos.x - XOffset) % (ldIconWidth + ldIconXSpace)) < ldIconWidth 
+					&& 
+					((pos.y - YOffset) % (ldIconWidth + ldIconYSpace)) < ldIconWidth
+				) {
+					const row = Math.floor((pos.y - YOffset) / (ldIconWidth + ldIconYSpace));
+					const column = Math.floor((pos.x - XOffset) / (ldIconWidth + ldIconXSpace));
+					if (row < 0 || column < 0) return;
+					if (row >= 8 || column >= 2) return;
+	
+					if (column === 0) {
+						// hotbar
+						if (row >= loadout.hb.length) return;
+						console.log(`Hovering over ${petalNames[loadout.hb[row]] || "an empty slot"}`);
+					} else {
+						// inventory
+						console.log(`Hovering over ${petalNames[loadout.inv[row]] || "an empty slot"}`);
+					}
+					pointerCursor = true;
+				}
 			}
+
 			if (pointerCursor) {
 				body.style.cursor = "pointer";
 			} else {

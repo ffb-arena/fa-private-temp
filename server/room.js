@@ -42,7 +42,7 @@ class Room {
         const x = Math.random() * this.info.x;
         const y = Math.random() * this.info.y;
         if (!myName) myName = C.names[Math.abs(Math.round(Math.random() * C.names.length) - 1)];
-        const name = msgName || myName;
+        const name = (msgName || myName).slice(0, 20);
         this.players[newID] = new Flower(newID, x, y, level, name, bruh, inv, hb, ws);
 
         // sending init package

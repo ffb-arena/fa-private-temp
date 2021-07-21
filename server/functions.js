@@ -9,6 +9,27 @@ function getID(array) {
     return ID;
 }
 
+/**
+ * Checks if a number is valid.
+ * Catches NaN, undefined, infinities, and non-numbers
+ * @param {Number} n - the number to check.
+ */
+function isValidNum(n) {
+    return n - n === 0;
+}
+// note that an empty string will return true
+// but I like this simplicity, and an empty string will
+// turn into 0 in any calculations anyways
+
+
+/**
+ * Checks if a boolean is valid.
+ * @param {Bool} b - the boolean to check.
+ */
+function isValidNum(b) {
+    return b === true || b === false;
+}
+
 
 
 // vector stuff
