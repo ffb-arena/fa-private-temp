@@ -101,6 +101,7 @@ nname.addEventListener("keydown", (key) => {
     if (key.code === "Enter") {
 
         // You join game
+		cancelAnimationFrame(menuLoopVar); // from index.js
         cancelAnimationFrame(background); // from src/petal-background.js
         loop = requestAnimationFrame(mainLoop); // from index.js
 
@@ -298,6 +299,49 @@ function drawLoadout() {
 			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
 }
+
+
+// menu holding petal stuff (for loadout)
+const petalCanvas = document.getElementById("petal-canvas");
+petalCanvas.width = window.innerWidth;
+petalCanvas.height = window.innerHeight;
+petalCanvas.hidden = true;
+const petalCtx = petalCanvas.getContext("2d"); 
+petalCtx.textAlign = "center";
+class MenuHoldingPetal {
+	constructor() {
+		this.pos = {
+			x: undefined,
+			y: undefined
+		};
+		this.baseWidth = 50;
+		this.width = 50;
+		this.id = 0;
+		this.canvas = petalCanvas;
+		this.ctx = petalCtx;
+		this.colours = {
+			bg: undefined,
+			fg: undefined
+		};
+	}
+	setPetal(id) {
+		this.id = id;
+		this.colours = rarityColours[rarities[id]];
+	}
+	clear() {
+		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+	}
+	draw() {
+		drawPetalIcon({ x: this.pos.x - this.width / 2, y: this.pos.y - this.width / 2}, 
+			petalNames[this.id], this.id, this.width,
+			this.colours.bg, this.colours.fg, 1, this.ctx);
+	}
+	setPos(x, y) {
+		this.pos.x = x;
+		this.pos.y = y;
+	}
+};
+let menuHoldingPetal = new MenuHoldingPetal();
 
 
 // death screen

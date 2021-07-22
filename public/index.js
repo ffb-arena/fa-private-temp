@@ -76,7 +76,14 @@ me = {
     settings: {
         keyboard: false,
         helper: false
-    }
+    },
+	mouseMenu: {
+		inGallery: undefined,
+		row: undefined,
+		column: undefined,
+		id: undefined,
+		onAnIcon: false
+	}
 };
 allPlayers = [];
 debug = [];
@@ -108,8 +115,12 @@ window.addEventListener("resize", () => {
     backgroundCanvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
+	petalCanvas.width = window.innerWidth;
+	petalCanvas.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
     ctx.textAlign = "center";
+	petalCtx.textAlign = "center";
+
     if (title.hidden) { // if in game
         drawMap();
         drawGrid();
@@ -166,6 +177,7 @@ function addEventListeners() {
         if (key.code === "Enter" && deathScreen.length) {
             returnToMenu();
             deathScreen = [];
+			menuLoopVar = requestAnimationFrame(menuLoop);
         }
 
 		// swapping all petals
@@ -228,11 +240,19 @@ function addEventListeners() {
 		if (click.button === 0) {
 			me.info.leftMouseDown = true;
 			me.info.justClicked = true;
+			if (me.mouseMenu.onAnIcon) {
+				menuHoldingPetal.canvas.hidden = false;
+				menuHoldingPetal.setPetal(me.mouseMenu.id);
+			}
 		}
     });
     window.addEventListener("mouseup", click => {
 		ws.send(JSON.stringify(`cb${click.button}`));
-		if (click.button === 0) me.info.leftMouseDown = false;
+		if (click.button === 0) {
+			menuHoldingPetal.setPetal(0);
+			menuHoldingPetal.canvas.hidden = true;
+			me.info.leftMouseDown = false;
+		}
 	});
 
 
@@ -243,9 +263,9 @@ function addEventListeners() {
             setLevelText(); // from src/menu.js
 
 			// inventory dragging stuff
+			me.mouseMenu.onAnIcon = false;
 			let galleryCoords = galleryCanvas.getBoundingClientRect();
 			let loadoutCoords = loadoutCanvas.getBoundingClientRect();
-			let pointerCursor = false;
 			if (pointInBox(pos, galleryCoords)) {
 				const XOffset = spaceBetweenGalleryIcons / 2 + galleryCoords.x;
 				const YOffset = spaceBetweenGalleryIcons / 2 + galleryCoords.y;
@@ -260,8 +280,11 @@ function addEventListeners() {
 					const index = row * galleryIconsPerRow + column;
 					if (index >= sorted.length) return;
 	
-					console.log(`Hovering over ${petalNames[sorted[index]]}`);
-					pointerCursor = true;
+					me.mouseMenu.id = sorted[index];
+					me.mouseMenu.inGallery = true;
+					me.mouseMenu.row = row;
+					me.mouseMenu.column = column;
+					me.mouseMenu.onAnIcon = true;
 				}
 			} else if (pointInBox(pos, loadoutCoords)) {
 				const XOffset = ldIconXSpace / 2 + loadoutCoords.x;
@@ -276,23 +299,24 @@ function addEventListeners() {
 					if (row < 0 || column < 0) return;
 					if (row >= 8 || column >= 2) return;
 	
+					let id;
 					if (column === 0) {
 						// hotbar
 						if (row >= loadout.hb.length) return;
-						console.log(`Hovering over ${petalNames[loadout.hb[row]] || "an empty slot"}`);
+						id = loadout.hb[row];
 					} else {
 						// inventory
-						console.log(`Hovering over ${petalNames[loadout.inv[row]] || "an empty slot"}`);
+						id = loadout.inv[row];
 					}
-					pointerCursor = true;
+					if (id === 0) return;
+					me.mouseMenu.id = id;
+					me.mouseMenu.inGallery = true;
+					me.mouseMenu.row = row;
+					me.mouseMenu.column = column;
+					me.mouseMenu.onAnIcon = true;
 				}
 			}
-
-			if (pointerCursor) {
-				body.style.cursor = "pointer";
-			} else {
-				body.style.cursor = "auto";
-			}
+			menuHoldingPetal.setPos(pos.x, pos.y);
         } else {
 			ws.send(JSON.stringify([
 				"c", 
@@ -369,3 +393,18 @@ function mainLoop() {
 
     loop = requestAnimationFrame(mainLoop);
 }
+
+
+let menuLoopVar;
+function menuLoop() {
+	menuHoldingPetal.clear();
+	if (menuHoldingPetal.id) {
+		menuHoldingPetal.draw();
+	}
+	if (menuHoldingPetal.id || me.mouseMenu.onAnIcon) {
+		body.style.cursor = "pointer";
+	} else body.style.cursor = "auto";
+
+    menuLoopVar = requestAnimationFrame(menuLoop);
+}
+menuLoopVar = requestAnimationFrame(menuLoop);
