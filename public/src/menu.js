@@ -323,6 +323,9 @@ class MenuHoldingPetal {
 			bg: undefined,
 			fg: undefined
 		};
+		this.fromLoadout = undefined;
+		this.row = undefined;
+		this.column = undefined;
 	}
 	setPetal(id) {
 		this.id = id;

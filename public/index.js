@@ -78,9 +78,6 @@ me = {
         helper: false
     },
 	mouseMenu: {
-		inGallery: undefined,
-		row: undefined,
-		column: undefined,
 		id: undefined,
 		onAnIcon: false
 	}
@@ -243,12 +240,32 @@ function addEventListeners() {
 			if (me.mouseMenu.onAnIcon) {
 				menuHoldingPetal.canvas.hidden = false;
 				menuHoldingPetal.setPetal(me.mouseMenu.id);
+				if (menuHoldingPetal.fromLoadout) {
+					if (menuHoldingPetal.column === 0) {
+						// loadout hotbar
+						loadout.hb[menuHoldingPetal.row] = 0;
+					} else {
+						// loadout inventory
+						loadout.inv[menuHoldingPetal.row] = 0;
+					}
+					drawLoadout();
+				}
 			}
 		}
     });
     window.addEventListener("mouseup", click => {
 		ws.send(JSON.stringify(`cb${click.button}`));
 		if (click.button === 0) {
+			if (menuHoldingPetal.id && menuHoldingPetal.fromLoadout) {
+				if (menuHoldingPetal.column === 0) {
+					// loadout hotbar
+					loadout.hb[menuHoldingPetal.row] = menuHoldingPetal.id;
+				} else {
+					// loadout inventory
+					loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
+				}
+				drawLoadout();
+			}
 			menuHoldingPetal.setPetal(0);
 			menuHoldingPetal.canvas.hidden = true;
 			me.info.leftMouseDown = false;
@@ -281,9 +298,9 @@ function addEventListeners() {
 					if (index >= sorted.length) return;
 	
 					me.mouseMenu.id = sorted[index];
-					me.mouseMenu.inGallery = true;
-					me.mouseMenu.row = row;
-					me.mouseMenu.column = column;
+					menuHoldingPetal.fromLoadout = false;
+					menuHoldingPetal.row = row;
+					menuHoldingPetal.column = column;
 					me.mouseMenu.onAnIcon = true;
 				}
 			} else if (pointInBox(pos, loadoutCoords)) {
@@ -310,13 +327,12 @@ function addEventListeners() {
 					}
 					if (id === 0) return;
 					me.mouseMenu.id = id;
-					me.mouseMenu.inGallery = true;
-					me.mouseMenu.row = row;
-					me.mouseMenu.column = column;
+					menuHoldingPetal.fromLoadout = true;
+					menuHoldingPetal.row = row;
+					menuHoldingPetal.column = column;
 					me.mouseMenu.onAnIcon = true;
 				}
 			}
-			menuHoldingPetal.setPos(pos.x, pos.y);
         } else {
 			ws.send(JSON.stringify([
 				"c", 
@@ -399,6 +415,7 @@ let menuLoopVar;
 function menuLoop() {
 	menuHoldingPetal.clear();
 	if (menuHoldingPetal.id) {
+		menuHoldingPetal.setPos(me.info.mouseX, me.info.mouseY);
 		menuHoldingPetal.draw();
 	}
 	if (menuHoldingPetal.id || me.mouseMenu.onAnIcon) {
