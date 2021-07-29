@@ -298,9 +298,11 @@ function addEventListeners() {
 					if (index >= sorted.length) return;
 	
 					me.mouseMenu.id = sorted[index];
-					menuHoldingPetal.fromLoadout = false;
-					menuHoldingPetal.row = row;
-					menuHoldingPetal.column = column;
+					if (!menuHoldingPetal.id) {
+						menuHoldingPetal.fromLoadout = false;
+						menuHoldingPetal.row = row;
+						menuHoldingPetal.column = column;
+					}
 					me.mouseMenu.onAnIcon = true;
 				}
 			} else if (pointInBox(pos, loadoutCoords)) {
@@ -327,9 +329,11 @@ function addEventListeners() {
 					}
 					if (id === 0) return;
 					me.mouseMenu.id = id;
-					menuHoldingPetal.fromLoadout = true;
-					menuHoldingPetal.row = row;
-					menuHoldingPetal.column = column;
+					if (!menuHoldingPetal.id) {
+						menuHoldingPetal.fromLoadout = true;
+						menuHoldingPetal.row = row;
+						menuHoldingPetal.column = column;
+					}
 					me.mouseMenu.onAnIcon = true;
 				}
 			}

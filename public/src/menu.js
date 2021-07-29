@@ -326,6 +326,10 @@ class MenuHoldingPetal {
 		this.fromLoadout = undefined;
 		this.row = undefined;
 		this.column = undefined;
+		this.snapping = false;
+		this.snapRow = undefined;
+		this.snapColumn = undefined;
+		this.snapPos = { x: undefined, y: undefined };
 	}
 	setPetal(id) {
 		this.id = id;
@@ -335,7 +339,12 @@ class MenuHoldingPetal {
 		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	}
 	draw() {
-		drawPetalIcon({ x: this.pos.x - this.width / 2, y: this.pos.y - this.width / 2}, 
+		let x = this.pos.x, y = this.pos.y;
+		if (this.snapping) {
+			x = this.snapPos.x;
+			y = this.snapPos.y;
+		}
+		drawPetalIcon({ x: x - this.width / 2, y: y - this.width / 2}, 
 			petalNames[this.id], this.id, this.width,
 			this.colours.bg, this.colours.fg, 1, this.ctx);
 	}
