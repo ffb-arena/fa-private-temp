@@ -256,13 +256,41 @@ function addEventListeners() {
     window.addEventListener("mouseup", click => {
 		ws.send(JSON.stringify(`cb${click.button}`));
 		if (click.button === 0) {
-			if (menuHoldingPetal.id && menuHoldingPetal.fromLoadout) {
-				if (menuHoldingPetal.column === 0) {
-					// loadout hotbar
-					loadout.hb[menuHoldingPetal.row] = menuHoldingPetal.id;
-				} else {
-					// loadout inventory
-					loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
+			if (menuHoldingPetal.id) {
+				if (menuHoldingPetal.snapping) {
+					if (menuHoldingPetal.fromLoadout) {
+						// if (menuHoldingPetal.snapColumn === 0) {
+						// 	let temp = loadout.hb[menuHoldingPetal.snapRow];
+						// 	loadout.hb[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
+						// 	if (menuHoldingPetal.column === 0) {
+						// 		loadout.hb[menuHoldingPetal.row] = temp;
+						// 	} else {
+						// 		loadout.inv[menuHoldingPetal.row] = temp;
+						// 	}	
+						// } else {
+						// 	let temp = loadout.inv[menuHoldingPetal.snapRow];
+						// 	loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
+						// 	if (menuHoldingPetal.column === 0) {
+						// 		loadout.hb[menuHoldingPetal.row] = temp;
+						// 	} else {
+						// 		loadout.inv[menuHoldingPetal.row] = temp;
+						// 	}	
+						// }
+					} else {
+						if (menuHoldingPetal.snapColumn === 0) {
+							loadout.hb[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
+						} else {
+							loadout.inv[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
+						}
+					}	
+				} else if (menuHoldingPetal.fromLoadout) {
+					if (menuHoldingPetal.column === 0) {
+						// loadout hotbar
+						loadout.hb[menuHoldingPetal.row] = menuHoldingPetal.id;
+					} else {
+						// loadout inventory
+						loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
+					}
 				}
 				drawLoadout();
 			}
@@ -328,19 +356,23 @@ function addEventListeners() {
 						// inventory
 						id = loadout.inv[row];
 					}
-					if (id === 0) return;
 					me.mouseMenu.id = id;
 					if (!menuHoldingPetal.id) {
 						menuHoldingPetal.fromLoadout = true;
 						menuHoldingPetal.row = row;
 						menuHoldingPetal.column = column;
-					} else {
+					} else if (
+							(id !== menuHoldingPetal.id) &&
+							( !(row === menuHoldingPetal.row && column === menuHoldingPetal.column) 
+							|| menuHoldingPetal.fromLoadout === false )
+						) {
 						menuHoldingPetal.snapping = true;
 						menuHoldingPetal.snapRow = row;
 						menuHoldingPetal.snapColumn = column;
 						menuHoldingPetal.snapPos.x = loadoutCoords.x + ldIconWidth * column + (column + 0.5) * ldIconXSpace;
 						menuHoldingPetal.snapPos.y = loadoutCoords.y + ldIconWidth * row + (row + 0.5) * ldIconYSpace;
 					}
+					if (id === 0) return;
 					me.mouseMenu.onAnIcon = true;
 				}
 			}

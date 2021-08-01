@@ -228,13 +228,14 @@ const galleryIconsPerRow = 4;
 galleryCanvas.width = galleryCanvasWidth;
 const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
 let sorted = [];
-const galleryCtx = galleryCanvas.getContext("2d")
+const galleryCtx = galleryCanvas.getContext("2d");
 function drawGallery(radii) {
 	if (!radii) return;
 
 	// creating a sorted list
 	sorted = [];
 	for (let id in petalNames) {
+		id = +id;
 		// dev petal
 		if (id <= 0) continue;
 		sorted.push(id);

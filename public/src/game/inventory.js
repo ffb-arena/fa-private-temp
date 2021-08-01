@@ -574,7 +574,6 @@ function drawInventory() {
     for (let i = 0; i < me.info.hotbar.length; i++) {
 
 		let id = me.info.hotbar[i];
-	
 		if (id >= 0) {
 			if (pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY },
