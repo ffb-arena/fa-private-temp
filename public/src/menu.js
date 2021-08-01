@@ -314,7 +314,6 @@ class MenuHoldingPetal {
 			x: undefined,
 			y: undefined
 		};
-		this.baseWidth = 50;
 		this.width = 50;
 		this.id = 0;
 		this.canvas = petalCanvas;
@@ -339,13 +338,14 @@ class MenuHoldingPetal {
 		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 	}
 	draw() {
-		let x = this.pos.x, y = this.pos.y;
+		let x = this.pos.x, y = this.pos.y, width = this.width;
 		if (this.snapping) {
-			x = this.snapPos.x;
-			y = this.snapPos.y;
+			x = this.snapPos.x + width / 2;
+			y = this.snapPos.y + width / 2;
+			width += 10;
 		}
-		drawPetalIcon({ x: x - this.width / 2, y: y - this.width / 2}, 
-			petalNames[this.id], this.id, this.width,
+		drawPetalIcon({ x: x - width / 2, y: y - width / 2}, 
+			petalNames[this.id], this.id, width,
 			this.colours.bg, this.colours.fg, 1, this.ctx);
 	}
 	setPos(x, y) {

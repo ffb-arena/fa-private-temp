@@ -281,6 +281,7 @@ function addEventListeners() {
 
 			// inventory dragging stuff
 			me.mouseMenu.onAnIcon = false;
+			menuHoldingPetal.snapping = false;
 			let galleryCoords = galleryCanvas.getBoundingClientRect();
 			let loadoutCoords = loadoutCanvas.getBoundingClientRect();
 			if (pointInBox(pos, galleryCoords)) {
@@ -333,6 +334,12 @@ function addEventListeners() {
 						menuHoldingPetal.fromLoadout = true;
 						menuHoldingPetal.row = row;
 						menuHoldingPetal.column = column;
+					} else {
+						menuHoldingPetal.snapping = true;
+						menuHoldingPetal.snapRow = row;
+						menuHoldingPetal.snapColumn = column;
+						menuHoldingPetal.snapPos.x = loadoutCoords.x + ldIconWidth * column + (column + 0.5) * ldIconXSpace;
+						menuHoldingPetal.snapPos.y = loadoutCoords.y + ldIconWidth * row + (row + 0.5) * ldIconYSpace;
 					}
 					me.mouseMenu.onAnIcon = true;
 				}
