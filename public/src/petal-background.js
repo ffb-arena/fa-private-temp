@@ -109,4 +109,4 @@ function drawBackground(){
 
     oldTime = newTime;
 }
-background = requestAnimationFrame(drawBackground);
+//background = requestAnimationFrame(drawBackground);
