@@ -16,14 +16,12 @@ class Flower {
             face: 0
         }
 
-        for (let i = 0; i < nOfPetals; i++) {
-            const petal = new Petal(1, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
-            this.pubInfo.petals.push(petal);
-        };
-
         this.hotbar = [];
         for (let i = 0; i < nOfPetals; i++) {
-            this.hotbar.push(hb[i]);
+			const id = hb[i];
+            this.hotbar.push(id);
+            const petal = new Petal(id, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
+            this.pubInfo.petals.push(petal);
         };
         this.inventory = [];
         for (let i = 0; i < 8; i++) {

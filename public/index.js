@@ -179,14 +179,16 @@ function addEventListeners() {
 
 		// swapping all petals
 		if (key.code === "KeyX") {
-			unselectTime = Date.now() + 5000;
 			for (let i = 0; i < me.info.hotbar.length; i++) {
 				const inventoryCooldown = me.info.inventoryCooldowns[i] < Date.now();
 				const hotbarCooldown = me.info.hotbarCooldowns[i] < Date.now();
 				const isDiffPetals = me.info.hotbar[i] !== me.info.inventory[i];	
 				if (inventoryCooldown && hotbarCooldown && isDiffPetals) {
 					swapPetals(i, i);
-					updateSelectedPetal(1, true);
+					if (numInfo) {
+						updateSelectedPetal(1, true);
+						unselectTime = Date.now() + 5000;
+					}
 				}
 			}
 		}
@@ -241,13 +243,9 @@ function addEventListeners() {
 				menuHoldingPetal.canvas.hidden = false;
 				menuHoldingPetal.setPetal(me.mouseMenu.id);
 				if (menuHoldingPetal.fromLoadout) {
-					if (menuHoldingPetal.column === 0) {
-						// loadout hotbar
-						loadout.hb[menuHoldingPetal.row] = 0;
-					} else {
-						// loadout inventory
-						loadout.inv[menuHoldingPetal.row] = 0;
-					}
+					// make petal not render in loadout (it's being held)
+					let loadoutColumn = menuHoldingPetal.column === 0 ? loadout.hb : loadout.inv;
+					loadoutColumn[menuHoldingPetal.row] = 0;
 					drawLoadout();
 				}
 			}
@@ -258,39 +256,22 @@ function addEventListeners() {
 		if (click.button === 0) {
 			if (menuHoldingPetal.id) {
 				if (menuHoldingPetal.snapping) {
+					// move (snapping) holding petal to new spot
 					if (menuHoldingPetal.fromLoadout) {
-						// if (menuHoldingPetal.snapColumn === 0) {
-						// 	let temp = loadout.hb[menuHoldingPetal.snapRow];
-						// 	loadout.hb[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
-						// 	if (menuHoldingPetal.column === 0) {
-						// 		loadout.hb[menuHoldingPetal.row] = temp;
-						// 	} else {
-						// 		loadout.inv[menuHoldingPetal.row] = temp;
-						// 	}	
-						// } else {
-						// 	let temp = loadout.inv[menuHoldingPetal.snapRow];
-						// 	loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
-						// 	if (menuHoldingPetal.column === 0) {
-						// 		loadout.hb[menuHoldingPetal.row] = temp;
-						// 	} else {
-						// 		loadout.inv[menuHoldingPetal.row] = temp;
-						// 	}	
-						// }
+						// swap holding petal and whatever it's snapping with
+						let snapColumn = menuHoldingPetal.snapColumn === 0 ? loadout.hb : loadout.inv;
+						let fromColumn = menuHoldingPetal.column === 0 ? loadout.hb : loadout.inv;
+						const snapID = snapColumn[menuHoldingPetal.snapRow];
+						fromColumn[menuHoldingPetal.row] = snapID;
+						snapColumn[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
 					} else {
-						if (menuHoldingPetal.snapColumn === 0) {
-							loadout.hb[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
-						} else {
-							loadout.inv[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
-						}
+						let loadoutColumn = menuHoldingPetal.snapColumn === 0 ? loadout.hb : loadout.inv;
+						loadoutColumn[menuHoldingPetal.snapRow] = menuHoldingPetal.id;
 					}	
 				} else if (menuHoldingPetal.fromLoadout) {
-					if (menuHoldingPetal.column === 0) {
-						// loadout hotbar
-						loadout.hb[menuHoldingPetal.row] = menuHoldingPetal.id;
-					} else {
-						// loadout inventory
-						loadout.inv[menuHoldingPetal.row] = menuHoldingPetal.id;
-					}
+					// "reset" petal to where it came from
+					let loadoutColumn = menuHoldingPetal.column === 0 ? loadout.hb : loadout.inv;
+					loadoutColumn[menuHoldingPetal.row] = menuHoldingPetal.id;
 				}
 				drawLoadout();
 			}

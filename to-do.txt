@@ -1,11 +1,10 @@
--fix gallery size
 -petal stats
 
 -mechanics to fix 
     code and bugs:
         -checks
         -random disconnects
-        -more consistent inventory.js variable names
+        -more consistent inventory.js variable names (esp. with const sizes)
 		-localStorage names/loadout/level
 
     rendering:
