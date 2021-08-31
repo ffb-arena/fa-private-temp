@@ -321,8 +321,8 @@ function handlePetalCollisions(p1, p2, dist, debug) {
                     <
                     ((petal.pubInfo.radius + petal2.pubInfo.radius) ** 2)
                 ) {
-                    petal.hp -= petal2.damage;
-                    petal2.hp -= petal.damage;
+					petal.petalHit(petal, petal2);
+					petal2.petalHit(petal2, petal);
 
                     const inv = Date.now() + C.petalInvincibility;
                     petal.inv = inv;
