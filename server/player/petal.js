@@ -16,8 +16,9 @@ class Petal {
 		this.defend = stats.defend;
 		this.neutral = stats.neutral;
 		this.post = stats.post;
+		this.equip = stats.equip;
+		this.dequip = stats.dequip;
 
-        this.change = 2.5 / (1000 / C.frame);
         this.degree = degree;
         this.cooldown = stats.cooldown;
         this.damage = stats.damage;
@@ -31,11 +32,11 @@ class Petal {
         this.deadInfo = {};
     }
 
-    update(mul, centre, distance, state) {
+    update(mul, centre, distance, state, change) {
 		switch (state) {
-			case -1: this.defend(this, mul, centre, distance); break;
-			case  0: this.neutral(this, mul, centre, distance); break;
-			case  1: this.attack(this, mul, centre, distance); break;
+			case -1: this.defend(this, mul, centre, distance, change); break;
+			case  0: this.neutral(this, mul, centre, distance, change); break;
+			case  1: this.attack(this, mul, centre, distance, change); break;
 		}
 		this.post(this, centre, distance);
         // if petal is dead

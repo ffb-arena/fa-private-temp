@@ -8,6 +8,7 @@
 		-localStorage names/loadout/level
 
     rendering:
+		-sometimes loadout/inventory bugs out and displays wrong petals
 		-only render gallery and loadout on loading
 		-make gallery and loadout scale with scroll bar
 		-fix movement helper

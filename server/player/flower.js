@@ -16,11 +16,13 @@ class Flower {
             face: 0
         }
 
+		this.petalChange = 2.5 / (1000 / C.frame);
         this.hotbar = [];
         for (let i = 0; i < nOfPetals; i++) {
 			const id = hb[i];
             this.hotbar.push(id);
             const petal = new Petal(id, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
+			petal.equip(this);
             this.pubInfo.petals.push(petal);
         };
         this.inventory = [];
@@ -71,7 +73,7 @@ class Flower {
         this.petalCentre = {
             x: x, 
             y: y
-        };
+		};
 		this.frozen = false;
         this.bodyDamage = Math.max(0, Math.min(25, (level - 8) * 25/7));
         this.healthRegen = this.pubInfo.maxHealth / 100 * 1/60; // per tick
@@ -198,6 +200,7 @@ class Flower {
 
     // swapping petals after checks have been passed
     _swapPetals(invPetal, hotbarPetal) {
+
         this._inventoryCooldowns[invPetal] = Date.now() + C.maxSwapCooldown;
 		this._hotbarCooldowns[hotbarPetal] = Date.now() + C.maxSwapCooldown;
 
@@ -207,9 +210,11 @@ class Flower {
         this.hotbar[hotbarPetal] = temp;
 
         oldPetal = this.pubInfo.petals[hotbarPetal];
+		oldPetal.dequip(this);
         this.pubInfo.petals[hotbarPetal] = new Petal(this.hotbar[hotbarPetal], oldPetal.degree, 
             this.petalDist, this.petalCentre, oldPetal.ws, hotbarPetal);
         this.pubInfo.petals[hotbarPetal].reload();
+		this.pubInfo.petals[hotbarPetal].equip(this);
     }
 
 	// weird swaps where they can both be in inventory or hotbar
@@ -240,14 +245,18 @@ class Flower {
 		oldP2 = this.pubInfo.petals[p2];
 
 		if (p1InHotbar) {
+			this.pubInfo.petals[p1].dequip(this);
         	this.pubInfo.petals[p1] = new Petal(this.hotbar[p1], oldP1.degree, 
         	    this.petalDist, this.petalCentre, oldP1.ws, p1);
 			this.pubInfo.petals[p1].reload();
+			this.pubInfo.petals[p1].equip(this);
 		}
 		if (p2InHotbar) {
+			this.pubInfo.petals[p2].dequip(this);
         	this.pubInfo.petals[p2] = new Petal(this.hotbar[p2], oldP2.degree, 
         	    this.petalDist, this.petalCentre, oldP2.ws, p2);
 			this.pubInfo.petals[p2].reload();
+			this.pubInfo.petals[p2].equip(this);
 		}
 	}
 
@@ -400,7 +409,8 @@ class Flower {
                     y: this.petalCentre.y
                 }, 
                 this.petalDist,
-				this.state
+				this.state,
+				this.petalChange
             );
             if (petal.deadInfo.id) {
                 this.deadPetals.push(petal.deadInfo);

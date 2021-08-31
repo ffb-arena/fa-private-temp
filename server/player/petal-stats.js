@@ -1,7 +1,7 @@
 const C = require("../consts.js");
 
-const d = (petal, mul, centre, rad) => { // default behavior
-	const change = petal.change * mul;
+const d = (petal, mul, centre, rad, change) => { // default behavior
+	change *= mul;
     const degree = (petal.degree + change) % (2 * Math.PI);
     petal.degree = degree;
     petal.pubInfo.x = centre.x + Math.sin(degree) * rad;
@@ -11,7 +11,8 @@ const no = () => {}; // noop
 
 // post is an action to be done after updating petal
 class PetalStat {
-	constructor({ radius, cooldown, damage, health, attack=d, defend=d, neutral=d, post=no, equip=no }) {
+	constructor({ radius, cooldown, damage, health, attack=d, defend=d, neutral=d, 
+			post=no, equip=no, dequip=no }) {
 		if (radius === undefined || cooldown === undefined || damage === undefined || health === undefined) {
 			throw "Tried to make petal with an undefined essential prop";
 		}
@@ -20,7 +21,7 @@ class PetalStat {
 		this.damage = damage;
 		this.health = health;
 		this.attack = attack; this.defend = defend; this.neutral = neutral;
-		this.post = post; this.equip = equip;
+		this.post = post; this.equip = equip; this.dequip = dequip;
 	}
 }
 
@@ -37,7 +38,9 @@ const petalStats = {
     		petal.pubInfo.x = centre.x + Math.sin(petal.degree) * rad;
     		petal.pubInfo.y = centre.y + Math.cos(petal.degree) * rad;
 		}}),
-	13: new PetalStat({ radius: 8, cooldown: 500, damage: 8, health: 5 }), // faster
+	13: new PetalStat({ radius: 8, cooldown: 500, damage: 8, health: 5,
+		equip: player => player.petalChange += 0.8 / (1000 / C.frame),
+		dequip: player => player.petalChange -= 0.8 / (1000 / C.frame) }), // faster
 };
 
 module.exports = petalStats;
