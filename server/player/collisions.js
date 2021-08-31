@@ -133,8 +133,8 @@ function handleBodyCollision(p1, p2, mul) {
         handleMovingCollision(p1, p2, divide);
     }
 
-    p1.pubInfo.health -= p2.bodyDamage;
-    p2.pubInfo.health -= p1.bodyDamage;
+    p1.pubInfo.hp -= p2.bodyDamage;
+    p2.pubInfo.hp -= p1.bodyDamage;
 }
 
 
@@ -361,8 +361,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
             <
             ((petal.pubInfo.radius + 25) ** 2)
         ) {
-            p2.pubInfo.health -= petal.damage;
-            petal.hp -= p2.bodyDamage;
+			petal.playerHit(petal, p2);
 
             petal.inv = Date.now() + C.petalInvincibility;
 
@@ -406,8 +405,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
             <
             ((petal.pubInfo.radius + 25) ** 2)
         ) {
-            p1.pubInfo.health -= petal.damage;
-            petal.hp -= p1.bodyDamage;
+			petal.playerHit(petal, p1);
 
             petal.inv = Date.now() + C.petalInvincibility;
 

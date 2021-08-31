@@ -1,16 +1,16 @@
 class Player {
-    constructor(name, x, y, radius, petals, health, maxHealth) {
+    constructor(name, x, y, radius, petals, hp, maxHP) {
         this.name = name;
         this.x = x;
         this.y = y;
         this.radius = radius;
         this.petals = petals;
-        this.health = health;
-        this.maxHealth = maxHealth;
+        this.hp = hp;
+        this.maxHP = maxHP;
     }
 
     _drawHealthBar() {
-        const percent = Math.max(this.health / this.maxHealth, 0);
+        const percent = Math.max(this.hp / this.maxHP, 0);
         if (percent === 1) return;
 
         ctx.fillStyle = "#000000";

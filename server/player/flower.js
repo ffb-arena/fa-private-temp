@@ -5,13 +5,13 @@ const F = require("../functions.js");
 class Flower {
     constructor(id, x, y, level, name, bruh, inv, hb, ws) {
         const nOfPetals = 5 + Math.floor(level / 15);
-        const maxHealth = 100 + (level - 1) * 50/44;
+        const maxHP = 100 + (level - 1) * 50/44;
         this.pubInfo = {
             name: name,
             x: x,
             y: y,
-            maxHealth: maxHealth,
-            health: maxHealth,
+            maxHP: maxHP,
+            hp: maxHP,
             petals: [],
             face: 0
         }
@@ -76,7 +76,7 @@ class Flower {
 		};
 		this.frozen = false;
         this.bodyDamage = Math.max(0, Math.min(25, (level - 8) * 25/7));
-        this.healthRegen = this.pubInfo.maxHealth / 100 * 1/60; // per tick
+        this.healthRegen = this.pubInfo.maxHP / 100 * 1/60; // per tick
 
         this.petalDist = C.normal; // radius
         this.ws = ws;

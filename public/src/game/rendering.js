@@ -176,8 +176,8 @@ function renderPlayer(data, i) {
         calculateRelPos(data.y, "y"), 
         gridSpace / 2 * res, 
         data.petals,
-        data.health,
-        data.maxHealth
+        data.hp,
+        data.maxHP
     );
     if (!i) {
         p.x = window.innerWidth / 2;

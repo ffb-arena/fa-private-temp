@@ -62,11 +62,11 @@ class Room {
         this.players.forEach(player => {
             if (!player) return;
             player.update(mul, this.info.x, this.info.y);
-            if (player.pubInfo.health <= 0) {
+            if (player.pubInfo.hp <= 0) {
                 player.ws.send(JSON.stringify(["c", Date.now() - player.startingTime, player.level]));
                 this.players[player.id] = undefined;
             } else {
-                player.pubInfo.health = Math.min(player.pubInfo.maxHealth, player.pubInfo.health + player.healthRegen * mul);
+                player.pubInfo.hp = Math.min(player.pubInfo.maxHP, player.pubInfo.hp + player.healthRegen * mul);
             }
         });
 

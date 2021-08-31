@@ -12,12 +12,9 @@ class Petal {
             radius: stats.radius
         }
 
-		this.attack = stats.attack;
-		this.defend = stats.defend;
-		this.neutral = stats.neutral;
-		this.post = stats.post;
-		this.equip = stats.equip;
-		this.dequip = stats.dequip;
+		this.attack = stats.attack; this.defend = stats.defend; this.neutral = stats.neutral;
+		this.post = stats.post;     this.equip = stats.equip;   this.dequip = stats.dequip;
+		this.playerHit = stats.playerHit; this.petalHit = stats.petalHIt;
 
         this.degree = degree;
         this.cooldown = stats.cooldown;
