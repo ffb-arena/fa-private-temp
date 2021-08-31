@@ -389,15 +389,12 @@ class Flower {
         
         // Updating rotation of each petal
         this.pubInfo.petals.forEach(petal => {
-            let change = petal.change * mul;
-            let nextPetalDegree = petal.degree + change;
-            if (nextPetalDegree > 2 * Math.PI) nextPetalDegree %= (2 * Math.PI);
             petal.update(
+				mul,
                 {
                     x: this.petalCentre.x,
                     y: this.petalCentre.y
                 }, 
-                nextPetalDegree, 
                 this.petalDist
             );
             if (petal.deadInfo.id) {
