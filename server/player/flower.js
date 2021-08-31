@@ -84,6 +84,7 @@ class Flower {
 
         this.deadPetals = [];
         this.deadPetalsToSend = [];
+		this.state = 0; // 0 = neutral, -1 = defend, 1 = attack
 
 		this._hotbarCooldowns = [];
 		for (let i = 0; i < nOfPetals; i++) {
@@ -375,16 +376,19 @@ class Flower {
         if (this.keys.spaceDown 
             || this.keys.leftMouse) {
                 this.petalDist = Math.min(C.attack, this.petalDist + C.petalSmooth * mul);
+				this.state = 1;
             }
         else if (this.keys.shiftLeft 
             || this.keys.shiftRight 
             || this.keys.rightMouse) {
                 this.petalDist = Math.max(C.defend, this.petalDist - C.petalSmooth * mul);
+				this.state = -1;
             }
         else {
-            (this.petalDist < C.normal)
-                ? this.petalDist = Math.min(this.petalDist + C.petalSmooth * mul)
-                : this.petalDist = Math.max(C.normal, this.petalDist - C.petalSmooth * mul);
+			this.state = 0;
+			this.petalDist = this.petalDist < C.normal
+				? Math.min(this.petalDist + C.petalSmooth * mul)
+				: Math.max(C.normal, this.petalDist - C.petalSmooth * mul);
         }
         
         // Updating rotation of each petal
@@ -395,7 +399,8 @@ class Flower {
                     x: this.petalCentre.x,
                     y: this.petalCentre.y
                 }, 
-                this.petalDist
+                this.petalDist,
+				this.state
             );
             if (petal.deadInfo.id) {
                 this.deadPetals.push(petal.deadInfo);
