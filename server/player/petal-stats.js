@@ -1,4 +1,5 @@
 const C = require("../consts.js");
+const Debuff = require("./debuff.js");
 
 const d = (petal, mul, centre, rad, change) => { // default behavior
 	change *= mul;
@@ -7,8 +8,8 @@ const d = (petal, mul, centre, rad, change) => { // default behavior
     petal.pubInfo.x = centre.x + Math.sin(degree) * rad;
     petal.pubInfo.y = centre.y + Math.cos(degree) * rad;
 }
-const petalHitF = (p1, p2) => {
-	p2.hp -= p1.damage;
+const petalHitF = (petal, victim) => {
+	victim.hp -= petal.damage;
 }
 const playerHitF = (petal, player) => {
 	player.pubInfo.hp -= petal.damage;
@@ -19,7 +20,7 @@ const no = () => {}; // noop
 // post is an action to be done after updating petal
 class PetalStat {
 	constructor({ radius, cooldown, damage, hp, attack=d, defend=d, neutral=d, 
-			post=no, equip=no, dequip=no, petalHit = petalHitF, playerHit = playerHitF }) {
+			post=no, equip=no, dequip=no, petalHit=petalHitF, playerHit=playerHitF }) {
 		if (radius === undefined || cooldown === undefined || damage === undefined || hp === undefined) {
 			throw "Tried to make petal with an undefined essential prop";
 		}
@@ -29,7 +30,7 @@ class PetalStat {
 		this.hp = hp;
 		this.attack = attack; this.defend = defend; this.neutral = neutral;
 		this.post = post; this.equip = equip; this.dequip = dequip;
-		this.petalHit = petalHitF; this.playerHit = playerHitF;
+		this.petalHit = petalHit; this.playerHit = playerHit;
 	}
 }
 
@@ -39,7 +40,16 @@ const petalStats = {
 	1: new PetalStat({ radius: 10, cooldown: 2500, damage: 10, hp: 10 }), // basic
 	2: new PetalStat({ radius: 8, cooldown: 500, damage: 8, hp: 5 }), // fast
 	3: new PetalStat({ radius: 12, cooldown: 5500, damage: 20, hp: 20 }), // heavy 
-	4: new PetalStat({ radius: 6, cooldown: 6000, damage: 5, hp: 5 }), // iris
+	4: new PetalStat({ radius: 6, cooldown: 6000, damage: 5, hp: 5,
+		petalHit: (petal, victim) => {
+			victim.debuffs.push(new Debuff(9, 60));
+			victim.hp -= petal.damage;
+		},
+		playerHit: (petal, player) => {
+			player.debuffs.push(new Debuff(9, 60));
+			player.pubInfo.hp -= petal.damage;
+			petal.hp -= player.bodyDamage;
+		} }), // iris
 	7: new PetalStat({ radius: 11, cooldown: 3500, damage: 20, hp: 20, // rose
 		post: (petal, centre, rad) => {
 			rad = Math.min(rad, C.normal);

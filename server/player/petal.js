@@ -21,10 +21,11 @@ class Petal {
         this.damage = stats.damage;
         this.maxHP = stats.hp;
         this.hp = stats.hp;
-        this.inv = 0; // invincibility
+        this.inv = 0; // invincibility timer
         this.cooldownTimer = 0;
 		this.ws = ws;
 		this.n = n; // position in hotbar
+		this.debuffs = [];
 
         this.deadInfo = {};
     }
@@ -57,10 +58,16 @@ class Petal {
         if (this.inv < Date.now()) {
             this.inv = 0;
         }
+
+        this.debuffs.forEach((debuff, i) => {
+			this.hp -= debuff.hpLoss * mul;
+            if (debuff.update()) this.debuffs.splice(i, 1);
+        });
     }
 
 	reload() {
 		this.hp = 0;
+		this.debuffs = [];
 		this.cooldownTimer = Date.now() + this.cooldown;
 		if (this.pubInfo.id) this.ws.send(JSON.stringify(["e", this.n, this.cooldown]));
 	}

@@ -70,6 +70,7 @@ class Flower {
             xToAdd: undefined,
             yToAdd: undefined
         };
+		this.debuffs = [];
         this.petalCentre = {
             x: x, 
             y: y
@@ -261,6 +262,8 @@ class Flower {
 	}
 
     // updates position based on mouse position/keys down
+	// also updates hp from debuffs
+	// regen is done in server\room.js
     update(mul, maxX, maxY) { // maxX and maxY are room limits
         // this.movement.acc is the acceleration on both axes (between -1 and 1)
         // this.movement.speed is the speed
@@ -416,6 +419,12 @@ class Flower {
                 this.deadPetals.push(petal.deadInfo);
                 petal.deadInfo = {};
             }
+        });
+
+		// updating debuffs
+        this.debuffs.forEach((debuff, i) => {
+			this.pubInfo.hp -= debuff.hpLoss * mul;
+            if (debuff.update()) this.debuffs.splice(i, 1);
         });
     }
 }
