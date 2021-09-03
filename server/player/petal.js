@@ -15,6 +15,7 @@ class Petal {
 		this.attack = stats.attack; this.defend = stats.defend; this.neutral = stats.neutral;
 		this.post = stats.post;     this.equip = stats.equip;   this.dequip = stats.dequip;
 		this.playerHit = stats.playerHit; this.petalHit = stats.petalHit;
+		this.respawn = stats.respawn;
 
         this.degree = degree;
         this.cooldown = stats.cooldown;
@@ -30,13 +31,17 @@ class Petal {
         this.deadInfo = {};
     }
 
-    update(mul, centre, distance, state, change) {
+    update(mul, player) {
+		const centre = { x: player.petalCentre.x, y: player.petalCentre.y };
+		const distance = player.petalDist;
+		const state = player.state;
+		const change = player.petalChange;
 		switch (state) {
 			case -1: this.defend(this, mul, centre, distance, change); break;
 			case  0: this.neutral(this, mul, centre, distance, change); break;
 			case  1: this.attack(this, mul, centre, distance, change); break;
 		}
-		this.post(this, centre, distance);
+		this.post(this, mul, centre, distance, player);
         // if petal is dead
         if (this.hp <= 0 && !this.cooldownTimer) {
 			this.reload();
@@ -52,6 +57,7 @@ class Petal {
             // cooldown is up
             this.cooldownTimer = 0;
             this.hp = this.maxHP;
+			this.respawn(this);
         }
 
         // if invincibility timer is up

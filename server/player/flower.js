@@ -22,7 +22,7 @@ class Flower {
 			const id = hb[i];
             this.hotbar.push(id);
             const petal = new Petal(id, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
-			petal.equip(this);
+			petal.equip(this, petal);
             this.pubInfo.petals.push(petal);
         };
         this.inventory = [];
@@ -211,11 +211,11 @@ class Flower {
         this.hotbar[hotbarPetal] = temp;
 
         oldPetal = this.pubInfo.petals[hotbarPetal];
-		oldPetal.dequip(this);
+		oldPetal.dequip(this, oldPetal);
         this.pubInfo.petals[hotbarPetal] = new Petal(this.hotbar[hotbarPetal], oldPetal.degree, 
             this.petalDist, this.petalCentre, oldPetal.ws, hotbarPetal);
         this.pubInfo.petals[hotbarPetal].reload();
-		this.pubInfo.petals[hotbarPetal].equip(this);
+		this.pubInfo.petals[hotbarPetal].equip(this, this.pubInfo.peatls[hotbarPetal]);
     }
 
 	// weird swaps where they can both be in inventory or hotbar
@@ -246,18 +246,18 @@ class Flower {
 		oldP2 = this.pubInfo.petals[p2];
 
 		if (p1InHotbar) {
-			this.pubInfo.petals[p1].dequip(this);
+			this.pubInfo.petals[p1].dequip(this, this.pubInfo.petals[p1]);
         	this.pubInfo.petals[p1] = new Petal(this.hotbar[p1], oldP1.degree, 
         	    this.petalDist, this.petalCentre, oldP1.ws, p1);
 			this.pubInfo.petals[p1].reload();
-			this.pubInfo.petals[p1].equip(this);
+			this.pubInfo.petals[p1].equip(this, this.pubInfo.petals[p1]);
 		}
 		if (p2InHotbar) {
-			this.pubInfo.petals[p2].dequip(this);
+			this.pubInfo.petals[p2].dequip(this, this.pubInfo.petals[p2]);
         	this.pubInfo.petals[p2] = new Petal(this.hotbar[p2], oldP2.degree, 
         	    this.petalDist, this.petalCentre, oldP2.ws, p2);
 			this.pubInfo.petals[p2].reload();
-			this.pubInfo.petals[p2].equip(this);
+			this.pubInfo.petals[p2].equip(this, this.pubInfo.petals[p2]);
 		}
 	}
 
@@ -405,16 +405,7 @@ class Flower {
         
         // Updating rotation of each petal
         this.pubInfo.petals.forEach(petal => {
-            petal.update(
-				mul,
-                {
-                    x: this.petalCentre.x,
-                    y: this.petalCentre.y
-                }, 
-                this.petalDist,
-				this.state,
-				this.petalChange
-            );
+            petal.update(mul, this);
             if (petal.deadInfo.id) {
                 this.deadPetals.push(petal.deadInfo);
                 petal.deadInfo = {};
