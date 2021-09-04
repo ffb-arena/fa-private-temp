@@ -215,7 +215,7 @@ class Flower {
         this.pubInfo.petals[hotbarPetal] = new Petal(this.hotbar[hotbarPetal], oldPetal.degree, 
             this.petalDist, this.petalCentre, oldPetal.ws, hotbarPetal);
         this.pubInfo.petals[hotbarPetal].reload();
-		this.pubInfo.petals[hotbarPetal].equip(this, this.pubInfo.peatls[hotbarPetal]);
+		this.pubInfo.petals[hotbarPetal].equip(this, this.pubInfo.petals[hotbarPetal]);
     }
 
 	// weird swaps where they can both be in inventory or hotbar

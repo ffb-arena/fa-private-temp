@@ -4,7 +4,7 @@ const AccOffset = require("./acc-offset.js");
 
 // fixing overlap between 2 players
 function fixOverlap(p1, p2) {
-    const currentDist = F.pythag( // current distance between players
+    const currentDist = F.pythag(
         p2.pubInfo.x - p1.pubInfo.x, 
         p2.pubInfo.y - p1.pubInfo.y
     );
@@ -23,12 +23,8 @@ function fixOverlap(p1, p2) {
 
 // collisions where one player is not moving
 function handleStillCollision(p1, p2, notMoving, divide) {
-    let players = [];
-    if (notMoving === 1) { // players[0] is still
-        players = [p1, p2]; // players[1] is moving
-    } else {
-        players = [p2, p1];
-    }
+	// players[0] is still, players[1] is moving
+	let players = notMoving === 0 ? [p1, p2] : [p2, p1];
 
     // setting moving player's accelerations in the opposite directions
     let cV = { // current velocities
@@ -37,22 +33,18 @@ function handleStillCollision(p1, p2, notMoving, divide) {
     };
 
     // making minimum amount of knockback and applying knockback
-    let posOrNeg = {
+    let sign = {
         x: Math.sign(cV.x),
         y: Math.sign(cV.y)
     }
     let knockback = {
-        x: cV.x * posOrNeg.x * C.knockbackMult,
-        y: cV.y * posOrNeg.y * C.knockbackMult
+        x: cV.x * sign.x * C.knockbackMult,
+        y: cV.y * sign.y * C.knockbackMult
     }
-    knockback.x = Math.max(0.6, knockback.x);
-    knockback.y = Math.max(0.6, knockback.y);
-    knockback.x *= posOrNeg.x;
-    knockback.y *= posOrNeg.y;
+    knockback.x = Math.max(0.6, knockback.x) * sign.x;
+    knockback.y = Math.max(0.6, knockback.y) * sign.y;
     players[1].movement.accOffsets.push(new AccOffset(knockback));
 
-
-    // fixing overlap
     fixOverlap(players[0], players[1]);
 
     // still object gets velocity in other object's direction
@@ -128,7 +120,7 @@ function handleBodyCollision(p1, p2, mul) {
     }
 
     if (notMoving) {
-        handleStillCollision(p1, p2, notMoving, divide);
+        handleStillCollision(p1, p2, notMoving-1, divide);
     } else {
         handleMovingCollision(p1, p2, divide);
     }
@@ -137,6 +129,14 @@ function handleBodyCollision(p1, p2, mul) {
     p2.pubInfo.hp -= p1.bodyDamage;
 }
 
+const petalDebug = (petal, debugArray1, debugArray2) => {
+	const data = [
+		"a",
+		{ x: petal.pubInfo.x, y: petal.pubInfo.y },
+		petal.pubInfo.radius
+	];
+	debugArray1.push(data); debugArray2.push(data);
+};
 
 // detecting and handling petal collisions
 function handlePetalCollisions(p1, p2, dist, debug) {
@@ -147,30 +147,13 @@ function handlePetalCollisions(p1, p2, dist, debug) {
         p1.pubInfo.petals.forEach(petal => {
             if (petal.cooldownTimer || petal.inv) return;
             p1Petals.push(petal);
-            if (debug) {
-                const data = [
-                    "a",
-                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                    petal.pubInfo.radius
-                ];
-                p1.debug.push(data);
-                p2.debug.push(data);
-            }
+			if (debug) petalDebug(petal, p1.debug, p2.debug);
         });
         p2.pubInfo.petals.forEach(petal => {
             if (petal.cooldownTimer || petal.inv) return;
             p2Petals.push(petal);
-            if (debug) {
-                const data = [
-                    "a",
-                    { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                    petal.pubInfo.radius
-                ];
-                p1.debug.push(data);
-                p2.debug.push(data);
-            }
+			if (debug) petalDebug(petal, p1.debug, p2.debug);
         });
-        
     } else {
 
         // finding intersection points
@@ -250,30 +233,14 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             // just push all petals
             if (p1angle2 > Math.PI) {
                 p1Petals.push(petal);
-                if (debug) {
-                    const data = [
-                        "a",
-                        { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                        petal.pubInfo.radius
-                    ];
-                    p1.debug.push(data);
-                    p2.debug.push(data);
-                }
+				if (debug) petalDebug(petal, p1.debug, p2.debug);
             } else {
                 let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
                 degree -= p1angle1;
                 degree = degree - (2 * Math.PI * (degree > 2 * Math.PI)) + (2 * Math.PI * (degree < 0));
                 if (degree < p1angle2) {
                     p1Petals.push(petal);
-                    if (debug) {
-                        const data = [
-                            "a",
-                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                            petal.pubInfo.radius
-                        ];
-                        p1.debug.push(data);
-                        p2.debug.push(data);
-                    }
+					if (debug) petalDebug(petal, p1.debug, p2.debug);
                 }
             }
         });
@@ -284,30 +251,14 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             // just push all petals
             if (p2angle2 > Math.PI) {
                 p2Petals.push(petal);
-                if (debug) {
-                    const data = [
-                        "a",
-                        { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                        petal.pubInfo.radius
-                    ];
-                    p1.debug.push(data);
-                    p2.debug.push(data);
-                }
+                if (debug) petalDebug(petal, p1.debug, p2.debug);
             } else {
                 let degree = petal.degree - (2 * Math.PI * (petal.degree > Math.PI));
                 degree -= p2angle1;
                 degree = degree - (2 * Math.PI * (degree > 2 * Math.PI)) + (2 * Math.PI * (degree < 0));
                 if (degree < p2angle2) {
                     p2Petals.push(petal);
-                    if (debug) {
-                        const data = [
-                            "a",
-                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                            petal.pubInfo.radius
-                        ];
-                        p1.debug.push(data);
-                        p2.debug.push(data);
-                    }
+					if (debug) petalDebug(petal, p1.debug, p2.debug);
                 }
             }
         });
@@ -329,20 +280,8 @@ function handlePetalCollisions(p1, p2, dist, debug) {
                     petal2.inv = inv;
 
                     if (debug) {
-                        let data = [
-                            "c",
-                            { x: petal.pubInfo.x, y: petal.pubInfo.y },
-                            petal.pubInfo.radius
-                        ];
-                        p1.debug.push(data);
-                        p2.debug.push(data);
-                        data = [
-                            "c",
-                            { x: petal2.pubInfo.x, y: petal2.pubInfo.y },
-                            petal2.pubInfo.radius
-                        ];
-                        p1.debug.push(data);
-                        p2.debug.push(data);
+						petalDebug(petal, p1.debug, p2.debug);
+						petalDebug(petal2, p1.debug, p2.debug);
                     }
                 }
             });
@@ -446,11 +385,10 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
 
 
 function handleCollision(p1, p2, mul, debug) {
-
-    // distance between the players
     let dist = {
         x: Math.abs(p1.pubInfo.x - p2.pubInfo.x),
-        y: Math.abs(p1.pubInfo.y - p2.pubInfo.y)
+        y: Math.abs(p1.pubInfo.y - p2.pubInfo.y),
+		dist: undefined
     };
     dist.dist = F.pythag(dist.x, dist.y);
 
@@ -461,10 +399,10 @@ function handleCollision(p1, p2, mul, debug) {
 
     let p1Petals, p2Petals;
     // handling petal/petal collisions
-    [p1Petals, p2Petals] = handlePetalCollisions(p1, p2, dist, debug);
+    // [p1Petals, p2Petals] = handlePetalCollisions(p1, p2, dist, debug);
 
     // handling petal/body collisions
-    handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug);
+    // handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug);
 }
 
 module.exports = handleCollision;

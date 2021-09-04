@@ -1,4 +1,6 @@
--petal stats
+-scratch file
+-player radius const
+-enum file
 
 -mechanics to fix 
     code and bugs:
