@@ -22,36 +22,27 @@ function fixOverlap(p1, p2) {
 }
 
 // collisions where one player is not moving
-function handleStillCollision(p1, p2, notMoving, divide) {
-	// players[0] is still, players[1] is moving
-	let players = notMoving === 0 ? [p1, p2] : [p2, p1];
-
-    // setting moving player's accelerations in the opposite directions
-    let cV = { // current velocities
-        x: -players[1].movement.xToAdd / divide,
-        y: -players[1].movement.yToAdd / divide
+// p1 is still, p2 is moving
+function handleStillCollision(p1, p2, divide) {
+    let cV = { // current velocities of moving player
+        x: p2.movement.xToAdd / divide,
+        y: p2.movement.yToAdd / divide
     };
-
-    // making minimum amount of knockback and applying knockback
-    let sign = {
-        x: Math.sign(cV.x),
-        y: Math.sign(cV.y)
-    }
+    // making minimum amount of knockback and applying knockback to moving player
     let knockback = {
-        x: cV.x * sign.x * C.knockbackMult,
-        y: cV.y * sign.y * C.knockbackMult
+        x: Math.abs(cV.x) * C.knockbackMult,
+        y: Math.abs(cV.y) * C.knockbackMult
     }
-    knockback.x = Math.max(0.6, knockback.x) * sign.x;
-    knockback.y = Math.max(0.6, knockback.y) * sign.y;
-    players[1].movement.accOffsets.push(new AccOffset(knockback));
-
-    fixOverlap(players[0], players[1]);
-
-    // still object gets velocity in other object's direction
-    players[0].movement.accOffsets.push(new AccOffset({
-        x: -cV.x * C.knockbackMult,
-        y: -cV.y * C.knockbackMult
+    knockback.x = Math.max(0.6, knockback.x) * -Math.sign(cV.x);
+    knockback.y = Math.max(0.6, knockback.y) * -Math.sign(cV.y);
+    p2.movement.accOffsets.push(new AccOffset(knockback));
+    // still player gets velocity in other player's direction
+    p1.movement.accOffsets.push(new AccOffset({
+        x: cV.x * C.knockbackMult,
+        y: cV.y * C.knockbackMult
     }));
+
+    fixOverlap(p1, p2);
 }
 
 // collision where both are moving
@@ -95,7 +86,6 @@ function handleMovingCollision(p1, p2, divide) {
     const v1f = F.addV(v1nvf, v1tvf); // final vector of p1
     const v2f = F.addV(v2nvf, v2tvf); // final vector of p2
 
-    // fix overlap 
     fixOverlap(p1, p2);
 
     p1.movement.accOffsets.push(new AccOffset({
@@ -114,17 +104,12 @@ function handleBodyCollision(p1, p2, mul) {
 
     let notMoving;
     if (!p1.movement.xToAdd && !p1.movement.yToAdd) {
-        notMoving = 1;
+        handleStillCollision(p1, p2, divide);
     } else if (!p2.movement.xToAdd && !p2.movement.yToAdd) {
-        notMoving = 2;
-    }
-
-    if (notMoving) {
-        handleStillCollision(p1, p2, notMoving-1, divide);
+        handleStillCollision(p2, p1, divide);
     } else {
         handleMovingCollision(p1, p2, divide);
-    }
-
+	}
     p1.pubInfo.hp -= p2.bodyDamage;
     p2.pubInfo.hp -= p1.bodyDamage;
 }
