@@ -24,24 +24,22 @@ function fixOverlap(p1, p2) {
 // collisions where one player is not moving
 // p1 is still, p2 is moving
 function handleStillCollision(p1, p2, divide) {
-    let cV = { // current velocities of moving player
+    const cV = { // current velocities of moving player
         x: p2.movement.xToAdd / divide,
         y: p2.movement.yToAdd / divide
     };
-    // making minimum amount of knockback and applying knockback to moving player
-    let knockback = {
+    const knockback = {
         x: Math.abs(cV.x) * C.knockbackMult,
         y: Math.abs(cV.y) * C.knockbackMult
-    }
+    };
     knockback.x = Math.max(0.6, knockback.x) * -Math.sign(cV.x);
     knockback.y = Math.max(0.6, knockback.y) * -Math.sign(cV.y);
     p2.movement.accOffsets.push(new AccOffset(knockback));
     // still player gets velocity in other player's direction
     p1.movement.accOffsets.push(new AccOffset({
-        x: cV.x * C.knockbackMult,
-        y: cV.y * C.knockbackMult
+        x: -knockback.x,
+        y: -knockback.y
     }));
-
     fixOverlap(p1, p2);
 }
 

@@ -350,16 +350,16 @@ class Flower {
             trueAcc.y = this.movement.acc.y;
         }
 
-        this.movement.accOffsets.forEach((accOffset, i) => {
+		this.movement.accOffsets = this.movement.accOffsets.filter(accOffset => {
             let result = accOffset.update(mul);
             trueAcc.x += result.x;
             trueAcc.y += result.y;
-            if (result.delete) this.movement.accOffsets.splice(i, 1);
-        });
+            return result.delete;
+		});
 
         trueAcc.x = F.clamp(trueAcc.x, -1, 1);
         trueAcc.y = F.clamp(trueAcc.y, -1, 1);
-
+		
         this.movement.direction.x = trueAcc.x * C.acc.flower * C.friction * mul;
         this.movement.direction.y = trueAcc.y * C.acc.flower * C.friction * mul;
 
@@ -413,10 +413,10 @@ class Flower {
         });
 
 		// updating debuffs
-        this.debuffs.forEach((debuff, i) => {
+		this.debuffs = this.debuffs.filter(debuff => {
 			this.pubInfo.hp -= debuff.hpLoss * mul;
-            if (debuff.update()) this.debuffs.splice(i, 1);
-        });
+			return debuff.update();
+		});
     }
 }
 

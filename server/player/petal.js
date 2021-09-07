@@ -65,10 +65,10 @@ class Petal {
             this.inv = 0;
         }
 
-        this.debuffs.forEach((debuff, i) => {
+		this.debuffs = this.debuffs.filter(debuff => {
 			this.hp -= debuff.hpLoss * mul;
-            if (debuff.update()) this.debuffs.splice(i, 1);
-        });
+			return debuff.update();
+		});
     }
 
 	reload() {

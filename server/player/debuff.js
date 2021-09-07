@@ -6,7 +6,7 @@ class Debuff {
 		this.endTime = Date.now() + Math.round(totalHPLoss / hpPerSecond * 1000);
 	}
 	update() {
-		return Date.now() > this.endTime;
+		return Date.now() < this.endTime;
 	}
 }
 
