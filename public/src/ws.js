@@ -6,6 +6,8 @@ ws.addEventListener("open", () => {
     document.getElementById("loading").remove();
 });
 
+window.c = str => ws.send(JSON.stringify(["f", str]));
+
 // When messages are recieved
 ws.onmessage = message => {
     let msg = JSON.parse(message.data);

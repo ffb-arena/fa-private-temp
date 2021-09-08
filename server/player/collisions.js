@@ -382,10 +382,10 @@ function handleCollision(p1, p2, mul, debug) {
 
     let p1Petals, p2Petals;
     // handling petal/petal collisions
-    // [p1Petals, p2Petals] = handlePetalCollisions(p1, p2, dist, debug);
+    [p1Petals, p2Petals] = handlePetalCollisions(p1, p2, dist, debug);
 
     // handling petal/body collisions
-    // handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug);
+    handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug);
 }
 
 module.exports = handleCollision;
