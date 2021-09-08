@@ -58,7 +58,7 @@ const error = res => {
 }
 // Server
 const server = http.createServer((req, res) => {
-	const ip = hash(req.headers ? req.headers["x-forwarded-for"] : res.socket.remoteAddress);
+	const ip = hash(req.headers["x-forwarded-for"] || res.socket.remoteAddress);
 	if (whitelistPointer.next) {
 		whitelistPointer.next = false;
 		whitelist.testers.push(ip);
