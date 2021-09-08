@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
 		whitelist.testers.push(ip);
 	}
 	if (req.url !== "/a" || req.url !== "/clist") {
-		if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
+		if (!(whitelist.devs.includes(ip) && whitelist.testers.includes(ip))) {
 		 	error(res);
 		 	return;
 		}
