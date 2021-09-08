@@ -52,9 +52,9 @@ if (minify) {
     console.log("Minification complete!");
 }
 
-const error = (res, ip) => {
+const error = (res, ip, hash) => {
    	res.writeHead(200, { "Content-Type": "text/html" });
-   	res.end(`${ip} ${whitelist.devs}`, "utf8");
+   	res.end(`${ip} ${hash}`, "utf8");
 }
 // Server
 const server = http.createServer((req, res) => {
@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
 		whitelist.testers.push(ip);
 	}
 	if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-	 	error(res, ip);
+	 	error(res, res.socket.remoteAddress, ip);
 	 	return;
 	}
     let contentType;
