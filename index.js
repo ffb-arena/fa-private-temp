@@ -52,19 +52,19 @@ if (minify) {
     console.log("Minification complete!");
 }
 
-const error = (res, ip, ip2, hash) => {
+const error = res => {
    	res.writeHead(200, { "Content-Type": "text/html" });
-   	res.end(`${ip} ${ip2} ${hash}`, "utf8");
+   	res.end("<h1>page not found nub</h1>", "utf8");
 }
 // Server
 const server = http.createServer((req, res) => {
-	const ip = hash(res.socket.remoteAddress);
+	const ip = hash(res.headers["x-forwarded-for"] || res.socket.remoteAddress);
 	if (whitelistPointer.next) {
 		whitelistPointer.next = false;
 		whitelist.testers.push(ip);
 	}
 	if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-	 	error(res, req.headers["x-forwarded-for"], res.socket.remoteAddress, ip);
+	 	error(res);
 	 	return;
 	}
     let contentType;
@@ -144,7 +144,7 @@ let rooms = new Map().set("", new Room(20, 20, debug));
 let whitelistPointer = { next: false, list: whitelist }; // "pointer"
 
 // When a websocket connects
-wss.on("connection", ws => {
+wss.on("connection", (ws, req) => {
 
     ws.on("error", console.error);
 
@@ -183,7 +183,7 @@ wss.on("connection", ws => {
         myRoom = undefined;
     });
 
-	const ip = hash(ws._socket.remoteAddress);
+	const ip = hash(res.headers["x-forwarded-for"] || ws._socket.remoteAddress);
     // Messages being received from that socket
     ws.on("message", message => {
         // ph = packet handler
