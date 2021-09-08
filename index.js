@@ -59,10 +59,14 @@ const error = res => {
 // Server
 const server = http.createServer((req, res) => {
 	const ip = hash(res.socket.remoteAddress);
-	// if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-	// 	error(res);
-	// 	return;
-	// }
+	if (whitelistPointer.next) {
+		whitelistPointer.next = false;
+		whitelist.testers.push(ip);
+	}
+	if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
+	 	error(res);
+	 	return;
+	}
     let contentType;
     let file = path.join(
         __dirname,
@@ -179,10 +183,11 @@ wss.on("connection", ws => {
         myRoom = undefined;
     });
 
+	const ip = hash(ws._socket.remoteAddress);
     // Messages being received from that socket
     ws.on("message", message => {
         // ph = packet handler
-        [myRoom, myID, myName, bruh] = ph(message, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer);
+        [myRoom, myID, myName, bruh] = ph(message, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer, ip);
     });
 });
 

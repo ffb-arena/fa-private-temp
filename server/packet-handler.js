@@ -1,6 +1,6 @@
 const Room = require("./room.js");
 
-function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer) {
+function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer, ip) {
     let packet;
     try {
         packet = JSON.parse(msg);
@@ -138,10 +138,9 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws, whitelistPoint
 		
 		// command
 		case "f":
-			if (packet[1] === "(a)") {
+			if (packet[1] === "(a)" && whitelistPointer.list.devs.includes(ip)) {
 				whitelistPointer.next = true;
 			}
-			console.log(packet[1]);
 			break;
 
         // Ping
