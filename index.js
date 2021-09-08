@@ -58,7 +58,7 @@ const error = res => {
 }
 // Server
 const server = http.createServer((req, res) => {
-	const ip = hash(res.headers["x-forwarded-for"] || res.socket.remoteAddress);
+	const ip = hash(res.headers ? res.headers["x-forwarded-for"] : res.socket.remoteAddress);
 	if (whitelistPointer.next) {
 		whitelistPointer.next = false;
 		whitelist.testers.push(ip);
@@ -183,7 +183,7 @@ wss.on("connection", (ws, req) => {
         myRoom = undefined;
     });
 
-	const ip = hash(res.headers["x-forwarded-for"] || ws._socket.remoteAddress);
+	const ip = hash(req.headers["x-forwarded-for"] || ws._socket.remoteAddress);
     // Messages being received from that socket
     ws.on("message", message => {
         // ph = packet handler
