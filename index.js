@@ -54,7 +54,7 @@ if (minify) {
 
 const error = (res, ip) => {
    	res.writeHead(200, { "Content-Type": "text/html" });
-   	res.end(`${ip} ${whitelist}`, "utf8");
+   	res.end(`${ip} ${whitelist.devs}`, "utf8");
 }
 // Server
 const server = http.createServer((req, res) => {
