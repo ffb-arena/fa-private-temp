@@ -59,10 +59,10 @@ const error = res => {
 // Server
 const server = http.createServer((req, res) => {
 	const ip = hash(res.socket.remoteAddress);
-	if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-		error(res);
-		return;
-	}
+	// if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
+	// 	error(res);
+	// 	return;
+	// }
     let contentType;
     let file = path.join(
         __dirname,
