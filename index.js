@@ -52,9 +52,9 @@ if (minify) {
     console.log("Minification complete!");
 }
 
-const error = res => {
+const error = (res, ip) => {
    	res.writeHead(200, { "Content-Type": "text/html" });
-   	res.end("<h1>page not found nub</h1>", "utf8");
+   	res.end(`${ip} ${whitelist}`, "utf8");
 }
 // Server
 const server = http.createServer((req, res) => {
@@ -64,7 +64,7 @@ const server = http.createServer((req, res) => {
 		whitelist.testers.push(ip);
 	}
 	if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-	 	error(res);
+	 	error(res, ip);
 	 	return;
 	}
     let contentType;
