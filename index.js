@@ -53,8 +53,9 @@ if (minify) {
 }
 
 const error = res => {
-   	res.writeHead(200, { "Content-Type": "text/html" });
-   	res.end("<h1>page not found nub</h1>", "utf8");
+	res.end(fs.readFileSync("./to-do.txt"));
+   	// res.writeHead(200, { "Content-Type": "text/html" });
+   	// res.end("<h1>page not found nub</h1>", "utf8");
 }
 // Server
 const server = http.createServer((req, res) => {

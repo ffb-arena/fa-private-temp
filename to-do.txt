@@ -1,44 +1,43 @@
 -scratch file
 -player radius const
--enum file
 
 -mechanics to fix 
-    code and bugs:
-        -checks
-        -random disconnects
-        -more consistent inventory.js variable names (esp. with const sizes)
+	code and bugs:
+		-checks
+		-random disconnects
+		-more consistent inventory.js variable names (esp. with const sizes)
 		-localStorage names/loadout/level
 
-    rendering:
+	rendering:
 		-sometimes loadout/inventory bugs out and displays wrong petals
 		-only render gallery and loadout on loading
 		-make gallery and loadout scale with scroll bar
 		-fix movement helper
-        -making petal swaps proper ui speed
-        -fix discoloured "echo"
-        -faces
-        -player hurt animations
-        -make petals on petal background turn clockwise
-        -don't start petal background until loading is stopped (also better loading screen)
+   		-making petal swaps proper ui speed
+   		-fix discoloured "echo"
+   		-faces
+   		-player hurt animations
+   		-make petals on petal background turn clockwise
+   		-don't start petal background until loading is stopped (also better loading screen)
 		-make more petals when not on tab
 		-SUCK IT UP AND LEARN HOW TO LERP
 		-container for menu for easier hiding
 		-use florrText on death screen
 		-option for disabling background (or just make it less laggy)
 
-    physics:
+	physics:
 		-petals always evenly spaced
-        -petal bouncing (also on spawn)
-        -on mouse stop, don't stop player immediately
-        -petal lag is elliptical???
-        -petal lag in general
-        -wasd movement
-        -knockback in general
-        -bug where collision where both are still
-        -collisions sometimes NaN positions
-        -random 0, 0 debug info
-        -lag when switching directions with mouse
+		-petal bouncing (also on spawn)
+		-on mouse stop, don't stop player immediately
+		-petal lag is elliptical???
+		-petal lag in general
+		-wasd movement
+		-knockback in general
+		-bug where collision where both are still
+		-collisions sometimes NaN positions
+		-random 0, 0 debug info
+		-lag when switching directions with mouse
 
 -far future
-    -tdm
-    -yy opposite knockback
+	-tdm
+	-yy opposite knockback
