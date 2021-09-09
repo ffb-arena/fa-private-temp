@@ -86,33 +86,18 @@ function drawMap() {
 }
 
 function drawHelper() {
-    if (!(me.settings.helper && !me.settings.keyboard)) return;
-    let d = Math.sqrt(
-        (me.info.mouseX - window.innerWidth / 2 ** 2) + 
-        (me.info.mouseY - window.innerHeight / 2 ** 2)
-    )
-    ctx.globalAlpha = 0.2 * ((d / res / 200 > 1) ? 1 : (d / res / 200));
+    if (!me.settings.helper || me.settings.keyboard) return;
+	const relPos = {
+		x: me.info.mouseX - window.innerWidth / 2,
+		y: me.info.mouseY - window.innerHeight / 2
+	};
+    const dist = Math.sqrt(relPos.x ** 2 + relPos.y ** 2);
+	ctx.globalAlpha = Math.min(dist / res / 1700, 0.2);
     ctx.lineWidth = 17.5 * res;
 
-    let start = {
-        x: me.info.mouseX - window.innerWidth / 2,
-        y: me.info.mouseY - window.innerHeight / 2
-    };
-    if (start.x === 0) {
-        start.y /= Math.abs(me.info.mouseY - window.innerHeight / 2);
-    } else {
-        start.x /= Math.abs(me.info.mouseX - window.innerWidth / 2);
-        start.y /= Math.abs(me.info.mouseX - window.innerWidth / 2);
-    }
-
-    let distance = Math.sqrt((start.x ** 2) + (start.y ** 2));
-    start.x /= distance;
-    start.y /= distance;
-    start.x *= 30;
-    start.y *= 30;
-
+	const angle = Math.atan2(relPos.y, relPos.x);
     ctx.beginPath();
-    ctx.moveTo(window.innerWidth / 2 + start.x, window.innerHeight / 2 + start.y);
+    ctx.moveTo(window.innerWidth / 2 + Math.cos(angle) * 30, window.innerHeight / 2 + Math.sin(angle) * 30);
     ctx.lineTo(me.info.mouseX, me.info.mouseY);
     ctx.stroke();
 

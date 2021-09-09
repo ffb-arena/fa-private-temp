@@ -2,6 +2,9 @@
 -player radius const
 
 -mechanics to fix 
+	petals:
+		-make faster only apply on first load
+		-make rose in more
 	code and bugs:
 		-checks
 		-random disconnects
@@ -12,7 +15,6 @@
 		-sometimes loadout/inventory bugs out and displays wrong petals
 		-only render gallery and loadout on loading
 		-make gallery and loadout scale with scroll bar
-		-fix movement helper
    		-making petal swaps proper ui speed
    		-fix discoloured "echo"
    		-faces
