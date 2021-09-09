@@ -1,6 +1,7 @@
 const Petal = require("./petal.js");
 const C = require("../consts.js");
 const F = require("../functions.js");
+const E = require("../enums.js");
 
 class Flower {
     constructor(id, x, y, level, name, bruh, inv, hb, ws) {
@@ -87,7 +88,7 @@ class Flower {
 
         this.deadPetals = [];
         this.deadPetalsToSend = [];
-		this.state = 0; // 0 = neutral, -1 = defend, 1 = attack
+		this.state = E.STATE_NEUTRAL;
 
 		this._hotbarCooldowns = [];
 		for (let i = 0; i < nOfPetals; i++) {
@@ -388,16 +389,16 @@ class Flower {
         if (this.keys.spaceDown 
             || this.keys.leftMouse) {
                 this.petalDist = Math.min(C.attack, this.petalDist + C.petalSmooth * mul);
-				this.state = 1;
+				this.state = E.STATE_ATTACK;
             }
         else if (this.keys.shiftLeft 
             || this.keys.shiftRight 
             || this.keys.rightMouse) {
                 this.petalDist = Math.max(C.defend, this.petalDist - C.petalSmooth * mul);
-				this.state = -1;
+				this.state = E.STATE_DEFEND;
             }
         else {
-			this.state = 0;
+			this.state = E.STATE_NEUTRAL;
 			this.petalDist = this.petalDist < C.normal
 				? Math.min(this.petalDist + C.petalSmooth * mul)
 				: Math.max(C.normal, this.petalDist - C.petalSmooth * mul);

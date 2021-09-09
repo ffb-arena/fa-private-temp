@@ -1,4 +1,5 @@
 const C = require("../consts.js");
+const E = require("../enums.js");
 const petalStats = require("./petal-stats.js");
 
 class Petal {
@@ -34,12 +35,11 @@ class Petal {
     update(mul, player) {
 		const centre = { x: player.petalCentre.x, y: player.petalCentre.y };
 		const distance = player.petalDist;
-		const state = player.state;
 		const change = player.petalChange;
-		switch (state) {
-			case -1: this.defend(this, mul, centre, distance, change); break;
-			case  0: this.neutral(this, mul, centre, distance, change); break;
-			case  1: this.attack(this, mul, centre, distance, change); break;
+		switch (player.state) {
+			case E.STATE_DEFEND:  this.defend(this, mul, centre, distance, change); break;
+			case E.STATE_NEUTRAL: this.neutral(this, mul, centre, distance, change); break;
+			case E.STATE_ATTACK:  this.attack(this, mul, centre, distance, change); break;
 		}
 		this.post(this, mul, centre, distance, player);
         // if petal is dead

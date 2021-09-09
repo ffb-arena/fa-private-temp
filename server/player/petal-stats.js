@@ -11,6 +11,7 @@
 const C = require("../consts.js");
 const Debuff = require("./debuff.js");
 const F = require("../functions.js");
+const E = require("../enums.js");
 
 const d = (petal, mul, centre, rad, change) => { // default attack/neutral/defend behavior
 	change *= mul;
@@ -53,13 +54,21 @@ const petalStats = {
 	3:    new PetalStat({ radius: 12, cooldown: 5500, damage: 20, hp: 20 }), // heavy 
 	4:    new PetalStat({ radius: 6 , cooldown: 6000, damage: 5 , hp: 5,     // iris
 		petalHit: (petal, victim) => {
-			victim.debuffs.push(new Debuff(9, 60));
 			victim.hp -= petal.damage;
+			const isPoisoned = victim.debuffs // or/poison=victim.debuffs.type
+				.map(d => d.type === E.DEBUFF_POISON)
+				.reduce((acc, next) => acc || next, false);
+			if (isPoisoned) return;
+			victim.debuffs.push(new Debuff(E.DEBUFF_POISON, 9, 60));
 		},
 		playerHit: (petal, player) => {
-			player.debuffs.push(new Debuff(9, 60));
 			player.pubInfo.hp -= petal.damage;
 			petal.hp -= player.bodyDamage;
+			const isPoisoned = player.debuffs
+				.map(d => d.type === E.DEBUFF_POISON)
+				.reduce((acc, next) => acc || next, false);
+			if (isPoisoned) return;
+			player.debuffs.push(new Debuff(E.DEBUFF_POISON, 9, 60));
 		}}),
 	7: new PetalStat({ radius: 11, cooldown: 3500, damage: 20, hp: 20,       // rose
 		equip: (_, petal) => { petal.healTime = Date.now() + 1000; petal.healing = false; petal.healingRad = 0; },
