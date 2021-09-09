@@ -76,7 +76,7 @@ const petalStats = {
     		petal.pubInfo.x = centre.x + Math.sin(petal.degree) * rad;
     		petal.pubInfo.y = centre.y + Math.cos(petal.degree) * rad;
 			const dist = F.pythag(player.pubInfo.x - petal.pubInfo.x, player.pubInfo.y - petal.pubInfo.y);
-			if (dist < 25) {
+			if (dist < (25 - petal.pubInfo.radius / 2) && petal.healing) {
 				player.pubInfo.hp = Math.min(player.pubInfo.hp + 10, player.pubInfo.maxHP);
 				petal.healTime = Infinity; // make sure it doesn't try to heal while reloading
 				petal.healing = false;
