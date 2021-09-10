@@ -27,29 +27,32 @@ let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
 // debug mode - shows hitboxes and stuff on client
 const debug = false;
 
-// minifying
-const minify = !!process.env.PORT;
+// minifying and writing client files
+const minify = true//!!process.env.PORT;
+let jsFile = "{";
+files.forEach(file => {
+    const filePath = path.join(
+        __dirname,
+        "public",
+        ...file
+    );
+    let fileCode = fs.readFileSync(filePath, "utf-8");
+    if (fileCode[fileCode.length - 1] !== ";") {
+        fileCode += ";";
+    }
+    jsFile += fileCode;
+});
+jsFile += "}";
 if (minify) {
     console.log("Minifying code...");
-    let jsFile = "{";
-    files.forEach(file => {
-        const filePath = path.join(
-            __dirname,
-            "public",
-            ...file
-        );
-        let fileCode = fs.readFileSync(filePath, "utf-8");
-        if (fileCode[fileCode.length - 1] !== ";") {
-            fileCode += ";";
-        }
-        jsFile += fileCode;
-    });
-    jsFile += "}";
-    var minifiedScript = require("@babel/core").transform(jsFile, {
+    const minifiedScript = require("@babel/core").transform(jsFile, {
         presets: ["minify"],
         comments: false 
-    }).code
+    }).code;
+	fs.writeFile("scratch-client.js", minifiedScript, err => console.error);
     console.log("Minification complete!");
+} else {
+	fs.writeFile("scratch-client.js", jsFile, err => console.error);
 }
 
 const error = res => {
@@ -110,24 +113,7 @@ const server = http.createServer((req, res) => {
                 break;
         }
         if (req.url === "/index.js") {
-            if (minify) content = minifiedScript;
-            else {
-                let jsFile = "{";
-                files.forEach(file => {
-                    const filePath = path.join(
-                        __dirname,
-                        "public",
-                        ...file
-                    );
-                    let fileCode = fs.readFileSync(filePath, "utf-8");
-                    if (fileCode[fileCode.length - 1] !== ";") {
-                        fileCode += ";";
-                    }
-                    jsFile += fileCode;
-                });
-                jsFile += "}";
-                content = jsFile;
-            }
+			content = fs.readFileSync("./scratch-client.js");
         } else if (req.url === "/clist") {
 		  	content = JSON.stringify(whitelist);
 			contentType = "application/json";

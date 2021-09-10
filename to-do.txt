@@ -1,10 +1,10 @@
--scratch file
 -player radius const
 
 -mechanics to fix 
 	petals:
 		-make faster only apply on first load
 		-make rose in more
+
 	code and bugs:
 		-checks
 		-random disconnects
