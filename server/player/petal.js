@@ -57,7 +57,7 @@ class Petal {
             // cooldown is up
             this.cooldownTimer = 0;
             this.hp = this.maxHP;
-			this.respawn(this);
+			this.respawn(this, player);
         }
 
         // if invincibility timer is up

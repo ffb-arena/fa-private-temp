@@ -28,7 +28,7 @@ let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
 const debug = false;
 
 // minifying and writing client files
-const minify = true//!!process.env.PORT;
+const minify = !!process.env.PORT;
 let jsFile = "{";
 files.forEach(file => {
     const filePath = path.join(

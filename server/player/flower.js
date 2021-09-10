@@ -25,6 +25,7 @@ class Flower {
             const petal = new Petal(id, 2 * Math.PI / nOfPetals * i, C.normal, { x: x, y: y }, ws, i);
 			petal.equip(this, petal);
             this.pubInfo.petals.push(petal);
+			petal.respawn(petal, this);
         };
         this.inventory = [];
         for (let i = 0; i < 8; i++) {

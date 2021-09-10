@@ -6,7 +6,7 @@
 // dequip    = function(player, petal)                    called on dequipping
 // petalHit  = function(petal, victim)                    called when this petal hits another
 // playerHit = function(petal, player)                    called when this petal hits a player
-// respawn   = function(petal)                            called when the petal responds after a reload
+// respawn   = function(petal, player)                    called when the petal respawns after a reload
 
 const C = require("../consts.js");
 const Debuff = require("./debuff.js");
@@ -94,7 +94,13 @@ const petalStats = {
 			}
 		}}),
 	13: new PetalStat({ radius: 8, cooldown: 500, damage: 8, hp: 5,
-		equip: player => player.petalChange += 0.8 / (1000 / C.frame),
+		equip: (_, petal) => petal.loaded = false,
+		respawn: (petal, player) => {
+			if (!petal.loaded) {
+				petal.loaded = true;
+				player.petalChange += 0.8 / (1000 / C.frame);
+			}
+		},
 		dequip: player => player.petalChange -= 0.8 / (1000 / C.frame) }),  // faster
 };
 
