@@ -1,4 +1,7 @@
+FFB TO-DO
+---------
 -player radius const
+-2 invites don't work?
 
 -mechanics to fix 
 	petals:
@@ -16,6 +19,7 @@
 		-only render gallery and loadout on loading
 		-make gallery and loadout scale with scroll bar
    		-making petal swaps proper ui speed
+		-way to delete petals
    		-fix discoloured "echo"
    		-faces
    		-player hurt animations
