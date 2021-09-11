@@ -44,7 +44,7 @@ const performance = {
 };
 
 canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.height = window.innerHeight + 10; // add extra because doesn't seem to be all height?
 ctx.textAlign = "center";
 
 
@@ -111,7 +111,7 @@ window.addEventListener("resize", () => {
     backgroundCanvas.width = window.innerWidth;
     backgroundCanvas.height = window.innerHeight;
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.height = window.innerHeight + 10; // needs a bit extra for some reason, otherwise isn't high enough
 	petalCanvas.width = window.innerWidth;
 	petalCanvas.height = window.innerHeight;
     res = (window.innerWidth / 1920 > window.innerHeight / 1080) ? window.innerWidth / 1920 : window.innerHeight / 1080;
