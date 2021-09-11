@@ -1,8 +1,5 @@
 FFB TO-DO
 ---------
--player radius const
--2 invites don't work?
-
 -mechanics to fix 
 	petals:
 		-make rose in more
