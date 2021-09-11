@@ -56,6 +56,10 @@ inputY.value = 20;
 
 levelInput.value = window.localStorage.level || 45;
 
+// stuff to do once fonts have loaded
+window.addEventListener("load", () => {
+	setLevelText();
+});
 
 // setting popup event listeners
 changelog.addEventListener("click", () => toggleFunc("changelog-container"));
@@ -222,7 +226,6 @@ function setLevelText() {
 		drawLoadout();
 	}
 }
-setLevelText();
 
 const galleryCanvas = document.getElementById("gallery-canvas");
 const galleryCanvasWidth = 260; 

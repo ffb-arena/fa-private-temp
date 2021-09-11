@@ -11,7 +11,6 @@ FFB TO-DO
 
 	rendering:
 		-sometimes loadout/inventory bugs out and displays wrong petals
-		-only render gallery and loadout on loading
 		-make gallery and loadout scale with scroll bar
    		-making petal swaps proper ui speed
 		-way to delete petals
