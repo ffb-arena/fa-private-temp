@@ -54,7 +54,7 @@ units.hidden = true;
 inputX.value = 20;
 inputY.value = 20;
 
-levelInput.value = 45;
+levelInput.value = window.localStorage.level || 45;
 
 
 // setting popup event listeners
@@ -97,8 +97,10 @@ joinSubmit.addEventListener("click", () => {
     ws.send(JSON.stringify(["a", "b", inputJoin.value]));
 });
 
+nname.value = window.localStorage.name || "";
 nname.addEventListener("keydown", (key) => {
     if (key.code === "Enter") {
+		window.localStorage.name = nname.value;
 
         // You join game
 		cancelAnimationFrame(menuLoopVar); // from index.js
@@ -180,6 +182,7 @@ helper.addEventListener("click", () => {
 // level selector stuff
 function setLevelText() {
     const level = levelInput.value;
+	window.localStorage.level = level;
 	nOfPetals = 5 + Math.floor(level / 15);
 
     ctx.font = "1.5vw Ubuntu";
@@ -280,6 +283,7 @@ const ldIconXSpace = (ldWidth - ldIconWidth * 2) / 2;
 const ldIconYSpace = (ldHeight - ldIconWidth * 8) / 8;
 
 function drawLoadout() {
+	window.localStorage.loadout = JSON.stringify(loadout);
 	ldCtx.clearRect(0, 0, ldWidth, ldHeight);
 	// hotbar
 	for (let i = 0; i < loadout.hb.length; i++) {

@@ -8,7 +8,6 @@ FFB TO-DO
 		-checks
 		-random disconnects
 		-more consistent inventory.js variable names (esp. with const sizes)
-		-localStorage names/loadout/level
 
 	rendering:
 		-sometimes loadout/inventory bugs out and displays wrong petals
