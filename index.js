@@ -149,7 +149,7 @@ wss.on("connection", (ws, req) => {
 	for (const petalID in PS) {
 		radii[petalID] = PS[petalID].radius;
 	}
-    ws.send(JSON.stringify(["a", "b", "a", "", rooms.get("").info, true, radii]));
+    ws.send(JSON.stringify(["a", "b", "a", "", rooms.get("").info, true, radii, C.playerR]));
 
     // Closed tab or reloading
     ws.on("close", () => {

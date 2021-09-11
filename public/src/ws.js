@@ -108,8 +108,8 @@ ws.onmessage = message => {
                         roomID.hidden = false;
                         roomContainer.hidden = false;
 
-						// setting radii (for petal icons)
-						if (msg[6]) radii = msg[6];
+						if (msg[6]) radii = msg[6]; // radii (for petal icons)
+						if (msg[7]) playerR = msg[7]; // player radius
 						drawGallery(msg[6]);
 						drawLoadout();
                     } else {

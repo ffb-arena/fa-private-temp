@@ -12,7 +12,7 @@ function fixOverlap(p1, p2) {
         (p2.pubInfo.x - p2.movement.xToAdd) - (p1.pubInfo.x - p1.movement.xToAdd),
         (p2.pubInfo.y - p2.movement.yToAdd) - (p1.pubInfo.y - p1.movement.yToAdd)
     ) - currentDist;
-    const wantedDist = 50 - currentDist;
+    const wantedDist = C.playerR * 2 - currentDist;
     const percent = wantedDist / lastFrameDist;
 
     p2.pubInfo.x -= p2.movement.xToAdd * percent;
@@ -176,7 +176,7 @@ function handlePetalCollisions(p1, p2, dist, debug) {
             let data = [
                 "a",
                 { x: p1.pubInfo.x, y: p1.pubInfo.y },
-                25
+                C.playerR
             ];
             p1.debug.push(data);
             p2.debug.push(data);
@@ -281,7 +281,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
         if (
             ((petal.pubInfo.x - p2.pubInfo.x) ** 2) + ((petal.pubInfo.y - p2.pubInfo.y) ** 2)
             <
-            ((petal.pubInfo.radius + 25) ** 2)
+            ((petal.pubInfo.radius + C.playerR) ** 2)
         ) {
 			petal.playerHit(petal, p2);
 
@@ -313,7 +313,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
                 data = [
                     "c",
                     { x: p2.pubInfo.x, y: p2.pubInfo.y },
-                    25
+                    C.playerR
                 ];
                 p1.debug.push(data);
                 p2.debug.push(data);
@@ -325,7 +325,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
         if (
             ((petal.pubInfo.x - p1.pubInfo.x) ** 2) + ((petal.pubInfo.y - p1.pubInfo.y) ** 2)
             <
-            ((petal.pubInfo.radius + 25) ** 2)
+            ((petal.pubInfo.radius + C.playerR) ** 2)
         ) {
 			petal.playerHit(petal, p1);
 
@@ -357,7 +357,7 @@ function handleBodyPetalCollision(p1, p2, p1Petals, p2Petals, debug) {
                 data = [
                     "c",
                     { x: p1.pubInfo.x, y: p1.pubInfo.y },
-                    25
+                	C.playerR 
                 ];
                 p1.debug.push(data);
                 p2.debug.push(data);
@@ -376,7 +376,7 @@ function handleCollision(p1, p2, mul, debug) {
     dist.dist = F.pythag(dist.x, dist.y);
 
     // checking if the bodies collide
-    if (dist.dist <= 50) {  
+    if (dist.dist <= C.playerR * 2) {  
         handleBodyCollision(p1, p2, mul);
     }
 

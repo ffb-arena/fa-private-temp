@@ -53,7 +53,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetals, radii, loadout, nOfPetals;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetals, radii, loadout, nOfPetals, playerR;
 me = {
 	swapCooldown: undefined,
     roomInfo: {

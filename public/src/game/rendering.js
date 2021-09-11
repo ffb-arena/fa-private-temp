@@ -159,7 +159,7 @@ function renderPlayer(data, i) {
         data.name, 
         calculateRelPos(data.x, "x"), 
         calculateRelPos(data.y, "y"), 
-        gridSpace / 2 * res, 
+        playerR * res, 
         data.petals,
         data.hp,
         data.maxHP

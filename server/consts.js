@@ -52,6 +52,9 @@ const petalInvincibility = 100;
 // cooldown after pressing swapping a petal, in ms
 const maxSwapCooldown = 300;
 
+// player radius
+const playerR = 25;
+
 module.exports = {
     names,
     frame, frameRate,
@@ -61,5 +64,6 @@ module.exports = {
     limit,
     collisionPadding, petalCollisionPadding,
     petalInvincibility,
-    maxSwapCooldown
+	maxSwapCooldown,
+	playerR
 };
