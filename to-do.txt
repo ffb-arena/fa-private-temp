@@ -5,6 +5,7 @@ FFB TO-DO
 		-make rose in more
 
 	code and bugs:
+		-suicide key
 		-checks
 		-random disconnects
 		-more consistent inventory.js variable names (esp. with const sizes)
