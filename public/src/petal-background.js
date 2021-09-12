@@ -1,5 +1,5 @@
 const backgroundCanvas = document.getElementById("petalBackground");
-const ctx2 = backgroundCanvas.getContext("2d");
+const backgroundCtx = backgroundCanvas.getContext("2d");
 
 backgroundCanvas.width = window.innerWidth;
 backgroundCanvas.height = window.innerHeight;
@@ -16,97 +16,72 @@ const rarePetals = ["bubble", "cactus", "honey", "rock", "wing"];
 const epicPetals = ["ecactus", "egg", "erose", "heaviest", "yin-yang"];
 const legPetals = ["tringer"];
 let textures = {};
-for (const name of commonPetals) {
-    textures[name] = loadImage(name);
-}
-for (const name of uncommonPetals) {
-    textures[name] = loadImage(name);
-}
-for (const name of rarePetals) {
-    textures[name] = loadImage(name);
-}
-for (const name of epicPetals) {
-    textures[name] = loadImage(name);
-}
-for (const name of legPetals) {
-    textures[name] = loadImage(name);
-}
+[commonPetals, uncommonPetals, rarePetals, epicPetals, legPetals].forEach(petals => {
+	petals.forEach(name => textures[name] = loadImage(name));
+});
 
 
 
-
-class PetalBackground{
+class PetalImage{
     constructor(){
         this.x = -200;
-        this.y = Math.random() * 1080;
+        this.y = Math.random() * window.innerHeight;
         this.velDirection = 0 + (Math.random()-0.5)/5;
-        this.size = Math.random() * 30 + 30
-        this.velX = Math.cos(this.velDirection) * 1/this.size * 120;
-        this.velY = Math.sin(this.velDirection) * 1/this.size * 120;
+        this.size = Math.random() * 30 + 30;
+        this.velX = Math.cos(this.velDirection) * 1/this.size * 100;
+        this.velY = Math.sin(this.velDirection) * 1/this.size * 100;
         const randomNumber = Math.random();
         let selectArray = [];
         if (randomNumber < 0.4){
             selectArray = JSON.parse(JSON.stringify(commonPetals));
-        }
-        else if (randomNumber < 0.7){
+        } else if (randomNumber < 0.7){
             selectArray = JSON.parse(JSON.stringify(uncommonPetals));
-        }
-        else if (randomNumber < 0.85){
+        } else if (randomNumber < 0.85){
             selectArray = JSON.parse(JSON.stringify(rarePetals));
-        }
-        else if (randomNumber < 0.99){
+        } else if (randomNumber < 0.99){
             selectArray = JSON.parse(JSON.stringify(epicPetals));
-        }
-        else{
+        } else{
             selectArray = JSON.parse(JSON.stringify(legPetals));
         }
         this.type = selectArray[Math.floor((Math.random() * selectArray.length))];
         if (this.type === "tringer" || this.type === "stinger" || this.type === "wing") {
-            this.size *= 4;
+            this.size *= 4; // small images for some reason
         }
     }
     update(deltaTimeMul){
         this.x += this.velX * deltaTimeMul;
         this.y += this.velY * deltaTimeMul;
+        try{
+            backgroundCtx.drawImage(textures[this.type], this.x, this.y, this.size, this.size);
+        }catch{
+            console.log(this.type)
+        }
         if (this.x > backgroundCanvas.width + 30){
             this.delete = true;
-        }
-    }
-    draw(){
-        try{
-            ctx2.drawImage(textures[this.type], this.x, this.y, this.size, this.size);
-        }
-        catch{
-            console.log(this.type)
         }
     }
 }
 
 const oneOverSixty = 1/60 * 1000;
-let petalBackgrounds = [];
-let petalSpawnCooldown = 6;
-let background;
-let oldTime = Date.now();
-let newTime;
+let petalImages = [];
+const petalSpawnDelay = 10; // frames
+let petalSpawnCooldown = petalSpawnDelay;
+let background, newTime, oldTime = Date.now();
 
 let justUnpaused = false;
 function drawBackground(){
     newTime = Date.now();
     const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
-    ctx2.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    petalSpawnCooldown --;
+    backgroundCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    petalSpawnCooldown -= !justUnpaused * deltaTimeMul;
     while (petalSpawnCooldown < 0){
-        petalSpawnCooldown += 6;
-        petalBackgrounds.push(new PetalBackground());
+        petalSpawnCooldown += petalSpawnDelay;
+        petalImages.push(new PetalImage());
     }
-    for(let i of petalBackgrounds){
-        i.update(!justUnpaused * deltaTimeMul);
-        i.draw();
-    }
+    for(let i of petalImages) i.update(!justUnpaused * deltaTimeMul);
     if (justUnpaused) justUnpaused = false;
-    petalBackgrounds = petalBackgrounds.filter((e) => e.delete != true)
-    background = requestAnimationFrame(drawBackground);
+    petalImages = petalImages.filter(e => !e.delete);
 
     oldTime = newTime;
 }
-background = requestAnimationFrame(drawBackground);
+background = setInterval(drawBackground, oneOverSixty);

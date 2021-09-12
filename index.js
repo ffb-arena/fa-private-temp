@@ -27,23 +27,23 @@ let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
 // debug mode - shows hitboxes and stuff on client
 const debug = false;
 
-// minifying and writing client files
 const minify = !!process.env.PORT;
-let jsFile = "{";
-files.forEach(file => {
-    const filePath = path.join(
-        __dirname,
-        "public",
-        ...file
-    );
-    let fileCode = fs.readFileSync(filePath, "utf-8");
-    if (fileCode[fileCode.length - 1] !== ";") {
-        fileCode += ";";
-    }
-    jsFile += fileCode;
-});
-jsFile += "}";
+// minifying
 if (minify) {
+	let jsFile = "{";
+	files.forEach(file => {
+	    const filePath = path.join(
+	        __dirname,
+	        "public",
+	        ...file
+	    );
+	    let fileCode = fs.readFileSync(filePath, "utf-8");
+	    if (fileCode[fileCode.length - 1] !== ";") {
+	        fileCode += ";";
+	    }
+	    jsFile += fileCode;
+	});
+	jsFile += "}";
     console.log("Minifying code...");
     const minifiedScript = require("@babel/core").transform(jsFile, {
         presets: ["minify"],
@@ -51,8 +51,6 @@ if (minify) {
     }).code;
 	fs.writeFile("scratch-client.js", minifiedScript, err => console.error);
     console.log("Minification complete!");
-} else {
-	fs.writeFile("scratch-client.js", jsFile, err => console.error);
 }
 
 const error = res => {
@@ -113,7 +111,24 @@ const server = http.createServer((req, res) => {
                 break;
         }
         if (req.url === "/index.js") {
-			content = fs.readFileSync("./scratch-client.js");
+			if (minify) content = fs.readFileSync("./scratch-client.js");
+			else {
+				let jsFile = "{";
+				files.forEach(file => {
+				    const filePath = path.join(
+				        __dirname,
+				        "public",
+				        ...file
+				    );
+				    let fileCode = fs.readFileSync(filePath, "utf-8");
+				    if (fileCode[fileCode.length - 1] !== ";") {
+				        fileCode += ";";
+				    }
+				    jsFile += fileCode;
+				});
+				jsFile += "}";
+				content = jsFile;
+			}
         } else if (req.url === "/clist") {
 		  	content = JSON.stringify(whitelist);
 			contentType = "application/json";

@@ -108,7 +108,7 @@ nname.addEventListener("keydown", (key) => {
 
         // You join game
 		cancelAnimationFrame(menuLoopVar); // from index.js
-        cancelAnimationFrame(background); // from src/petal-background.js
+        clearInterval(background); // from src/petal-background.js
         loop = requestAnimationFrame(mainLoop); // from index.js
 
         canvas.hidden = false;
@@ -396,7 +396,7 @@ function drawDeathScreen(c, time, level) {
 // returning to menu stuff
 // returning to menu from death screen
 function returnToMenu() {
-    background = requestAnimationFrame(drawBackground);
+    background = setInterval(drawBackground, oneOverSixty);
     justUnpaused = true;
     canvas.hidden = true;
     document.getElementById("body").style.backgroundColor = "#1ea761";
