@@ -3,9 +3,8 @@
 const petals = {
 
 	// haha's dev petal
-	"-3": (p, c, ratio, radius) => {
+	"-3": (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#c2c2c2";
@@ -57,9 +56,8 @@ const petals = {
     0: () => {},
 
     // basic
-    1: (p, c, ratio, radius) => {
+    1: (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#c2c2c2";
@@ -83,9 +81,8 @@ const petals = {
     },
 
     // fast
-    2: (p, c, ratio, radius) => {
+    2: (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#c2c2c2";
@@ -110,9 +107,8 @@ const petals = {
 
     
     // heavy
-    3: (p, c, ratio, radius) => {
+    3: (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#8f8f8f";
@@ -137,9 +133,8 @@ const petals = {
 
    
     // iris
-    4: (p, c, ratio, radius) => {
+    4: (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#B76CBC";
@@ -162,9 +157,8 @@ const petals = {
         c.closePath();
     },
     // rose
-    7: (p, c, ratio, radius) => {
+    7: (p, c, ratio=1, radius) => {
         radius = radius || p.radius;
-        ratio = ratio || 1;
 
         c.beginPath();
         c.fillStyle = "#ce7c97";
@@ -187,9 +181,8 @@ const petals = {
         c.closePath();
     },
     // faster
-    13: (p, c, ratio, radius) => {
+    13: (p, c, ratio=1, radius) => {
        radius = radius || p.radius;
-       ratio = ratio || 1;
 
        c.beginPath();
        c.fillStyle = "#c2c2c2";
@@ -216,57 +209,50 @@ const petals = {
 
 // rarity colours
 const rarityColours = {
-	"empty": {
-		bg: "#dedede",
-		fg: "#ffffff"
-	},
-    "common": {
-        bg: "#68c058",
-        fg: "#82ec71"
-    },
-    "unusual": {
-        bg: "#ceba4a",
-        fg: "#ffe65d"
-    },
-    "rare": {
-        bg: "#4c3fb7",
-        fg: "#5e4de2"
-    },
-
-	"haha": {
-        bg: "#9c58c0",
-        fg: "#e071ec",
-    },
+	"empty":   { bg: "#dedede", fg: "#ffffff" },
+    "common":  { bg: "#68c058", fg: "#82ec71" },
+    "unusual": { bg: "#ceba4a", fg: "#ffe65d" },
+    "rare":    { bg: "#4c3fb7", fg: "#5e4de2" },
+	"haha":    { bg: "#9c58c0", fg: "#e071ec", },
 };
 
 // which petals are which rarity
 const rarities = {
 	"-3": "haha",
-    0: "empty",
-    1: "common",
-	2: "common",
-    3: "common",
-    4: "unusual",
-    7: "unusual",
-    13: "rare"
+    0:    "empty",
+    1:    "common",
+	2:    "common",
+    3:    "common",
+    4:    "unusual",
+    7:    "unusual",
+    13:   "rare"
 };
 
 const petalNames = {
 	"-3": "haha",
-	0: "",
-    1: "Basic",
-	2: "Fast",
-    3: "Heavy",
-    4: "Iris",
-    7: "Rose",
-    13: "Faster"
+	0:    "",
+    1:    "Basic",
+	2:    "Fast",
+    3:    "Heavy",
+    4:    "Iris",
+    7:    "Rose",
+    13:   "Faster"
 };
 
 const rarityTiers = {
-	"common": 0,
-	"unusual": 1,
-	"rare": 2,
-	"epic": 3,
+	"common":    0,
+	"unusual":   1,
+	"rare":      2,
+	"epic":      3,
 	"legendary": 4,
-	"unique": 5
+	"unique":    5
+};
+
+const rarityChances = {
+	"common":    0.40,
+	"unusual":   0.70,
+	"rare":      0.85,	
+	"epic":      0.95,
+	"legendary": 0.99,
+	"unique":    1.00
 };
