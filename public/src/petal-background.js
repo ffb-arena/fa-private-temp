@@ -73,6 +73,7 @@ function drawBackground(){
     oldTime = newTime;
 }
 function startBackground() {
+	justUnpaused = true;
 	background = setInterval(drawBackground, oneOverSixty);
 }
 function stopBackground() {

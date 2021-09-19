@@ -399,7 +399,6 @@ function drawDeathScreen(c, time, level) {
 // returning to menu from death screen
 function returnToMenu() {
 	startBackground();
-    justUnpaused = true;
     canvas.hidden = true;
     document.getElementById("body").style.backgroundColor = "#1ea761";
     document.getElementById("title").hidden = false;
