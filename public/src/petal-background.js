@@ -18,6 +18,7 @@ class PetalImage{
         this.velDirection = (Math.random()-0.5)/10;
         this.velX = Math.cos(this.velDirection) * (Math.random() + 0.4);
         this.velY = Math.sin(this.velDirection);
+		this.dir = 0; this.dirChange = Math.PI * 2 / (Math.random() * 300 + 400);
         const randomNumber = Math.random();
 		while (this.type === undefined) {
 			const r = Math.random();
@@ -34,9 +35,16 @@ class PetalImage{
 	}
     
     update(deltaTimeMul){
+		this.dir += this.dirChange;
+		if (this.dir > Math.PI * 2) this.dir %= Math.PI * 2;
         this.x += this.velX * deltaTimeMul;
         this.y += this.velY * deltaTimeMul;
+		backgroundCtx.save();
+		backgroundCtx.translate(this.x, this.y);
+		backgroundCtx.rotate(this.dir);
+		backgroundCtx.translate(-this.x, -this.y);
 		petals[this.type]({ x: this.x, y: this.y }, backgroundCtx, res, this.size);
+		backgroundCtx.restore();
 		return (this.x < backgroundCanvas.width + 30) && (this.y > 0);
     }
 }

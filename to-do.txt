@@ -18,7 +18,6 @@ FFB TO-DO
    		-fix discoloured "echo"
    		-faces
    		-player hurt animations
-   		-make petals on petal background turn clockwise
    		-don't start petal background until loading is stopped (also better loading screen, start onload)
 		-SUCK IT UP AND LEARN HOW TO LERP
 		-container for menu for easier hiding
