@@ -53,7 +53,7 @@ ctx.lineJoin = "bevel";
 ctx.miterLimit = 2;
 
 // Variables
-let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetals, radii, loadout, nOfPetals, playerR;
+let me, res, gridSetter, allPlayers, mms, mmHeight, mmWidth, circleRadius, circlePlane, debug, deadPetals, radii, loadout, nOfPetals, playerR, loads;
 me = {
 	swapCooldown: undefined,
     roomInfo: {
@@ -90,8 +90,8 @@ radii = {};
 loadout = window.localStorage.loadout
 		? JSON.parse(window.localStorage.loadout)
 		: { hb: [1, 1, 1, 1, 1, 1, 1, 1], inv: [2, 1, 0, 0, 0, 0, 0, 0] };
-
 stopText = "Move mouse here to disable movement";
+loads = [false, false];
 
 function pointInBox(point, box) {
 	return (
@@ -132,7 +132,9 @@ window.addEventListener("resize", () => {
             y: Math.max(mmHeight - (circleRadius * 2), 2)
         }
         drawMinimap();
-    }
+    } else {
+		drawBackground();
+	}
 });
 
 // checkCurrent is optional param
@@ -153,6 +155,13 @@ function updateSelectedPetal(interval, checkCurrent) {
 	
 	// if the hotbar is completely empty
 	numInfo = false;
+}
+
+function finishLoad() {
+	if (!(loads[0] && loads[1])) return; // [0] is ws open, [1] is all HTML loaded
+    document.getElementById("loading").remove();
+	addEventListeners();
+	startBackground();
 }
 
 // event listeners only get added when ws opens

@@ -72,4 +72,9 @@ function drawBackground(){
 
     oldTime = newTime;
 }
-background = setInterval(drawBackground, oneOverSixty);
+function startBackground() {
+	background = setInterval(drawBackground, oneOverSixty);
+}
+function stopBackground() {
+	clearInterval(background);
+}

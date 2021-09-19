@@ -2,8 +2,8 @@ const wsUrl = `ws${location.protocol === "https:" ? "s" : ""}://${window.locatio
 const ws = new WebSocket(wsUrl === "ws://" ? "ws://localhost:9700" : wsUrl);
 ws.addEventListener("open", () => {
     console.log("Websocket Sucessfully Opened");
-    addEventListeners();
-    document.getElementById("loading").remove();
+	loads[0] = true;
+	finishLoad();
 });
 
 window.c = str => ws.send(JSON.stringify(["f", str]));
