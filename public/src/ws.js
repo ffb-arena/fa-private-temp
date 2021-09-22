@@ -129,6 +129,11 @@ ws.onmessage = message => {
 
         // Player init (when spawning)
         case "i":
+			cancelAnimationFrame(menuLoopVar); // from index.js
+        	stopBackground(); // from src/petal-background.js
+        	loop = requestAnimationFrame(mainLoop); // from index.js
+        	canvas.hidden = false;
+
             me.info.level = msg[1];
             const nOfPetals = 5 + Math.floor(msg[1] / 15);
 

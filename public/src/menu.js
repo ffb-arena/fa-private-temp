@@ -109,11 +109,7 @@ nname.addEventListener("keydown", (key) => {
 		window.localStorage.name = nname.value;
 
         // You join game
-		cancelAnimationFrame(menuLoopVar); // from index.js
-        stopBackground(); // from src/petal-background.js
-        loop = requestAnimationFrame(mainLoop); // from index.js
-
-        canvas.hidden = false;
+		// switches to game rendering in ws.js, on init packet
         allPlayers = [];
 
         document.getElementById("body").style.backgroundColor = "transparent";
