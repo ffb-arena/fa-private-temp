@@ -54,26 +54,24 @@ let activeBackgroundPetals = [];
 const petalSpawnDelay = 10; // frames
 const petalLimit = 100;
 let petalSpawnCooldown = petalSpawnDelay;
-let background, newTime, oldTime = Date.now();
+let background, newTime, oldTime;
 
-let justUnpaused = false;
 function drawBackground(){
     newTime = Date.now();
     const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
     backgroundCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-    petalSpawnCooldown -= !justUnpaused * deltaTimeMul;
+    petalSpawnCooldown -= deltaTimeMul;
     while (petalSpawnCooldown < 0 && activeBackgroundPetals.length < petalLimit){
         petalSpawnCooldown += petalSpawnDelay;
         activeBackgroundPetals.push(new PetalImage());
     }
-    for(let i of activeBackgroundPetals) i.update(!justUnpaused * deltaTimeMul);
-    if (justUnpaused) justUnpaused = false;
-    activeBackgroundPetals = activeBackgroundPetals.filter(e => e.update(!justUnpaused * deltaTimeMul));
+    for(let i of activeBackgroundPetals) i.update(deltaTimeMul);
+    activeBackgroundPetals = activeBackgroundPetals.filter(e => e.update(deltaTimeMul));
 
     oldTime = newTime;
 }
 function startBackground() {
-	justUnpaused = true;
+	oldTime = Date.now();
 	background = setInterval(drawBackground, oneOverSixty);
 }
 function stopBackground() {
