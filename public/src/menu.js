@@ -107,34 +107,7 @@ nname.value = window.localStorage.name || "";
 nname.addEventListener("keydown", (key) => {
     if (key.code === "Enter") {
 		window.localStorage.name = nname.value;
-
-        // You join game
-		// switches to game rendering in ws.js, on init packet
-        allPlayers = [];
-
-        document.getElementById("body").style.backgroundColor = "transparent";
-        document.getElementById("title").hidden = true;
-        document.getElementById("subtitle").hidden = true;
-        document.getElementById("noobs").hidden = true;
-        systemText.hidden = true;
-        nname.hidden = true;
-        back.hidden = true;
-        roomID.hidden = true;
-		
-		discord.hidden = true;
-		github.hidden = true;
-		florr.hidden = true;
-        changelogContainer.hidden = true;
-        changelog.hidden = true;
-        gallery.hidden = true;
-        make.hidden = true;
-        join.hidden = true;
-		loadoutBtn.hidden = true;
-        level.hidden = true;
-        levelBtn.hidden = true;
-		galleryContainer.hidden = true;
-		loadoutContainer.hidden = true;
-
+		// menu hiding stuff is in ws.js, on init packet
         ws.send(JSON.stringify(["b", nname.value, levelInput.value, loadout.inv, loadout.hb]));
         ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
     }

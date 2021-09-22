@@ -134,6 +134,31 @@ ws.onmessage = message => {
         	loop = requestAnimationFrame(mainLoop); // from index.js
         	canvas.hidden = false;
 
+        	allPlayers = [];
+
+        	document.getElementById("body").style.backgroundColor = "transparent";
+        	document.getElementById("title").hidden = true;
+        	document.getElementById("subtitle").hidden = true;
+        	document.getElementById("noobs").hidden = true;
+        	systemText.hidden = true;
+        	nname.hidden = true;
+        	back.hidden = true;
+        	roomID.hidden = true;
+			
+			discord.hidden = true;
+			github.hidden = true;
+			florr.hidden = true;
+        	changelogContainer.hidden = true;
+        	changelog.hidden = true;
+        	gallery.hidden = true;
+        	make.hidden = true;
+        	join.hidden = true;
+			loadoutBtn.hidden = true;
+        	level.hidden = true;
+        	levelBtn.hidden = true;
+			galleryContainer.hidden = true;
+			loadoutContainer.hidden = true;
+
             me.info.level = msg[1];
             const nOfPetals = 5 + Math.floor(msg[1] / 15);
 
