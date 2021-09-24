@@ -8,15 +8,13 @@ FFB TO-DO
 		-suicide key
 		-checks
 		-random disconnects
-		-more consistent inventory.js variable names (esp. with const sizes)
 
 	rendering:
-		-garden sometimes takes up too much space
+		-garden text sometimes takes up too much space
 		-sometimes loadout/inventory bugs out and displays wrong petals
 		-make gallery and loadout scale with scroll bar
    		-making petal swaps proper ui speed
 		-way to delete petals
-   		-fix discoloured "echo"
    		-faces
    		-player hurt animations
 		-SUCK IT UP AND LEARN HOW TO LERP

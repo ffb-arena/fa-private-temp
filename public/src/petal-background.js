@@ -19,7 +19,6 @@ class PetalImage{
         this.velX = Math.cos(this.velDirection) * (Math.random() + 0.4);
         this.velY = Math.sin(this.velDirection);
 		this.dir = 0; this.dirChange = Math.PI * 2 / (Math.random() * 300 + 400);
-        const randomNumber = Math.random();
 		while (this.type === undefined) {
 			const r = Math.random();
 			let tmpRarity;

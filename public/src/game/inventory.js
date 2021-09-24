@@ -5,15 +5,15 @@ function lerp(begin, end, amount) {
 }
 
 // gets a function that returns the left side of slot i, in hotbar if hotbar is true (else inventory)
-function getXPos(i, hotbar, xOffset = 0) {
+function getXPos(i, hotbar, xOffset=0) {
 	const bar = hotbar ? me.info.hotbar : me.info.inventory;
-	const width = hotbar ? hbOutline : outlineWidth;
-	const spacing = hotbar ? spaceBetweenHB : spaceBetweenInvIcons;
+	const width = hotbar ? hbWidth : invWidth;
+	const spacing = hotbar ? spaceBetweenHB : spaceBetweenInv;
 	const newNum = i - bar.length / 2;
 	return () => window.innerWidth / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
 }
 
-function getYPos(hotbar, yOffset = 0) {
+function getYPos(hotbar, yOffset=0) {
 	const offset = hotbar ? 144 : 81;
 	return () => window.innerHeight - offset + yOffset;
 }
@@ -21,8 +21,8 @@ function getYPos(hotbar, yOffset = 0) {
 // farthest right corner on a side (see HotbarReload._whichSide())
 // relative to the middle, using canvas coords
 const corners = [
-    { x: 0.5, y: -0.5 }, // 0
-    { x: 0.5, y: 0.5 }, // 1
+    { x: 0.5,  y: -0.5 }, // 0
+    { x: 0.5,  y: 0.5 }, // 1
     { x: -0.5, y: 0.5 }, // 2
     { x: -0.5, y: -0.5 } // 3
 ];
@@ -32,7 +32,7 @@ const angles = [
     2 * Math.PI * 1/8, // 0
     2 * Math.PI * 3/8, // 1
     2 * Math.PI * 5/8, // 2
-    2 * Math.PI * 7/8 // 3
+    2 * Math.PI * 7/8  // 3
 ];
 
 // rendering reloading hotbar slots
@@ -150,16 +150,16 @@ class SlidingPetal {
         this._lastUpdateTime = Date.now();
     }
 
-    update(c, drawReload = false) {
-        let returnValue;
+    update(c, drawReload=false) {
+        let doneSliding;
         const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
         this._lastUpdateTime = Date.now();
 
         this._timeRemaining -= timeSinceLastFrame;
         if (this._timeRemaining <= 0) {
             this._timeRemaining = 0;
-            returnValue = true;
-        } else returnValue = false;
+            doneSliding = true;
+        } else doneSliding = false;
 
         const colours = rarityColours[rarities[this.petalID]];
         if (!colours) return;
@@ -182,7 +182,7 @@ class SlidingPetal {
         drawPetalIcon({ x: x, y: y }, petalNames[this.petalID], this.petalID, width,
             colours.bg, colours.fg, 0.9, c, invSlot, reloadSettings);
 
-        return returnValue;
+        return doneSliding;
     }
 }
 
@@ -247,12 +247,13 @@ let numInfo = false;
 let selectedPetal = 0;
 let unselectTime = undefined;
 
+// widths are total width, with outlines
 // inventory vars (petals not in use)
-const outlineWidth = 40;
-const spaceBetweenInvIcons = 8;
+const invWidth = 40;
+const spaceBetweenInv = 8;
 
 // hotbar vars (petals in use)
-const hbOutline = 55;
+const hbWidth = 55;
 const spaceBetweenHB = 8;
 
 const holdingWidth = 70; // width of petals being held
@@ -334,7 +335,7 @@ class HoldingPetal {
 				y: getYPos(this.snapInHotbar),
 				n: this.snapN
 			};
-			const holdingTargetWidth = this.snapInHotbar ? hbOutline : outlineWidth;
+			const holdingTargetWidth = this.snapInHotbar ? hbWidth : invWidth;
 
 			// for the holding petal
 			holdingSliding[this.snapN] = new SlidingPetal(300, holdingRN, holdingTarget, 
@@ -349,7 +350,7 @@ class HoldingPetal {
 				}	
 			} else {
 				let otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
-				const OGHoldingWidth = this.fromHotbar ? hbOutline : outlineWidth;
+				const OGHoldingWidth = this.fromHotbar ? hbWidth : invWidth;
 				otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
 					holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
 			}
@@ -361,7 +362,7 @@ class HoldingPetal {
 			// normal boring release
 
 			// making it zoom back to its spot
-			const endWidth = this.fromHotbar ? hbOutline : outlineWidth;
+			const endWidth = this.fromHotbar ? hbWidth : invWidth;
 
 
 			const distance = Math.sqrt(
@@ -435,7 +436,7 @@ function swapPetals(invSlot, hotbarSlot) {
 		// petal is normal
 		default:
 			aboveSlidingPetals[hotbarSlot] = new SlidingPetal(300, invInfo,
-			    hbInfo, outlineWidth, hbOutline, invID);
+			    hbInfo, invWidth, hbWidth, invID);
 			break;
 	}
 	// same as above, but for hotbar
@@ -449,7 +450,7 @@ function swapPetals(invSlot, hotbarSlot) {
 	
 		default:
 			belowSlidingPetals[invSlot] = new SlidingPetal(300, hbInfo,
-			    invInfo, hbOutline, outlineWidth, hotbarID);
+			    invInfo, hbWidth, invWidth, hotbarID);
 			break;
 	}
 
@@ -523,7 +524,7 @@ function drawInventory() {
 
     // inventory boxes (+ detecting if cursor is hovering over them)
     let x;
-    x = window.innerWidth / 2 - spaceBetweenInvIcons * 3.5 - outlineWidth * 4;
+    x = window.innerWidth / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
 
     if (me.info.inventory.length === 0) return;
 	let y = window.innerHeight - 81;
@@ -534,12 +535,12 @@ function drawInventory() {
 		if (id >= 0) {
 			if (pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY },
-				{ x: x, y: y, width: outlineWidth })
+				{ x: x, y: y, width: invWidth })
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
 					if (id !== holdingPetal.id) {
-						holdingPetal.snap(x, y, outlineWidth, i, false)
+						holdingPetal.snap(x, y, invWidth, i, false)
 					}
 				} else if (me.info.justClicked) {
 					// new petal was selected
@@ -556,19 +557,19 @@ function drawInventory() {
        	const colours = rarityColours[rarities[id]];
        	drawPetalIcon({ x: x, y: y },
       		petalNames[id], id, 
-			outlineWidth, colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx);
+			invWidth, colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx);
 		// if the petal is selected in the inventory
 		if (numInfo && selectedPetal === i) {	
 			ctx.lineWidth = 1.6;
 			ctx.strokeStyle = colours.fg;
-			ctx.strokeRect(x, y, outlineWidth, outlineWidth);
+			ctx.strokeRect(x, y, invWidth, invWidth);
 		}
 
-        x += spaceBetweenInvIcons + outlineWidth;
+        x += spaceBetweenInv + invWidth;
     }
 
     // hotbar
-    x = window.innerWidth / 2 - (hbOutline * me.info.hotbar.length / 2) - 
+    x = window.innerWidth / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
 	y = window.innerHeight - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
@@ -577,12 +578,12 @@ function drawInventory() {
 		if (id >= 0) {
 			if (pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY },
-				{ x: x, y: y, width: hbOutline })
+				{ x: x, y: y, width: hbWidth })
 			) {
 				pointerCursor = true;
 				if (holdingPetal.id) {
 					if (id !== holdingPetal.id) {
-						holdingPetal.snap(x, y, hbOutline, i, true)
+						holdingPetal.snap(x, y, hbWidth, i, true)
 					}
 				} else if (me.info.justClicked) {
 					// new petal was selected
@@ -600,10 +601,10 @@ function drawInventory() {
 		id = Math.max(id, 0);
         const colours = rarityColours[rarities[id]];
         drawPetalIcon({ x: x, y: y },
-            petalNames[id],	id, hbOutline,
+            petalNames[id],	id, hbWidth,
             colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx, id === 0 ? undefined : i);
 
-        x += spaceBetweenHB + hbOutline;
+        x += spaceBetweenHB + hbWidth;
     }
 
     // drawing the transitioning petals
@@ -627,12 +628,12 @@ function drawInventory() {
 
     // drawing numbers
     if (numInfo) {
-        x = window.innerWidth / 2 - (hbOutline * me.info.hotbar.length / 2) - 
-			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbOutline / 2);
+        x = window.innerWidth / 2 - (hbWidth * me.info.hotbar.length / 2) - 
+			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbWidth / 2);
 
         for (let i = 0; i < me.info.hotbar.length; i++) {
             florrText(`[${i + 1}]`, 14, { x: x, y: window.innerHeight - 157 }, ctx);
-            x += spaceBetweenHB + hbOutline;
+            x += spaceBetweenHB + hbWidth;
         }
     }
 

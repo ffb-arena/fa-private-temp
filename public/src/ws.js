@@ -217,10 +217,10 @@ ws.onmessage = message => {
 			const newNum = msg[1] - me.info.hotbar.length / 2;
 			hotbarReloads[msg[1]] = new HotbarReload(msg[2], 
                 { 
-					x: getXPos(msg[1], true, (hbOutline - (hbOutline * fgPercent)) / 2),
-					y: getYPos(true, (hbOutline - (hbOutline * fgPercent)) / 2)
+					x: getXPos(msg[1], true, (hbWidth - (hbWidth * fgPercent)) / 2),
+					y: getYPos(true, (hbWidth - (hbWidth * fgPercent)) / 2)
 				}, 
-                hbOutline * fgPercent); 
+                hbWidth * fgPercent); 
 			break;
 
         // debug info
