@@ -1,6 +1,7 @@
 // list of all client files that need to be combined
 // may break if you change the order (let and const are hoisted but not initialized)
 const files = [ // (in public folder already)
+	["src", "functions.js"],
     ["index.js"],
     ["src", "ws.js"],
     ["src", "florr-text.js"],

@@ -109,7 +109,7 @@ nname.addEventListener("keydown", (key) => {
 		window.localStorage.name = nname.value;
 		// menu hiding stuff is in ws.js, on init packet
         ws.send(JSON.stringify(["b", nname.value, levelInput.value, loadout.inv, loadout.hb]));
-        ws.send(JSON.stringify(["c", "d", me.info.mouseX - window.innerWidth / 2, window.innerHeight - ((me.info.mouseY - window.innerHeight / 2) + window.innerHeight / 2) - window.innerHeight / 2, res]));
+        ws.send(JSON.stringify(["c", "d", me.info.mouseX - ww() / 2, wh() - ((me.info.mouseY - wh() / 2) + wh() / 2) - wh() / 2, res]));
     }
 });
 
@@ -282,8 +282,8 @@ function drawLoadout() {
 
 // menu holding petal stuff (for loadout)
 const petalCanvas = document.getElementById("petal-canvas");
-petalCanvas.width = window.innerWidth;
-petalCanvas.height = window.innerHeight;
+petalCanvas.width = ww();
+petalCanvas.height = wh();
 petalCanvas.hidden = true;
 const petalCtx = petalCanvas.getContext("2d"); 
 petalCtx.textAlign = "center";
@@ -314,7 +314,7 @@ class MenuHoldingPetal {
 		this.colours = rarityColours[rarities[id]];
 	}
 	clear() {
-		this.ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+		this.ctx.clearRect(0, 0, ww(), wh());
 	}
 	draw() {
 		let x = this.pos.x, y = this.pos.y, width = this.width;
@@ -339,28 +339,28 @@ let menuHoldingPetal = new MenuHoldingPetal();
 function drawDeathScreen(c, time, level) {
 	c.globalAlpha = 0.5;
 	c.fillStyle = "#000000";
-	c.fillRect(0, 0, window.innerWidth, window.innerHeight);
+	c.fillRect(0, 0, ww(), wh());
 	c.globalAlpha = 1;
 	
 	c.lineWidth = 7 * res;
 	c.strokeStyle = "#000000";
 	c.fillStyle = "#ffffff";
 	c.font = "30px Ubuntu"
-	c.strokeText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
-	c.fillText("You died : (", window.innerWidth / 2, window.innerHeight * 4/10);
+	c.strokeText("You died : (", ww() / 2, wh() * 4/10);
+	c.fillText("You died : (", ww() / 2, wh() * 4/10);
 	
 	c.lineWidth = 3 * res;
 	c.strokeStyle = "#000000";
 	c.font = "15px Ubuntu"
 	
-	c.strokeText(`Time alive: ${time}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
-	c.fillText(`Time alive: ${time}ms`, window.innerWidth / 2, window.innerHeight * 6/10);
+	c.strokeText(`Time alive: ${time}ms`, ww() / 2, wh() * 6/10);
+	c.fillText(`Time alive: ${time}ms`, ww() / 2, wh() * 6/10);
 	
-	c.strokeText(`Level: ${level}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
-	c.fillText(`Level: ${level}`, window.innerWidth / 2, window.innerHeight * 6.5/10);
+	c.strokeText(`Level: ${level}`, ww() / 2, wh() * 6.5/10);
+	c.fillText(`Level: ${level}`, ww() / 2, wh() * 6.5/10);
 	
-	c.strokeText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
-	c.fillText("(press enter to return to menu)", window.innerWidth / 2, window.innerHeight * 7/10);
+	c.strokeText("(press enter to return to menu)", ww() / 2, wh() * 7/10);
+	c.fillText("(press enter to return to menu)", ww() / 2, wh() * 7/10);
 }
 
 

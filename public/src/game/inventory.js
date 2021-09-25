@@ -1,39 +1,18 @@
-// lerps a certain percent between 2 numbers
-// amount = number between 0 and 1
-function lerp(begin, end, amount) {
-    return begin + ((end - begin) * amount);
-}
-
-// gets a function that returns the left side of slot i, in hotbar if hotbar is true (else inventory)
-function getXPos(i, hotbar, xOffset=0) {
-	const bar = hotbar ? me.info.hotbar : me.info.inventory;
-	const width = hotbar ? hbWidth : invWidth;
-	const spacing = hotbar ? spaceBetweenHB : spaceBetweenInv;
+const lerp = (begin, end, amount) => begin + ((end - begin) * amount);
+// returns a function that returns the left side of slot i
+function getXPos(i, hb, xOffset=0) {
+	const bar = hb ? me.info.hotbar : me.info.inventory;
+	const width = hb ? hbWidth : invWidth;
+	const spacing = hb ? spaceBetweenHB : spaceBetweenInv;
 	const newNum = i - bar.length / 2;
-	return () => window.innerWidth / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
+	return () => ww() / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
 }
+const getYPos = (hb, offset=0) => { const y = hb ? 144 : 81; return () => wh() - y + offset; };
 
-function getYPos(hotbar, yOffset=0) {
-	const offset = hotbar ? 144 : 81;
-	return () => window.innerHeight - offset + yOffset;
-}
-
-// farthest right corner on a side (see HotbarReload._whichSide())
-// relative to the middle, using canvas coords
-const corners = [
-    { x: 0.5,  y: -0.5 }, // 0
-    { x: 0.5,  y: 0.5 }, // 1
-    { x: -0.5, y: 0.5 }, // 2
-    { x: -0.5, y: -0.5 } // 3
-];
-
+// farthest right corner on a side (see HotbarReload._whichSide()), relative to centre, using canvas coords
+const corners = [{ x: 0.5,  y: -0.5 }, { x: 0.5,  y: 0.5 }, { x: -0.5, y: 0.5 }, { x: -0.5, y: -0.5 }];
 // angles to corners above
-const angles = [
-    2 * Math.PI * 1/8, // 0
-    2 * Math.PI * 3/8, // 1
-    2 * Math.PI * 5/8, // 2
-    2 * Math.PI * 7/8  // 3
-];
+const angles = [2 * Math.PI * 1/8, 2 * Math.PI * 3/8, 2 * Math.PI * 5/8, 2 * Math.PI * 7/8];
 
 // rendering reloading hotbar slots
 class HotbarReload {
@@ -61,10 +40,7 @@ class HotbarReload {
 
     // what side of a square an angle is on
     // top is 0, right is 1 etc.
-    static whichSide(angle) {
-        let side = angle + (Math.PI / 4);
-        return Math.floor(side / (Math.PI / 2)) % 4;
-    }
+    static whichSide(angle) { const side = angle + (Math.PI / 4); return Math.floor(side / (Math.PI / 2)) % 4; }
 
 	update(c, posParam, widthParam) {
 		if (this._totalTime === 0) return;
@@ -304,11 +280,11 @@ class HoldingPetal {
 	release() {
 		if (!this.id) return;
 
-		const xPercent = this.pos.x / window.innerWidth;
-		const yPercent = this.pos.y / window.innerHeight;
+		const xPercent = this.pos.x / ww();
+		const yPercent = this.pos.y / wh();
 		const holdingRN = {
-			x: () => xPercent * window.innerWidth, 
-			y: () => yPercent * window.innerHeight 
+			x: () => xPercent * ww(), 
+			y: () => yPercent * wh() 
 		};
 
 		const holdingOGSpot = {
@@ -484,7 +460,7 @@ function drawInventory() {
 		if (
 			pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY }, 
-				{ x: window.innerWidth / 2 - boxWidth / 2, y: window.innerHeight - boxHeight, width: boxWidth, height: boxHeight })
+				{ x: ww() / 2 - boxWidth / 2, y: wh() - boxHeight, width: boxWidth, height: boxHeight })
 			||
 			(playerStopped && holdingPetal.id)
 		) {
@@ -509,8 +485,8 @@ function drawInventory() {
     	ctx.fillStyle = "#000000";
     	ctx.globalAlpha = 0.4;
     	ctx.roundRect(
-    	    window.innerWidth / 2 - boxWidth / 2,
-    	    window.innerHeight - boxHeight,
+    	    ww() / 2 - boxWidth / 2,
+    	    wh() - boxHeight,
     	    boxWidth,
     	    boxHeight + 20,
     	    7
@@ -519,15 +495,15 @@ function drawInventory() {
 
     	// stop moving text
     	florrText(stopText, 11.9,
-    	    { x: window.innerWidth / 2, y: window.innerHeight - 15 }, ctx);
+    	    { x: ww() / 2, y: wh() - 15 }, ctx);
 	}
 
     // inventory boxes (+ detecting if cursor is hovering over them)
     let x;
-    x = window.innerWidth / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
+    x = ww() / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
 
     if (me.info.inventory.length === 0) return;
-	let y = window.innerHeight - 81;
+	let y = wh() - 81;
     for (let i = 0; i < 8; i++) {
 
 		let id = me.info.inventory[i];
@@ -569,9 +545,9 @@ function drawInventory() {
     }
 
     // hotbar
-    x = window.innerWidth / 2 - (hbWidth * me.info.hotbar.length / 2) - 
+    x = ww() / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
-	y = window.innerHeight - 144;
+	y = wh() - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
 
 		let id = me.info.hotbar[i];
@@ -628,11 +604,11 @@ function drawInventory() {
 
     // drawing numbers
     if (numInfo) {
-        x = window.innerWidth / 2 - (hbWidth * me.info.hotbar.length / 2) - 
+        x = ww() / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbWidth / 2);
 
         for (let i = 0; i < me.info.hotbar.length; i++) {
-            florrText(`[${i + 1}]`, 14, { x: x, y: window.innerHeight - 157 }, ctx);
+            florrText(`[${i + 1}]`, 14, { x: x, y: wh() - 157 }, ctx);
             x += spaceBetweenHB + hbWidth;
         }
     }

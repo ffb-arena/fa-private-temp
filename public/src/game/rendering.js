@@ -1,13 +1,13 @@
 // calculates position relative to you
 function calculateRelPos(pos, axis) {
-    if (axis === "x") return window.innerWidth / 2 + pos * res - me.info.x * res;
-    return window.innerHeight / 2 - pos * res + me.info.y * res;
+    if (axis === "x") return ww() / 2 + pos * res - me.info.x * res;
+    return wh() / 2 - pos * res + me.info.y * res;
 }
 
 // clears everything
 function clear(ctx) {
     // clearing canvas
-    ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.clearRect(0, 0, ww(), wh());
 }
 
 // ~~Stole~~ borrowed this from stackoverflow.
@@ -31,19 +31,19 @@ function drawGrid() {
     ctx.lineWidth = res / 4;
     let bruh = gridSpace * res;
 
-    gridSetter = (window.innerWidth / 2 - me.info.x * res % bruh) % bruh - 25 * res;
-    while (gridSetter <= window.innerWidth) {
+    gridSetter = (ww() / 2 - me.info.x * res % bruh) % bruh - 25 * res;
+    while (gridSetter <= ww()) {
         ctx.beginPath();
         ctx.moveTo(gridSetter, 0);
-        ctx.lineTo(gridSetter, window.innerHeight);
+        ctx.lineTo(gridSetter, wh());
         ctx.stroke();
         gridSetter += bruh;
     }
-    gridSetter = (window.innerHeight / 2 + me.info.y * res % bruh) % bruh - 25 * res;
-    while (gridSetter <= window.innerHeight) {
+    gridSetter = (wh() / 2 + me.info.y * res % bruh) % bruh - 25 * res;
+    while (gridSetter <= wh()) {
         ctx.beginPath();
         ctx.moveTo(0, gridSetter);
-        ctx.lineTo(window.innerWidth, gridSetter);
+        ctx.lineTo(ww(), gridSetter);
         ctx.stroke();
         gridSetter += bruh;
     }
@@ -52,35 +52,35 @@ function drawGrid() {
 
 function drawMap() {
     ctx.fillStyle = "#1ea761";
-    ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    ctx.fillRect(0, 0, ww(), wh());
 
     // drawing stuff outside map
     ctx.fillStyle = "#1b9657";
-    if (me.info.x < window.innerWidth / 2 / res) {
-	    ctx.fillRect(0, 0, (window.innerWidth / 2 / res - me.info.x - 25) * res, window.innerHeight);
+    if (me.info.x < ww() / 2 / res) {
+	    ctx.fillRect(0, 0, (ww() / 2 / res - me.info.x - 25) * res, wh());
     }
-    if (me.info.y < window.innerHeight / 2 / res) {
+    if (me.info.y < wh() / 2 / res) {
 	    ctx.fillRect(
 		    0, 
-		    window.innerHeight - ((window.innerHeight / 2 / res - me.info.y - 25) * res), 
-		    window.innerWidth, 
-            (window.innerHeight / 2 / res - me.info.y - 25) * res
+		    wh() - ((wh() / 2 / res - me.info.y - 25) * res), 
+		    ww(), 
+            (wh() / 2 / res - me.info.y - 25) * res
 	    );
     }
-    if (me.info.x > me.roomInfo.x - window.innerWidth / 2 / res) {
+    if (me.info.x > me.roomInfo.x - ww() / 2 / res) {
 	    ctx.fillRect(
-		    window.innerWidth - ((window.innerWidth / 2 / res - 25 - (me.roomInfo.x - me.info.x)) * res), 
+		    ww() - ((ww() / 2 / res - 25 - (me.roomInfo.x - me.info.x)) * res), 
 		    0, 
-		    (window.innerWidth / 2 / res + 25 - (me.roomInfo.x - me.info.x)) * res, 
-            window.innerHeight
+		    (ww() / 2 / res + 25 - (me.roomInfo.x - me.info.x)) * res, 
+            wh()
 	    )
     }
-    if (me.info.y > me.roomInfo.y - window.innerHeight / 2 / res) {
+    if (me.info.y > me.roomInfo.y - wh() / 2 / res) {
 	    ctx.fillRect(
 		    0, 
 		    0, 
-		    window.innerWidth, 
-		    (me.info.y - 25 - (me.roomInfo.y - window.innerHeight / 2 / res)) * res
+		    ww(), 
+		    (me.info.y - 25 - (me.roomInfo.y - wh() / 2 / res)) * res
 	    );
     }
 }
@@ -88,8 +88,8 @@ function drawMap() {
 function drawHelper() {
     if (!me.settings.helper || me.settings.keyboard) return;
 	const relPos = {
-		x: me.info.mouseX - window.innerWidth / 2,
-		y: me.info.mouseY - window.innerHeight / 2
+		x: me.info.mouseX - ww() / 2,
+		y: me.info.mouseY - wh() / 2
 	};
     const dist = Math.sqrt(relPos.x ** 2 + relPos.y ** 2);
 	ctx.globalAlpha = Math.min(dist / res / 1700, 0.2);
@@ -97,7 +97,7 @@ function drawHelper() {
 
 	const angle = Math.atan2(relPos.y, relPos.x);
     ctx.beginPath();
-    ctx.moveTo(window.innerWidth / 2 + Math.cos(angle) * 30, window.innerHeight / 2 + Math.sin(angle) * 30);
+    ctx.moveTo(ww() / 2 + Math.cos(angle) * 30, wh() / 2 + Math.sin(angle) * 30);
     ctx.lineTo(me.info.mouseX, me.info.mouseY);
     ctx.stroke();
 
@@ -111,8 +111,8 @@ function drawMinimap() {
     ctx.fillStyle = "#30443a";
     ctx.beginPath();
     ctx.roundRect(
-        window.innerWidth - mmWidth - 56 * res, 
-        window.innerHeight - mmHeight - 56 * res,
+        ww() - mmWidth - 56 * res, 
+        wh() - mmHeight - 56 * res,
         mmWidth + 12 * res, 
         mmHeight + 12 * res, 
         6
@@ -122,8 +122,8 @@ function drawMinimap() {
     // Interior
     ctx.fillStyle = "#1ea660";
     ctx.roundRect(
-        window.innerWidth - mmWidth - 50 * res, 
-        window.innerHeight - mmHeight - 50 * res, 
+        ww() - mmWidth - 50 * res, 
+        wh() - mmHeight - 50 * res, 
         mmWidth, 
         mmHeight, 
         6
@@ -133,8 +133,8 @@ function drawMinimap() {
 
     // Yellow circle
     let circlePos = {
-        x: (window.innerWidth - 50 * res - (mmWidth + circlePlane.x) / 2) + (me.info.x / me.roomInfo.x * circlePlane.x),
-        y: (window.innerHeight - 50 * res - (mmHeight + circlePlane.y) / 2) + (circlePlane.y - me.info.y / me.roomInfo.y * circlePlane.y)
+        x: (ww() - 50 * res - (mmWidth + circlePlane.x) / 2) + (me.info.x / me.roomInfo.x * circlePlane.x),
+        y: (wh() - 50 * res - (mmHeight + circlePlane.y) / 2) + (circlePlane.y - me.info.y / me.roomInfo.y * circlePlane.y)
     }
 
     ctx.beginPath();
@@ -165,8 +165,8 @@ function renderPlayer(data, i) {
         data.maxHP
     );
     if (!i) {
-        p.x = window.innerWidth / 2;
-        p.y = window.innerHeight / 2;
+        p.x = ww() / 2;
+        p.y = wh() / 2;
     }
     p.draw();
 }
@@ -183,18 +183,18 @@ function drawPerformance() {
         ctx.fillStyle = "#ffffff";
         ctx.fillText(
             "Avg/Min/Max", 
-            window.innerWidth * 28.5/30, 
-            window.innerHeight * 1/30
+            ww() * 28.5/30, 
+            wh() * 1/30
         );
         ctx.fillText(
             `Ping: ${round(performance.ping.ping[0], 2)}/${performance.ping.ping[1]}/${performance.ping.ping[2]}`, 
-            window.innerWidth * 28.5/30, 
-            window.innerHeight * 1.8/30
+            ww() * 28.5/30, 
+            wh() * 1.8/30
         );
         ctx.fillText(
             `FPS: ${round(performance.fps.fps[0], 1)}/${round(performance.fps.fps[1], 1)}/${round(performance.fps.fps[2], 1)}`, 
-            window.innerWidth * 28.5/30, 
-            window.innerHeight * 2.6/30
+            ww() * 28.5/30, 
+            wh() * 2.6/30
         );
         ctx.globalAlpha = 1;
     }
