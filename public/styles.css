@@ -126,6 +126,14 @@ body {
 	height: 100%;
 }
 
+/* discord, florr, github buttons */
+.button {
+	float: right;
+	margin-right: 4px;
+	margin-top: 4px;
+	width: 50px;
+	height: 50px;
+}
 
 .list{
     background-color: #5a9fdb;
@@ -184,6 +192,7 @@ input[type=number] {
     transform: translate(-50%, -50%);
 }
 #subtitle {
+    font-family: ubuntu;
     position: fixed;
     height: 200px;
 
@@ -530,7 +539,7 @@ input[type=number] {
     color: #ffffff;
     -webkit-text-stroke: 0.7px black;
 }
-#petal-canvas {
+#petal-dragging-canvas {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -711,4 +720,10 @@ input[type=number] {
     position: absolute;
     -webkit-text-stroke: 0.5px black;
     transform: translate(-50%, 0);
+}
+
+#petal-background {
+    background-color: Transparent;
+    position: fixed;
+    z-index: -1;
 }

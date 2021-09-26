@@ -1,4 +1,5 @@
-regex = str => new RegExp(`(?=[\\w]|'|")${str}(?![\\w]|'|")`, "g"); 
+const ors = "|'|`|\"";
+const regex = str => new RegExp(`(?=[\\w]${ors})${str}(?![\\w]${ors})`, "g"); 
 const macros = [
 	[regex("wh"), "window.innerHeight"],
 	[regex("ww"), "window.innerWidth"],

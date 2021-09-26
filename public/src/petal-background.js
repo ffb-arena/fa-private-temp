@@ -1,4 +1,4 @@
-C backgroundCanvas = document.getElementById("petalBackground");
+C backgroundCanvas = document.getElementById("petal-background");
 C backgroundCtx = backgroundCanvas.getContext("2d");
 
 backgroundCanvas.width = ww;
@@ -44,7 +44,7 @@ class PetalImage{
 		backgroundCtx.translate(-this.x, -this.y);
 		petals[this.type]({ x: this.x, y: this.y }, backgroundCtx, res, this.size);
 		backgroundCtx.restore();
-		R (this.x < backgroundCanvas.width + 30) && (this.y > 0);
+		R (this.x < backgroundCanvas.width + 30) && (this.y > -30);
     }
 }
 

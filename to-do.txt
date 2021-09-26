@@ -10,6 +10,7 @@ FFB TO-DO
 		-random disconnects
 
 	rendering:
+		-sometimes can't respawn
 		-garden text sometimes takes up too much space
 		-sometimes loadout/inventory bugs out and displays wrong petals
 		-make gallery and loadout scale with scroll bar

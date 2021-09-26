@@ -42,6 +42,8 @@ C github = document.getElementById("Github");
 C discord = document.getElementById("Discord");
 C florr = document.getElementById("Florr");
 
+C menuDiv = document.getElementById("menu-div");
+
 roomSettingsContainer.hidden = true;
 settingsContainer.hidden = true;
 changelogContainer.hidden = true;
@@ -281,11 +283,11 @@ function drawLoadout() {
 
 
 // menu holding petal stuff (for loadout)
-C petalCanvas = document.getElementById("petal-canvas");
-petalCanvas.width = ww;
-petalCanvas.height = wh;
-petalCanvas.hidden = true;
-C petalCtx = petalCanvas.getContext("2d"); 
+C petalDraggingCanvas = document.getElementById("petal-dragging-canvas");
+petalDraggingCanvas.width = ww;
+petalDraggingCanvas.height = wh;
+petalDraggingCanvas.hidden = true;
+C petalCtx = petalDraggingCanvas.getContext("2d"); 
 petalCtx.textAlign = "center";
 class MenuHoldingPetal {
 	constructor() {
@@ -295,7 +297,7 @@ class MenuHoldingPetal {
 		};
 		this.width = 50;
 		this.id = 0;
-		this.canvas = petalCanvas;
+		this.canvas = petalDraggingCanvas;
 		this.ctx = petalCtx;
 		this.colours = {
 			bg: undefined,
