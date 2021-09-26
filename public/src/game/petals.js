@@ -1,6 +1,6 @@
 // instructions to render each petal
 // the param p is the petal, from the Petal class (src/player/petal.js relative to dir root)
-const petals = {
+C petals = {
 
 	// haha's dev petal
 	"-3": (p, c, ratio=1, radius) => {
@@ -208,7 +208,7 @@ const petals = {
 };
 
 // rarity colours
-const rarityColours = {
+C rarityColours = {
 	"empty":   { bg: "#dedede", fg: "#ffffff" },
     "common":  { bg: "#68c058", fg: "#82ec71" },
     "unusual": { bg: "#ceba4a", fg: "#ffe65d" },
@@ -217,7 +217,7 @@ const rarityColours = {
 };
 
 // which petals are which rarity
-const rarities = {
+C rarities = {
 	"-3": "haha",
     0:    "empty",
     1:    "common",
@@ -228,7 +228,7 @@ const rarities = {
     13:   "rare"
 };
 
-const petalNames = {
+C petalNames = {
 	"-3": "haha",
 	0:    "",
     1:    "Basic",
@@ -239,7 +239,7 @@ const petalNames = {
     13:   "Faster"
 };
 
-const rarityTiers = {
+C rarityTiers = {
 	"common":    0,
 	"unusual":   1,
 	"rare":      2,
@@ -248,7 +248,7 @@ const rarityTiers = {
 	"unique":    5
 };
 
-const rarityChances = {
+C rarityChances = {
 	"common":    0.40,
 	"unusual":   0.70,
 	"rare":      0.85,	

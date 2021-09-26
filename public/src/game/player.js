@@ -10,12 +10,12 @@ class Player {
     }
 
     _drawHealthBar() {
-        const percent = Math.max(this.hp / this.maxHP, 0);
-        if (percent === 1) return;
+        C percent = Math.max(this.hp / this.maxHP, 0);
+        if (percent === 1) R;
 
         ctx.fillStyle = "#000000";
-        const width = 65 * res;
-        const height = 8 * res;
+        C width = 65 * res;
+        C height = 8 * res;
         ctx.fillRect(
             this.x - width / 2,
             this.y + 40 * res,
@@ -23,7 +23,7 @@ class Player {
             height
         );
 
-        const border = 1.5 * res;
+        C border = 1.5 * res;
         ctx.fillStyle = "#23d400";
         ctx.fillRect(
             this.x - (width / 2) + border,

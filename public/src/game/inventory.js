@@ -1,18 +1,18 @@
-const lerp = (begin, end, amount) => begin + ((end - begin) * amount);
+C lerp = (begin, end, amount) => begin + ((end - begin) * amount);
 // returns a function that returns the left side of slot i
 function getXPos(i, hb, xOffset=0) {
-	const bar = hb ? me.info.hotbar : me.info.inventory;
-	const width = hb ? hbWidth : invWidth;
-	const spacing = hb ? spaceBetweenHB : spaceBetweenInv;
-	const newNum = i - bar.length / 2;
-	return () => ww / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
+	C bar = hb ? me.info.hotbar : me.info.inventory;
+	C width = hb ? hbWidth : invWidth;
+	C spacing = hb ? spaceBetweenHB : spaceBetweenInv;
+	C newNum = i - bar.length / 2;
+	R () => ww / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
 }
-const getYPos = (hb, offset=0) => { const y = hb ? 144 : 81; return () => wh - y + offset; };
+C getYPos = (hb, offset=0) => { C y = hb ? 144 : 81; R () => wh - y + offset; };
 
 // farthest right corner on a side (see HotbarReload._whichSide()), relative to centre, using canvas coords
-const corners = [{ x: 0.5,  y: -0.5 }, { x: 0.5,  y: 0.5 }, { x: -0.5, y: 0.5 }, { x: -0.5, y: -0.5 }];
+C corners = [{ x: 0.5,  y: -0.5 }, { x: 0.5,  y: 0.5 }, { x: -0.5, y: 0.5 }, { x: -0.5, y: -0.5 }];
 // angles to corners above
-const angles = [2 * Math.PI * 1/8, 2 * Math.PI * 3/8, 2 * Math.PI * 5/8, 2 * Math.PI * 7/8];
+C angles = [2 * Math.PI * 1/8, 2 * Math.PI * 3/8, 2 * Math.PI * 5/8, 2 * Math.PI * 7/8];
 
 // rendering reloading hotbar slots
 class HotbarReload {
@@ -31,41 +31,41 @@ class HotbarReload {
 
     // how far a line will go from the centre of a square to an edge
     static lineSquare(angle, squareWidth) {
-        const adjacent = squareWidth / 2;
-        let modAngle = angle % (Math.PI / 2);
+        C adjacent = squareWidth / 2;
+        L modAngle = angle % (Math.PI / 2);
         if (modAngle > Math.PI / 4) modAngle = Math.PI / 2 - modAngle;
-        const opposite = adjacent * Math.tan(modAngle);
-        return Math.sqrt(opposite * opposite + adjacent * adjacent); 
+        C opposite = adjacent * Math.tan(modAngle);
+        R Math.sqrt(opposite * opposite + adjacent * adjacent); 
     }
 
     // what side of a square an angle is on
     // top is 0, right is 1 etc.
-    static whichSide(angle) { const side = angle + (Math.PI / 4); return Math.floor(side / (Math.PI / 2)) % 4; }
+    static whichSide(angle) { C side = angle + (Math.PI / 4); R Math.floor(side / (Math.PI / 2)) % 4; }
 
 	update(c, posParam, widthParam) {
-		if (this._totalTime === 0) return;
-        if (this._time <= 0) return;
+		if (this._totalTime === 0) R;
+        if (this._time <= 0) R;
 
-        const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
+        C timeSinceLastFrame = Date.now() - this._lastUpdateTime;
 		this._time -= timeSinceLastFrame;
 		this._angle = (this._angle + (timeSinceLastFrame / this._timePerRotation * 2 * Math.PI)) % (2 * Math.PI);
         this._angleToSecondLine += this._angleAddPerMs * timeSinceLastFrame;
 
-		const pos = posParam || {
+		C pos = posParam || {
 			x: this._pos.x() + this._width / 2,
 			y: this._pos.y() + this._width / 2
 		};
-		const width = widthParam || this._width
+		C width = widthParam || this._width
         this._lastUpdateTime = Date.now();
 
-        const angle2 = this._angle + this._angleToSecondLine;
-		const length = HotbarReload.lineSquare(this._angle, width);
-        const length2 = HotbarReload.lineSquare(angle2, width);
+        C angle2 = this._angle + this._angleToSecondLine;
+		C length = HotbarReload.lineSquare(this._angle, width);
+        C length2 = HotbarReload.lineSquare(angle2, width);
 
         c.fillStyle = "#000000";
         c.globalAlpha = 0.4;
 
-        let angleChecking = angle2;
+        L angleChecking = angle2;
 
 		c.beginPath();
         c.moveTo(pos.x, pos.y);
@@ -77,7 +77,7 @@ class HotbarReload {
             pos.y + corners[HotbarReload.whichSide(angleChecking)].y * width);
 
         if (this._angleToSecondLine < Math.PI) {
-            const side = HotbarReload.whichSide(angleChecking);
+            C side = HotbarReload.whichSide(angleChecking);
             c.lineTo(
                 pos.x + corners[side].x * width, 
                 pos.y + corners[side].y * width);
@@ -85,7 +85,7 @@ class HotbarReload {
             angleChecking = angles[side];
         }
         while (HotbarReload.whichSide(this._angle) !== HotbarReload.whichSide(angleChecking)) {
-            const side = HotbarReload.whichSide(angleChecking);
+            C side = HotbarReload.whichSide(angleChecking);
             c.lineTo(
                 pos.x + corners[side].x * width, 
                 pos.y + corners[side].y * width);
@@ -127,8 +127,8 @@ class SlidingPetal {
     }
 
     update(c, drawReload=false) {
-        let doneSliding;
-        const timeSinceLastFrame = Date.now() - this._lastUpdateTime;
+        L doneSliding;
+        C timeSinceLastFrame = Date.now() - this._lastUpdateTime;
         this._lastUpdateTime = Date.now();
 
         this._timeRemaining -= timeSinceLastFrame;
@@ -137,15 +137,15 @@ class SlidingPetal {
             doneSliding = true;
         } else doneSliding = false;
 
-        const colours = rarityColours[rarities[this.petalID]];
-        if (!colours) return;
+        C colours = rarityColours[rarities[this.petalID]];
+        if (!colours) R;
 
-        const amount = 1 - this._timeRemaining / this._totalTime;
+        C amount = 1 - this._timeRemaining / this._totalTime;
 
-        const width = lerp(this._startingWidth, this._targetWidth, amount);
-        const x = lerp(this.startingPos.x(), this.targetPos.x(), amount);
-        const y = lerp(this.startingPos.y(), this.targetPos.y(), amount);
-		let reloadSettings, invSlot;
+        C width = lerp(this._startingWidth, this._targetWidth, amount);
+        C x = lerp(this.startingPos.x(), this.targetPos.x(), amount);
+        C y = lerp(this.startingPos.y(), this.targetPos.y(), amount);
+		L reloadSettings, invSlot;
 
 		if (drawReload) {
 			reloadSettings = {
@@ -158,17 +158,17 @@ class SlidingPetal {
         drawPetalIcon({ x: x, y: y }, petalNames[this.petalID], this.petalID, width,
             colours.bg, colours.fg, 0.9, c, invSlot, reloadSettings);
 
-        return doneSliding;
+        R doneSliding;
     }
 }
 
 
-let hotbarReloads = [];
-let belowSlidingPetals = [];
-let aboveSlidingPetals = [];
+L hotbarReloads = [];
+L belowSlidingPetals = [];
+L aboveSlidingPetals = [];
 
 // percent of petals icons that are foreground (not border)
-const fgPercent = 13/16;
+C fgPercent = 13/16;
 function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour, globalAlpha, c, invSlot, reloadSettings) {
     c.globalAlpha = globalAlpha;
 
@@ -179,7 +179,7 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
     c.fill();
 
     // foreground square
-    const newWidth = width * fgPercent;
+    C newWidth = width * fgPercent;
     c.fillStyle = foregroundColour;
     c.strokeStyle = foregroundColour;
     c.roundRect(pos.x + (width - newWidth) / 2, pos.y + (width - newWidth) / 2, newWidth, newWidth, newWidth / 30);
@@ -205,34 +205,34 @@ function drawPetalIcon(pos, name, id, width, backgroundColour, foregroundColour,
 }
 
 
-const changeSpeed = 0.08;
+C changeSpeed = 0.08;
 
-const minBoxWidth = 240;
-const minBoxHeight = 28
+C minBoxWidth = 240;
+C minBoxHeight = 28
 // 530 and 160 are the maxes
 // 508 in game, but too small here
 // and I'm too lazy to go in game and see how it handles it
-const maxBoxWidthAdd = 530 - 240;
-const maxBoxHeightAdd = 160 - 28;
-let boxWidth = minBoxWidth;
-let boxHeight = minBoxHeight;
-let sizeMult = 0;
+C maxBoxWidthAdd = 530 - 240;
+C maxBoxHeightAdd = 160 - 28;
+L boxWidth = minBoxWidth;
+L boxHeight = minBoxHeight;
+L sizeMult = 0;
 
 // whether to show the numbers above the petals
-let numInfo = false;
-let selectedPetal = 0;
-let unselectTime = undefined;
+L numInfo = false;
+L selectedPetal = 0;
+L unselectTime = undefined;
 
 // widths are total width, with outlines
 // inventory vars (petals not in use)
-const invWidth = 40;
-const spaceBetweenInv = 8;
+C invWidth = 40;
+C spaceBetweenInv = 8;
 
 // hotbar vars (petals in use)
-const hbWidth = 55;
-const spaceBetweenHB = 8;
+C hbWidth = 55;
+C spaceBetweenHB = 8;
 
-const holdingWidth = 70; // width of petals being held
+C holdingWidth = 70; // width of petals being held
 
 class HoldingPetal {
 	constructor() {
@@ -261,7 +261,7 @@ class HoldingPetal {
 	}
 
 	draw() {
-		const colours = rarityColours[rarities[this.id]];
+		C colours = rarityColours[rarities[this.id]];
 		drawPetalIcon({ x: this.pos.x, y: this.pos.y },
 			petalNames[this.id], this.id, this.width,
 			colours.bg, colours.fg, 0.9, ctx, this.n,
@@ -278,40 +278,40 @@ class HoldingPetal {
 	}
 
 	release() {
-		if (!this.id) return;
+		if (!this.id) R;
 
-		const xPercent = this.pos.x / ww;
-		const yPercent = this.pos.y / wh;
-		const holdingRN = {
+		C xPercent = this.pos.x / ww;
+		C yPercent = this.pos.y / wh;
+		C holdingRN = {
 			x: () => xPercent * ww, 
 			y: () => yPercent * wh 
 		};
 
-		const holdingOGSpot = {
+		C holdingOGSpot = {
 			x: getXPos(this.n, this.fromHotbar),
 			y: getYPos(this.fromHotbar),
 			n: this.n 
 		};
 
-		let isSwap = !!this.snapping;
-		let fromCooldown = this.fromHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;
-		let toCooldown = this.snapInHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;	
+		L isSwap = !!this.snapping;
+		L fromCooldown = this.fromHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;
+		L toCooldown = this.snapInHotbar ? me.info.hotbarCooldowns : me.info.inventoryCooldowns;	
 		if (fromCooldown[this.n] > Date.now() || toCooldown[this.snapN] > Date.now()) isSwap = false;
 
 		if (isSwap) {
 			// OMG IT'S A PETAL SWAP!!!!!
 			ws.send(JSON.stringify(["e", this.n, this.fromHotbar, this.snapN, this.snapInHotbar]));
 
-			const targetBar = this.snapInHotbar ? me.info.hotbar : me.info.inventory;
+			C targetBar = this.snapInHotbar ? me.info.hotbar : me.info.inventory;
 
-			let holdingSliding = this.snapInHotbar ? aboveSlidingPetals : belowSlidingPetals;
+			L holdingSliding = this.snapInHotbar ? aboveSlidingPetals : belowSlidingPetals;
 
-			const holdingTarget = {
+			C holdingTarget = {
 				x: getXPos(this.snapN, this.snapInHotbar),
 				y: getYPos(this.snapInHotbar),
 				n: this.snapN
 			};
-			const holdingTargetWidth = this.snapInHotbar ? hbWidth : invWidth;
+			C holdingTargetWidth = this.snapInHotbar ? hbWidth : invWidth;
 
 			// for the holding petal
 			holdingSliding[this.snapN] = new SlidingPetal(300, holdingRN, holdingTarget, 
@@ -325,8 +325,8 @@ class HoldingPetal {
 					me.info.inventory[this.n] = 0;
 				}	
 			} else {
-				let otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
-				const OGHoldingWidth = this.fromHotbar ? hbWidth : invWidth;
+				L otherSliding = this.fromHotbar ? aboveSlidingPetals : belowSlidingPetals;
+				C OGHoldingWidth = this.fromHotbar ? hbWidth : invWidth;
 				otherSliding[this.n] = new SlidingPetal(300, holdingTarget, holdingOGSpot, 
 					holdingTargetWidth, OGHoldingWidth, targetBar[this.snapN]);
 			}
@@ -338,16 +338,16 @@ class HoldingPetal {
 			// normal boring release
 
 			// making it zoom back to its spot
-			const endWidth = this.fromHotbar ? hbWidth : invWidth;
+			C endWidth = this.fromHotbar ? hbWidth : invWidth;
 
 
-			const distance = Math.sqrt(
+			C distance = Math.sqrt(
 				Math.abs(this.pos.x - holdingOGSpot.x()) ** 2
 				+
 				Math.abs(this.pos.y - holdingOGSpot.y()) ** 2
 			);
 
-			const slider = new SlidingPetal(distance * 0.5,
+			C slider = new SlidingPetal(distance * 0.5,
 				holdingRN, holdingOGSpot,
 				this.width, endWidth, this.id);
 
@@ -362,16 +362,16 @@ class HoldingPetal {
 	}
 }
 // petal that is being held
-let holdingPetal = new HoldingPetal();
+L holdingPetal = new HoldingPetal();
 
 // if the player is stopped or not
-let playerStopped = false;
+L playerStopped = false;
 
 // switches petals
 function swapPetals(invSlot, hotbarSlot) {
 	ws.send(JSON.stringify(["d", invSlot, hotbarSlot]));
-	let invID = me.info.inventory[invSlot];
-	let hotbarID = me.info.hotbar[hotbarSlot];
+	L invID = me.info.inventory[invSlot];
+	L hotbarID = me.info.hotbar[hotbarSlot];
 
 	if (invID === -1) {
 		// pain
@@ -385,13 +385,13 @@ function swapPetals(invSlot, hotbarSlot) {
 		hotbarID = holdingPetal.id;
 	}
 	
-	const invInfo = {
+	C invInfo = {
 	    x: getXPos(invSlot, false),
 	    y: getYPos(false),
 	    n: invSlot
 	};
 	
-	const hbInfo = {
+	C hbInfo = {
 	    x: getXPos(hotbarSlot, true),
 	    y: getYPos(true),
 	    n: hotbarSlot
@@ -448,7 +448,7 @@ function swapPetals(invSlot, hotbarSlot) {
 
 // draws inventory and stuff
 function drawInventory() {
-	let pointerCursor = !!holdingPetal.id; // if the cursor should be a pointer or not
+	L pointerCursor = !!holdingPetal.id; // if the cursor should be a pointer or not
 
 	// checks if should automatically unselect
 	if (Date.now() > unselectTime) {
@@ -499,14 +499,14 @@ function drawInventory() {
 	}
 
     // inventory boxes (+ detecting if cursor is hovering over them)
-    let x;
+    L x;
     x = ww / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
 
-    if (me.info.inventory.length === 0) return;
-	let y = wh - 81;
-    for (let i = 0; i < 8; i++) {
+    if (me.info.inventory.length === 0) R;
+	L y = wh - 81;
+    for (L i = 0; i < 8; i++) {
 
-		let id = me.info.inventory[i];
+		L id = me.info.inventory[i];
 
 		if (id >= 0) {
 			if (pointInBox(
@@ -530,7 +530,7 @@ function drawInventory() {
 		}
 
 		id = Math.max(id, 0);
-       	const colours = rarityColours[rarities[id]];
+       	C colours = rarityColours[rarities[id]];
        	drawPetalIcon({ x: x, y: y },
       		petalNames[id], id, 
 			invWidth, colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx);
@@ -548,9 +548,9 @@ function drawInventory() {
     x = ww / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
 	y = wh - 144;
-    for (let i = 0; i < me.info.hotbar.length; i++) {
+    for (L i = 0; i < me.info.hotbar.length; i++) {
 
-		let id = me.info.hotbar[i];
+		L id = me.info.hotbar[i];
 		if (id >= 0) {
 			if (pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY },
@@ -575,7 +575,7 @@ function drawInventory() {
 		// if the petal is -1 or -2, render an empty slot
 		// (-1 = sliding, -2 = holding)
 		id = Math.max(id, 0);
-        const colours = rarityColours[rarities[id]];
+        C colours = rarityColours[rarities[id]];
         drawPetalIcon({ x: x, y: y },
             petalNames[id],	id, hbWidth,
             colours.bg, colours.fg, id === 0 ? 0.5 : 0.9, ctx, id === 0 ? undefined : i);
@@ -584,7 +584,7 @@ function drawInventory() {
     }
 
     // drawing the transitioning petals
-    for (let i = 0; i < belowSlidingPetals.length; i++) {
+    for (L i = 0; i < belowSlidingPetals.length; i++) {
         if (belowSlidingPetals[i]) {
             if (belowSlidingPetals[i].update(ctx)) {
                 me.info.inventory[belowSlidingPetals[i].targetPos.n] = belowSlidingPetals[i].petalID;
@@ -592,7 +592,7 @@ function drawInventory() {
             }
         }
     }
-    for (let i = 0; i < 8; i++) {
+    for (L i = 0; i < 8; i++) {
         if (aboveSlidingPetals[i]) {
 			// updating with reload
             if (aboveSlidingPetals[i].update(ctx, true)) {
@@ -607,7 +607,7 @@ function drawInventory() {
         x = ww / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbWidth / 2);
 
-        for (let i = 0; i < me.info.hotbar.length; i++) {
+        for (L i = 0; i < me.info.hotbar.length; i++) {
             florrText(`[${i + 1}]`, 14, { x: x, y: wh - 157 }, ctx);
             x += spaceBetweenHB + hbWidth;
         }

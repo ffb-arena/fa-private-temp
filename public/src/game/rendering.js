@@ -1,7 +1,7 @@
 // calculates position relative to you
 function calculateRelPos(pos, axis) {
-    if (axis === "x") return ww / 2 + pos * res - me.info.x * res;
-    return wh / 2 - pos * res + me.info.y * res;
+    if (axis === "x") R ww / 2 + pos * res - me.info.x * res;
+    R wh / 2 - pos * res + me.info.y * res;
 }
 
 // clears everything
@@ -22,14 +22,14 @@ CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
     this.arcTo(x,   y+h, x,   y,   r);
     this.arcTo(x,   y,   x+w, y,   r);
     this.closePath();
-    return this;
+    R this;
 }
 
 function drawGrid() {
     ctx.strokeStyle = "#000000";
     ctx.globalAlpha = 0.5;
     ctx.lineWidth = res / 4;
-    let bruh = gridSpace * res;
+    L bruh = gridSpace * res;
 
     gridSetter = (ww / 2 - me.info.x * res % bruh) % bruh - 25 * res;
     while (gridSetter <= ww) {
@@ -86,16 +86,16 @@ function drawMap() {
 }
 
 function drawHelper() {
-    if (!me.settings.helper || me.settings.keyboard) return;
-	const relPos = {
+    if (!me.settings.helper || me.settings.keyboard) R;
+	C relPos = {
 		x: me.info.mouseX - ww / 2,
 		y: me.info.mouseY - wh / 2
 	};
-    const dist = Math.sqrt(relPos.x ** 2 + relPos.y ** 2);
+    C dist = Math.sqrt(relPos.x ** 2 + relPos.y ** 2);
 	ctx.globalAlpha = Math.min(dist / res / 1700, 0.2);
     ctx.lineWidth = 17.5 * res;
 
-	const angle = Math.atan2(relPos.y, relPos.x);
+	C angle = Math.atan2(relPos.y, relPos.x);
     ctx.beginPath();
     ctx.moveTo(ww / 2 + Math.cos(angle) * 30, wh / 2 + Math.sin(angle) * 30);
     ctx.lineTo(me.info.mouseX, me.info.mouseY);
@@ -132,7 +132,7 @@ function drawMinimap() {
     ctx.closePath();
 
     // Yellow circle
-    let circlePos = {
+    L circlePos = {
         x: (ww - 50 * res - (mmWidth + circlePlane.x) / 2) + (me.info.x / me.roomInfo.x * circlePlane.x),
         y: (wh - 50 * res - (mmHeight + circlePlane.y) / 2) + (circlePlane.y - me.info.y / me.roomInfo.y * circlePlane.y)
     }
@@ -155,7 +155,7 @@ function drawMinimap() {
 }
 
 function renderPlayer(data, i) {
-    let p = new Player(
+    L p = new Player(
         data.name, 
         calculateRelPos(data.x, "x"), 
         calculateRelPos(data.y, "y"), 
@@ -172,8 +172,8 @@ function renderPlayer(data, i) {
 }
 
 function round(number, decimals) {
-    let mult = 10 * decimals;
-    return(Math.round(number * mult) / mult);
+    L mult = 10 * decimals;
+    R Math.round(number * mult) / mult;
 }
 
 function drawPerformance() {
@@ -205,7 +205,7 @@ function drawDebug() {
     ctx.lineWidth = res * 2;
     ctx.strokeStyle = "#ff0000";
     ctx.fillStyle = "#ff0000";
-    let centre;
+    L centre;
     debug.forEach(debugInfo => {
         switch (debugInfo[0]) {
 

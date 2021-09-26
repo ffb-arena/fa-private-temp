@@ -1,5 +1,5 @@
-const wsUrl = `ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`;
-const ws = new WebSocket(wsUrl === "ws://" ? "ws://localhost:9700" : wsUrl);
+C wsUrl = `ws${location.protocol === "https:" ? "s" : ""}://${window.location.hostname}${window.location.port ? ":" : ""}${window.location.port}`;
+C ws = new WebSocket(wsUrl === "ws://" ? "ws://localhost:9700" : wsUrl);
 ws.addEventListener("open", () => {
     console.log("Websocket Sucessfully Opened");
 	loads[0] = true;
@@ -10,12 +10,12 @@ window.c = str => ws.send(JSON.stringify(["f", str]));
 
 // When messages are recieved
 ws.onmessage = message => {
-    let msg = JSON.parse(message.data);
+    L msg = JSON.parse(message.data);
     switch (msg[0]) {
 
         // Creating/joining rooms
         case "a":
-            let msgRoom = msg[3];
+            L msgRoom = msg[3];
             switch (msg[1]) {
 
                 // Creating rooms
@@ -35,7 +35,7 @@ ws.onmessage = message => {
                     nname.hidden = false;
 
                     if (msg[2] === "a") {
-                        let text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
+                        L text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
                         ctx.font = "20px Ubuntu";
                         roomContainer.style.width = `${ctx.measureText(text).width}px`
                         roomID.innerHTML = text;
@@ -64,7 +64,7 @@ ws.onmessage = message => {
                     } else {
                         back.hidden = true;
 
-                        const text = `error: room "${msgRoom}" already exists`
+                        C text = `error: room "${msgRoom}" already exists`
                         ctx.font = "20px Ubuntu";
                         systemText.style.width = `${ctx.measureText(text).width}px`
                         systemText.innerHTML = text;
@@ -77,7 +77,7 @@ ws.onmessage = message => {
                     make.hidden = false;
                     nname.hidden = false;
                     if (msg[2] === "a") {
-                        let text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
+                        L text = `current room: ${msgRoom === "" ? `"" (community garden)` : `"${msgRoom}"`}`;
                         ctx.font = "20px Ubuntu";
                         roomContainer.style.width = `${ctx.measureText(text).width}px`;
                         roomID.innerHTML = text;
@@ -118,7 +118,7 @@ ws.onmessage = message => {
                         inputJoin.hidden = true;
                         joinSubmit.hidden = true;
 
-                        const text = `error: room "${msgRoom}" does not exist`
+                        C text = `error: room "${msgRoom}" does not exist`
                         ctx.font = "20px Ubuntu";
                         systemText.style.width = `${ctx.measureText(text).width}px`
                         systemText.innerHTML = text;
@@ -160,20 +160,20 @@ ws.onmessage = message => {
 			loadoutContainer.hidden = true;
 
             me.info.level = msg[1];
-            const nOfPetals = 5 + Math.floor(msg[1] / 15);
+            C nOfPetals = 5 + Math.floor(msg[1] / 15);
 
             hotbarReloads = [];
             belowSlidingPetals = [];
 			me.info.hotbarCooldowns = [];
 			me.info.inventoryCooldowns = [];
-            for (let i = 0; i < nOfPetals; i++) {
+            for (L i = 0; i < nOfPetals; i++) {
                 hotbarReloads.push(new HotbarReload(0, 0, 0));
                 belowSlidingPetals.push(undefined);
 				me.info.hotbarCooldowns.push(Date.now());
             }
 
             aboveSlidingPetals = [];
-            for (let i = 0; i < 8; i++) {
+            for (L i = 0; i < 8; i++) {
                 aboveSlidingPetals.push(undefined);
 				me.info.inventoryCooldowns.push(Date.now());
             }
@@ -214,7 +214,7 @@ ws.onmessage = message => {
 		
 		// petal reloads
 		case "e":
-			const newNum = msg[1] - me.info.hotbar.length / 2;
+			C newNum = msg[1] - me.info.hotbar.length / 2;
 			hotbarReloads[msg[1]] = new HotbarReload(msg[2], 
                 { 
 					x: getXPos(msg[1], true, (hbWidth - (hbWidth * fgPercent)) / 2),

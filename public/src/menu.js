@@ -1,46 +1,46 @@
 // constants
-const join = document.getElementById("join");
-const make = document.getElementById("make");
-const inputCreate = document.getElementById("input-create");
-const inputJoin = document.getElementById("input-join");
-const joinSubmit = document.getElementById("join-submit");
+C join = document.getElementById("join");
+C make = document.getElementById("make");
+C inputCreate = document.getElementById("input-create");
+C inputJoin = document.getElementById("input-join");
+C joinSubmit = document.getElementById("join-submit");
 
-const createSubmit = document.getElementById("create-submit");
-const changelog = document.getElementById("changelog-btn")
-const gallery = document.getElementById("gallery-btn")
-const levelBtn = document.getElementById("level-btn");
-const level = document.getElementById("level");
-const loadoutBtn = document.getElementById("loadout-btn");
-const galleryContainer = document.getElementById("gallery-container");
-const loadoutContainer = document.getElementById("loadout-container");
+C createSubmit = document.getElementById("create-submit");
+C changelog = document.getElementById("changelog-btn")
+C gallery = document.getElementById("gallery-btn")
+C levelBtn = document.getElementById("level-btn");
+C level = document.getElementById("level");
+C loadoutBtn = document.getElementById("loadout-btn");
+C galleryContainer = document.getElementById("gallery-container");
+C loadoutContainer = document.getElementById("loadout-container");
 
-const nname = document.getElementById("name");
-const back = document.getElementById("back");
-const systemText = document.getElementById("system-text");
-const roomID = document.getElementById("room-ID");
-const roomContainer = document.getElementById("room-container");
+C nname = document.getElementById("name");
+C back = document.getElementById("back");
+C systemText = document.getElementById("system-text");
+C roomID = document.getElementById("room-ID");
+C roomContainer = document.getElementById("room-container");
 
-const roomSettingsContainer = document.getElementById("room-settings-container");
-const inputX = document.getElementById("x");
-const inputY = document.getElementById("y");
-const by = document.getElementById("by");
-const units = document.getElementById("units");
+C roomSettingsContainer = document.getElementById("room-settings-container");
+C inputX = document.getElementById("x");
+C inputY = document.getElementById("y");
+C by = document.getElementById("by");
+C units = document.getElementById("units");
 
-const settingsContainer = document.getElementById("settings-container");
-const changelogContainer = document.getElementById("changelog-container");
-const keyboard = document.getElementById("keyboard");
-const helper = document.getElementById("helper");
+C settingsContainer = document.getElementById("settings-container");
+C changelogContainer = document.getElementById("changelog-container");
+C keyboard = document.getElementById("keyboard");
+C helper = document.getElementById("helper");
 
-const levelInput = document.getElementById("level-input");
-const levelText = document.getElementById("level-display");
-const health = document.getElementById("health");
-const bodyDamage = document.getElementById("body-damage");
-const petalNum = document.getElementById("petal-num");
+C levelInput = document.getElementById("level-input");
+C levelText = document.getElementById("level-display");
+C health = document.getElementById("health");
+C bodyDamage = document.getElementById("body-damage");
+C petalNum = document.getElementById("petal-num");
 
 // icon links
-const github = document.getElementById("Github");
-const discord = document.getElementById("Discord");
-const florr = document.getElementById("Florr");
+C github = document.getElementById("Github");
+C discord = document.getElementById("Discord");
+C florr = document.getElementById("Florr");
 
 roomSettingsContainer.hidden = true;
 settingsContainer.hidden = true;
@@ -156,14 +156,14 @@ helper.addEventListener("click", () => {
 
 // level selector stuff
 function setLevelText() {
-    const level = levelInput.value;
+    C level = levelInput.value;
 	window.localStorage.level = level;
 	nOfPetals = 5 + Math.floor(level / 15);
 
     ctx.font = "1.5vw Ubuntu";
 
-    let text = `Level ${level}`;
-    let width = ctx.measureText(text).width;
+    L text = `Level ${level}`;
+    L width = ctx.measureText(text).width;
 
     levelText.innerHTML = text;
     levelText.style.width = `${width}px`;
@@ -186,11 +186,11 @@ function setLevelText() {
 
 	if (nOfPetals !== loadout.hb.length) {
 		if (nOfPetals > loadout.hb.length) {
-			for (let i = 0; i < nOfPetals - loadout.hb.length; i++) {
+			for (L i = 0; i < nOfPetals - loadout.hb.length; i++) {
 				loadout.hb.push(0);
 			}
 		} else {
-			for (let i = 0; i < loadout.hb.length - nOfPetals; i++) {
+			for (L i = 0; i < loadout.hb.length - nOfPetals; i++) {
 				loadout.hb.pop();
 			}
 		}
@@ -198,32 +198,32 @@ function setLevelText() {
 	}
 }
 
-const galleryCanvas = document.getElementById("gallery-canvas");
-const galleryCanvasWidth = 260; 
-const galleryIconWidth = 50;
-const galleryIconsPerRow = 4;
+C galleryCanvas = document.getElementById("gallery-canvas");
+C galleryCanvasWidth = 260; 
+C galleryIconWidth = 50;
+C galleryIconsPerRow = 4;
 galleryCanvas.width = galleryCanvasWidth;
-const spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
-let sorted = [];
-const galleryCtx = galleryCanvas.getContext("2d");
+C spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIconsPerRow)) / galleryIconsPerRow;
+L sorted = [];
+C galleryCtx = galleryCanvas.getContext("2d");
 function drawGallery(radii) {
 	if (!radii) return;
 
 	// creating a sorted list
 	sorted = [];
-	for (let id in petalNames) {
+	for (L id in petalNames) {
 		id = +id;
 		// dev petal
 		if (id <= 0) continue;
 		sorted.push(id);
 	}
 	sorted.sort((id1, id2) => {
-		const rarity1 = rarities[id1];
-		const rarity2 = rarities[id2];
+		C rarity1 = rarities[id1];
+		C rarity2 = rarities[id2];
 		if (rarity1 === rarity2) {
 			// same rarity, sort alphabetically
-			const name1 = petalNames[id1];
-			const name2 = petalNames[id2];
+			C name1 = petalNames[id1];
+			C name2 = petalNames[id2];
 			return name1 > name2 ? 1 : -1;
 		}
 		return rarityTiers[rarity1] < rarityTiers[rarity2] ? -1 : 1;
@@ -233,47 +233,47 @@ function drawGallery(radii) {
 	galleryCanvas.height = Math.floor((sorted.length - 1) / 3 + 1) * (galleryIconWidth + spaceBetweenGalleryIcons);
 	galleryCtx.textAlign = "center";
 	sorted.forEach((v, i) => {
-		const row = i % galleryIconsPerRow;
-		const column = Math.floor(i / galleryIconsPerRow);
-		const x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
-		const y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
+		C row = i % galleryIconsPerRow;
+		C column = Math.floor(i / galleryIconsPerRow);
+		C x = spaceBetweenGalleryIcons / 2 + row * (galleryIconWidth + spaceBetweenGalleryIcons);
+		C y = spaceBetweenGalleryIcons / 2 + column * (galleryIconWidth + spaceBetweenGalleryIcons);
 	
-		const colours = rarityColours[rarities[v]];
+		C colours = rarityColours[rarities[v]];
 		drawPetalIcon({ x: x, y: y }, petalNames[v], v, galleryIconWidth, 
 			colours.bg, colours.fg, 1, galleryCtx);
 	});
 }
 
 
-const loadoutCanvas = document.getElementById("loadout-canvas");
-const ldCtx = loadoutCanvas.getContext("2d");
-const ldWidth = 170;
-const ldHeight = 500;
+C loadoutCanvas = document.getElementById("loadout-canvas");
+C ldCtx = loadoutCanvas.getContext("2d");
+C ldWidth = 170;
+C ldHeight = 500;
 loadoutCanvas.width = ldWidth;
 loadoutCanvas.height = ldHeight;
 ldCtx.textAlign = "center";
-const ldIconWidth = 50;
-const ldIconXSpace = (ldWidth - ldIconWidth * 2) / 2;
-const ldIconYSpace = (ldHeight - ldIconWidth * 8) / 8;
+C ldIconWidth = 50;
+C ldIconXSpace = (ldWidth - ldIconWidth * 2) / 2;
+C ldIconYSpace = (ldHeight - ldIconWidth * 8) / 8;
 
 function drawLoadout() {
 	window.localStorage.loadout = JSON.stringify(loadout);
 	ldCtx.clearRect(0, 0, ldWidth, ldHeight);
 	// hotbar
-	for (let i = 0; i < loadout.hb.length; i++) {
-		const x = ldIconXSpace / 2;
-		const y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
-		const id = loadout.hb[i];
-        const colours = rarityColours[rarities[id]];
+	for (L i = 0; i < loadout.hb.length; i++) {
+		C x = ldIconXSpace / 2;
+		C y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
+		C id = loadout.hb[i];
+        C colours = rarityColours[rarities[id]];
 		drawPetalIcon({ x: x, y: y }, petalNames[id], id, ldIconWidth,
 			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
 	// inventory
-	for (let i = 0; i < 8; i++) {
-		const x = ldIconXSpace / 2 + ldIconWidth + ldIconXSpace;
-		const y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
-		const id = loadout.inv[i];
-        const colours = rarityColours[rarities[id]];
+	for (L i = 0; i < 8; i++) {
+		C x = ldIconXSpace / 2 + ldIconWidth + ldIconXSpace;
+		C y = ldIconYSpace / 2 + i * (ldIconYSpace + ldIconWidth);
+		C id = loadout.inv[i];
+        C colours = rarityColours[rarities[id]];
 		drawPetalIcon({ x: x, y: y }, petalNames[id], id, ldIconWidth,
 			colours.bg, colours.fg,	id === 0 ? 0.5 : 1, ldCtx);
 	}	
@@ -281,11 +281,11 @@ function drawLoadout() {
 
 
 // menu holding petal stuff (for loadout)
-const petalCanvas = document.getElementById("petal-canvas");
+C petalCanvas = document.getElementById("petal-canvas");
 petalCanvas.width = ww;
 petalCanvas.height = wh;
 petalCanvas.hidden = true;
-const petalCtx = petalCanvas.getContext("2d"); 
+C petalCtx = petalCanvas.getContext("2d"); 
 petalCtx.textAlign = "center";
 class MenuHoldingPetal {
 	constructor() {
@@ -317,7 +317,7 @@ class MenuHoldingPetal {
 		this.ctx.clearRect(0, 0, ww, wh);
 	}
 	draw() {
-		let x = this.pos.x, y = this.pos.y, width = this.width;
+		L x = this.pos.x, y = this.pos.y, width = this.width;
 		if (this.snapping) {
 			x = this.snapPos.x + width / 2;
 			y = this.snapPos.y + width / 2;
@@ -332,7 +332,7 @@ class MenuHoldingPetal {
 		this.pos.y = y;
 	}
 };
-let menuHoldingPetal = new MenuHoldingPetal();
+L menuHoldingPetal = new MenuHoldingPetal();
 
 
 // death screen
