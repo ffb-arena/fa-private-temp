@@ -16,19 +16,15 @@ const path = require("path");
 const fs = require("fs");
 const WebSocket = require("ws");
 const { createHash } = require("crypto");
+const core = require("@babel/core");
 const hash = str => {
 	const hasher = createHash("sha256");
 	hasher.update(str);
 	return hasher.digest("hex");
 }
 
-const core = require("@babel/core");
-const { parse } = require("@babel/parser");
-const traverse = require("@babel/traverse");
-const generate = require("@babel/generator");
-
 let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
-const macros = JSON.parse(fs.readFileSync("./public/macros.json"));
+const macros = require("./macros.js");
 
 function getClient() {
 	let jsFile = "{";
@@ -45,18 +41,10 @@ function getClient() {
 	    jsFile += fileCode;
 	});
 	jsFile += "}";
-    const ast = parse(jsFile);
-    traverse.default(ast, {
-        enter(path) {
-            for (const m in macros) {
-                if (path.isIdentifier({ name: m })) {
-                    path.node.name = macros[m];
-                }
-            }
-        }
-    });
-    const output = generate.default(ast, jsFile);
-    return output.code;
+	macros.forEach(m => {
+		jsFile = jsFile.replace(m[0], m[1]);
+	});
+    return jsFile;
 }
 
 // debug mode - shows hitboxes and stuff on client
