@@ -5,9 +5,9 @@ function getXPos(i, hb, xOffset=0) {
 	const width = hb ? hbWidth : invWidth;
 	const spacing = hb ? spaceBetweenHB : spaceBetweenInv;
 	const newNum = i - bar.length / 2;
-	return () => ww() / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
+	return () => ww / 2 + newNum * width + (newNum - 0.5) * spacing + spacing + xOffset;
 }
-const getYPos = (hb, offset=0) => { const y = hb ? 144 : 81; return () => wh() - y + offset; };
+const getYPos = (hb, offset=0) => { const y = hb ? 144 : 81; return () => wh - y + offset; };
 
 // farthest right corner on a side (see HotbarReload._whichSide()), relative to centre, using canvas coords
 const corners = [{ x: 0.5,  y: -0.5 }, { x: 0.5,  y: 0.5 }, { x: -0.5, y: 0.5 }, { x: -0.5, y: -0.5 }];
@@ -280,11 +280,11 @@ class HoldingPetal {
 	release() {
 		if (!this.id) return;
 
-		const xPercent = this.pos.x / ww();
-		const yPercent = this.pos.y / wh();
+		const xPercent = this.pos.x / ww;
+		const yPercent = this.pos.y / wh;
 		const holdingRN = {
-			x: () => xPercent * ww(), 
-			y: () => yPercent * wh() 
+			x: () => xPercent * ww, 
+			y: () => yPercent * wh 
 		};
 
 		const holdingOGSpot = {
@@ -460,7 +460,7 @@ function drawInventory() {
 		if (
 			pointInBox(
 				{ x: me.info.mouseX, y: me.info.mouseY }, 
-				{ x: ww() / 2 - boxWidth / 2, y: wh() - boxHeight, width: boxWidth, height: boxHeight })
+				{ x: ww / 2 - boxWidth / 2, y: wh - boxHeight, width: boxWidth, height: boxHeight })
 			||
 			(playerStopped && holdingPetal.id)
 		) {
@@ -485,8 +485,8 @@ function drawInventory() {
     	ctx.fillStyle = "#000000";
     	ctx.globalAlpha = 0.4;
     	ctx.roundRect(
-    	    ww() / 2 - boxWidth / 2,
-    	    wh() - boxHeight,
+    	    ww / 2 - boxWidth / 2,
+    	    wh - boxHeight,
     	    boxWidth,
     	    boxHeight + 20,
     	    7
@@ -495,15 +495,15 @@ function drawInventory() {
 
     	// stop moving text
     	florrText(stopText, 11.9,
-    	    { x: ww() / 2, y: wh() - 15 }, ctx);
+    	    { x: ww / 2, y: wh - 15 }, ctx);
 	}
 
     // inventory boxes (+ detecting if cursor is hovering over them)
     let x;
-    x = ww() / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
+    x = ww / 2 - spaceBetweenInv * 3.5 - invWidth * 4;
 
     if (me.info.inventory.length === 0) return;
-	let y = wh() - 81;
+	let y = wh - 81;
     for (let i = 0; i < 8; i++) {
 
 		let id = me.info.inventory[i];
@@ -545,9 +545,9 @@ function drawInventory() {
     }
 
     // hotbar
-    x = ww() / 2 - (hbWidth * me.info.hotbar.length / 2) - 
+    x = ww / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 		(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2);
-	y = wh() - 144;
+	y = wh - 144;
     for (let i = 0; i < me.info.hotbar.length; i++) {
 
 		let id = me.info.hotbar[i];
@@ -604,11 +604,11 @@ function drawInventory() {
 
     // drawing numbers
     if (numInfo) {
-        x = ww() / 2 - (hbWidth * me.info.hotbar.length / 2) - 
+        x = ww / 2 - (hbWidth * me.info.hotbar.length / 2) - 
 			(spaceBetweenHB * Math.ceil(me.info.hotbar.length - 1) / 2) + (hbWidth / 2);
 
         for (let i = 0; i < me.info.hotbar.length; i++) {
-            florrText(`[${i + 1}]`, 14, { x: x, y: wh() - 157 }, ctx);
+            florrText(`[${i + 1}]`, 14, { x: x, y: wh - 157 }, ctx);
             x += spaceBetweenHB + hbWidth;
         }
     }

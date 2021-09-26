@@ -77,7 +77,6 @@ Go to localhost:9700
 ### [public](/public)
 
 * All public files
-* See [public/src/functions.js](/public/src/functions.js) before reaading any client code.
 
 ### [public/index.html](/public/index.html)
 

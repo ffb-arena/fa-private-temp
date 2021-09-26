@@ -22,14 +22,15 @@ const hash = str => {
 	return hasher.digest("hex");
 }
 
+const core = require("@babel/core");
+const { parse } = require("@babel/parser");
+const traverse = require("@babel/traverse");
+const generate = require("@babel/generator");
+
 let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
+const macros = JSON.parse(fs.readFileSync("./public/macros.json"));
 
-// debug mode - shows hitboxes and stuff on client
-const debug = false;
-
-const minify = !!process.env.PORT;
-// minifying
-if (minify) {
+function getClient() {
 	let jsFile = "{";
 	files.forEach(file => {
 	    const filePath = path.join(
@@ -44,8 +45,29 @@ if (minify) {
 	    jsFile += fileCode;
 	});
 	jsFile += "}";
+    const ast = parse(jsFile);
+    traverse.default(ast, {
+        enter(path) {
+            for (const m in macros) {
+                if (path.isIdentifier({ name: m })) {
+                    path.node.name = macros[m];
+                }
+            }
+        }
+    });
+    const output = generate.default(ast, jsFile);
+    return output.code;
+}
+
+// debug mode - shows hitboxes and stuff on client
+const debug = false;
+
+const minify = !!process.env.PORT;
+// minifying
+if (minify) {
+    let jsFile = getClient();
     console.log("Minifying code...");
-    const minifiedScript = require("@babel/core").transform(jsFile, {
+    const minifiedScript = core.transform(jsFile, {
         presets: ["minify"],
         comments: false 
     }).code;
@@ -112,23 +134,7 @@ const server = http.createServer((req, res) => {
         }
         if (req.url === "/index.js") {
 			if (minify) content = fs.readFileSync("./scratch-client.js");
-			else {
-				let jsFile = "{";
-				files.forEach(file => {
-				    const filePath = path.join(
-				        __dirname,
-				        "public",
-				        ...file
-				    );
-				    let fileCode = fs.readFileSync(filePath, "utf-8");
-				    if (fileCode[fileCode.length - 1] !== ";") {
-				        fileCode += ";";
-				    }
-				    jsFile += fileCode;
-				});
-				jsFile += "}";
-				content = jsFile;
-			}
+			else content = getClient();
         } else if (req.url === "/clist") {
 		  	content = JSON.stringify(whitelist);
 			contentType = "application/json";

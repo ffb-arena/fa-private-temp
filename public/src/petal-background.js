@@ -1,8 +1,8 @@
 const backgroundCanvas = document.getElementById("petalBackground");
 const backgroundCtx = backgroundCanvas.getContext("2d");
 
-backgroundCanvas.width = ww();
-backgroundCanvas.height = wh();
+backgroundCanvas.width = ww;
+backgroundCanvas.height = wh;
 
 let backgroundPetals = {};
 for (const r in rarityTiers) { backgroundPetals[r] = [] };
@@ -14,7 +14,7 @@ for (const id in petalNames) {
 class PetalImage{
     constructor(){
         this.x = -100;
-        this.y = Math.random() * wh();
+        this.y = Math.random() * wh;
         this.velDirection = (Math.random()-0.5)/10;
         this.velX = Math.cos(this.velDirection) * (Math.random() + 0.4);
         this.velY = Math.sin(this.velDirection);
@@ -58,7 +58,7 @@ let background, newTime, oldTime;
 function drawBackground(){
     newTime = Date.now();
     const deltaTimeMul = (newTime - oldTime) / oneOverSixty;
-    backgroundCtx.clearRect(0, 0, ww(), wh());
+    backgroundCtx.clearRect(0, 0, ww, wh);
     petalSpawnCooldown -= deltaTimeMul;
     while (petalSpawnCooldown < 0 && activeBackgroundPetals.length < petalLimit){
         petalSpawnCooldown += petalSpawnDelay;

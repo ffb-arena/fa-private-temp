@@ -11,7 +11,6 @@
   "dependencies": {
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.1",
-    "@sweet-js/cli": "^3.0.13",
     "babel-preset-minify": "^0.5.1",
     "ws": "^7.4.6"
   }

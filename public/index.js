@@ -43,8 +43,8 @@ const performance = {
     }
 };
 
-canvas.width = ww();
-canvas.height = wh() + 10; // add extra because doesn't seem to be all height?
+canvas.width = ww;
+canvas.height = wh + 10; // add extra because doesn't seem to be all height?
 ctx.textAlign = "center";
 
 
@@ -84,7 +84,7 @@ me = {
 };
 allPlayers = [];
 debug = [];
-res = (ww() / 1920 > wh() / 1080) ? ww() / 1920 : wh() / 1080;
+res = (ww / 1920 > wh / 1080) ? ww / 1920 : wh / 1080;
 deadPetals = [];
 radii = {};
 loadout = window.localStorage.loadout
@@ -107,13 +107,13 @@ window.addEventListener("contextmenu", c => {
 });
 
 window.addEventListener("resize", () => {
-    backgroundCanvas.width = ww();
-    backgroundCanvas.height = wh();
-    canvas.width = ww();
-    canvas.height = wh() + 10; // needs a bit extra for some reason, otherwise isn't high enough
-	petalCanvas.width = ww();
-	petalCanvas.height = wh();
-    res = (ww() / 1920 > wh() / 1080) ? ww() / 1920 : wh() / 1080;
+    backgroundCanvas.width = ww;
+    backgroundCanvas.height = wh;
+    canvas.width = ww;
+    canvas.height = wh + 10; // needs a bit extra for some reason, otherwise isn't high enough
+	petalCanvas.width = ww;
+	petalCanvas.height = wh;
+    res = (ww / 1920 > wh / 1080) ? ww / 1920 : wh / 1080;
     ctx.textAlign = "center";
 	petalCtx.textAlign = "center";
 
@@ -369,8 +369,8 @@ function addEventListeners() {
 			ws.send(JSON.stringify([
 				"c", 
 				"d", 
-				me.info.mouseX - ww() / 2, 
-				wh() - ((me.info.mouseY - wh() / 2) + wh() / 2) - wh() / 2, 
+				me.info.mouseX - ww / 2, 
+				wh - ((me.info.mouseY - wh / 2) + wh / 2) - wh / 2, 
 				res
 			]));    
 		}
