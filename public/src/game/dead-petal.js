@@ -16,7 +16,6 @@ class DeadPetal {
             ctx, res, this.radius * (this.stage / 10));
         ctx.globalAlpha = 1;
 
-        if (this.stage === 16) R true;
-        R false;
+		R !(this.stage === 16);
     }
 }

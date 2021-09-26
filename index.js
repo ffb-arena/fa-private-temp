@@ -41,9 +41,7 @@ function getClient() {
 	    jsFile += fileCode;
 	});
 	jsFile += "}";
-	macros.forEach(m => {
-		jsFile = jsFile.replace(m[0], m[1]);
-	});
+	macros.forEach(m => jsFile = jsFile.replace(m[0], m[1]));
     return jsFile;
 }
 

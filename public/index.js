@@ -383,7 +383,6 @@ function mainLoop() {
     performance.fps.newTime = Date.now();
     performance.fps.fpsArray.push(1 / (((performance.fps.newTime - performance.fps.oldTime) / 1000) || 1));
 
-    // Clearing canvas
     clear(ctx);
 
     // ping stuff
@@ -406,28 +405,10 @@ function mainLoop() {
 
     // if not on menu
     if (title.hidden) {
-        drawMap();
-        drawGrid();
-
-        // Drawing players
+        drawMap(); drawGrid();
         allPlayers.forEach((data, i) => renderPlayer(data, i));
-
-        drawHelper();
-        drawMinimap();
-        drawPerformance();
-        drawDebug();
-
-        // drawing dead petals
-        let deadDeadPetals = [];
-        deadPetals.forEach((deadPetal, i) => {
-            if (deadPetal.update()) {
-                deadDeadPetals.push(i);
-            }
-        });
-        deadDeadPetals.forEach((i, n) => {
-            deadPetals.splice(i - n, 1);
-        });
-
+        drawHelper(); drawMinimap(); drawPerformance(); drawDebug();
+		deadPetals = deadPetals.filter(p => p.update());
         // drawing death screen
         if (!deathScreen.length) {
             drawInventory();
@@ -436,9 +417,7 @@ function mainLoop() {
 			drawDeathScreen(ctx, deathScreen[0], deathScreen[1]);
         }
     }
-
     performance.fps.oldTime = performance.fps.newTime;
-
     loop = requestAnimationFrame(mainLoop);
 }
 
