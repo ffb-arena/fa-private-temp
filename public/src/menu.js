@@ -174,7 +174,7 @@ function setLevelText() {
     text = `# of petals: ${nOfPetals}`;
     width = ctx.measureText(text).width + 1;
     petalNum.innerHTML = text;
-    petalNum.style.width = `${width}px`;
+	petalNum.style.width = `${width}px`;
 
     text = `health: ${round(100 + (level - 1) * 50/44, 2)}`;
     width = ctx.measureText(text).width + 1;
