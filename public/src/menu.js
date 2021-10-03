@@ -209,7 +209,7 @@ C spaceBetweenGalleryIcons = (galleryCanvasWidth - (galleryIconWidth * galleryIc
 L sorted = [];
 C galleryCtx = galleryCanvas.getContext("2d");
 function drawGallery(radii) {
-	if (!radii) return;
+	if (!radii) R;
 
 	// creating a sorted list
 	sorted = [];
@@ -226,9 +226,9 @@ function drawGallery(radii) {
 			// same rarity, sort alphabetically
 			C name1 = petalNames[id1];
 			C name2 = petalNames[id2];
-			return name1 > name2 ? 1 : -1;
+			R name1 > name2 ? 1 : -1;
 		}
-		return rarityTiers[rarity1] < rarityTiers[rarity2] ? -1 : 1;
+		R rarityTiers[rarity1] < rarityTiers[rarity2] ? -1 : 1;
 	});
 
 	// drawing the gallery
@@ -372,23 +372,8 @@ function returnToMenu() {
 	startBackground();
     canvas.hidden = true;
     document.getElementById("body").style.backgroundColor = "#1ea761";
-    document.getElementById("title").hidden = false;
-    document.getElementById("subtitle").hidden = false;
-    document.getElementById("noobs").hidden = false;
-    systemText.hidden = false;
-    nname.hidden = false;
-    roomID.hidden = false;
-	
-	discord.hidden = false;
-	florr.hidden = false;
-	github.hidden = false;
-    changelog.hidden = false;
-    gallery.hidden = false;
-    make.hidden = false;
-    join.hidden = false;
     level.hidden = levelHidden;
 	galleryContainer.hidden = galleryHidden;
 	loadoutContainer.hidden = loadoutHidden;
-    levelBtn.hidden = false;
-	loadoutBtn.hidden = false;
+	menuDiv.hidden = false
 }

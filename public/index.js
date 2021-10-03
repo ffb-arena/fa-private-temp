@@ -28,7 +28,7 @@ function toggleFunc(element) {
 
 const gridSpace = 50;
 const spaceBetweenPingUpdates = 1000; // ms
-const performance = {
+const perf = {
     ping: {
         pings: [],
         ping: [],
@@ -117,7 +117,7 @@ window.addEventListener("resize", () => {
     ctx.textAlign = "center";
 	petalCtx.textAlign = "center";
 
-    if (title.hidden) { // if in game
+    if (menuDiv.hidden) { // if in game
         drawMap();
         drawGrid();
         allPlayers.forEach((data, i) => renderPlayer(data, i));
@@ -175,7 +175,7 @@ function addEventListeners() {
 
         // showing/hiding performance stats
         if (key.code === "Semicolon") {
-            performance.hidden = !performance.hidden;
+            perf.hidden = !perf.hidden;
         }
 
         // if on death screen and enter is pressed
@@ -293,7 +293,7 @@ function addEventListeners() {
     document.addEventListener("mousemove", pos => {
         me.info.mouseX = pos.x;
         me.info.mouseY = pos.y;
-        if (!title.hidden) {
+        if (!menuDiv.hidden) { // if on menu
             setLevelText(); // from src/menu.js
 
 			// inventory dragging stuff
@@ -380,31 +380,30 @@ function addEventListeners() {
 let loop;
 let deathScreen = [];
 function mainLoop() {
-    performance.fps.newTime = Date.now();
-    performance.fps.fpsArray.push(1 / (((performance.fps.newTime - performance.fps.oldTime) / 1000) || 1));
+    perf.fps.newTime = Date.now();
+    perf.fps.fpsArray.push(1 / (((perf.fps.newTime - perf.fps.oldTime) / 1000) || 1));
 
     clear(ctx);
 
     // ping stuff
     ws.send(JSON.stringify(["ping", Date.now()]));
-    if (performance.lastChecked < Date.now()) {
-        performance.lastChecked = Date.now() + spaceBetweenPingUpdates;
+    if (perf.lastChecked < Date.now()) {
+        perf.lastChecked = Date.now() + spaceBetweenPingUpdates;
 
-        if (performance.ping.pings.length) {
-            performance.ping.ping[0] = performance.ping.pings.reduce((a, b) => (a + b)) / performance.ping.pings.length;
-            performance.ping.ping[1] = Math.min(...performance.ping.pings);
-            performance.ping.ping[2] = Math.max(...performance.ping.pings);
-            performance.ping.pings = [];
+        if (perf.ping.pings.length) {
+            perf.ping.ping[0] = perf.ping.pings.reduce((a, b) => (a + b)) / perf.ping.pings.length;
+            perf.ping.ping[1] = Math.min(...perf.ping.pings);
+            perf.ping.ping[2] = Math.max(...perf.ping.pings);
+            perf.ping.pings = [];
         }
 
-        performance.fps.fps[0] = performance.fps.fpsArray.reduce((a, b) => (a + b)) / performance.fps.fpsArray.length;
-        performance.fps.fps[1] = Math.min(...performance.fps.fpsArray);
-        performance.fps.fps[2] = Math.max(...performance.fps.fpsArray);
-        performance.fps.fpsArray = [];
+        perf.fps.fps[0] = perf.fps.fpsArray.reduce((a, b) => (a + b)) / perf.fps.fpsArray.length;
+        perf.fps.fps[1] = Math.min(...perf.fps.fpsArray);
+        perf.fps.fps[2] = Math.max(...perf.fps.fpsArray);
+        perf.fps.fpsArray = [];
     }
 
-    // if not on menu
-    if (title.hidden) {
+    if (menuDiv.hidden) { // if in game
         drawMap(); drawGrid();
         allPlayers.forEach((data, i) => renderPlayer(data, i));
         drawHelper(); drawMinimap(); drawPerformance(); drawDebug();
@@ -417,7 +416,7 @@ function mainLoop() {
 			drawDeathScreen(ctx, deathScreen[0], deathScreen[1]);
         }
     }
-    performance.fps.oldTime = performance.fps.newTime;
+    perf.fps.oldTime = perf.fps.newTime;
     loop = requestAnimationFrame(mainLoop);
 }
 

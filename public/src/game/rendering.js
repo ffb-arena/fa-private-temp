@@ -177,7 +177,7 @@ function round(number, decimals) {
 }
 
 function drawPerformance() {
-    if (!performance.hidden) {
+    if (!perf.hidden) {
         ctx.globalAlpha = 0.4;
         ctx.font = `${15 * res}px Ubuntu`;
         ctx.fillStyle = "#ffffff";
@@ -187,12 +187,12 @@ function drawPerformance() {
             wh * 1/30
         );
         ctx.fillText(
-            `Ping: ${round(performance.ping.ping[0], 2)}/${performance.ping.ping[1]}/${performance.ping.ping[2]}`, 
+            `Ping: ${round(perf.ping.ping[0], 2)}/${perf.ping.ping[1]}/${perf.ping.ping[2]}`, 
             ww * 28.5/30, 
             wh * 1.8/30
         );
         ctx.fillText(
-            `FPS: ${round(performance.fps.fps[0], 1)}/${round(performance.fps.fps[1], 1)}/${round(performance.fps.fps[2], 1)}`, 
+            `FPS: ${round(perf.fps.fps[0], 1)}/${round(perf.fps.fps[1], 1)}/${round(perf.fps.fps[2], 1)}`, 
             ww * 28.5/30, 
             wh * 2.6/30
         );
