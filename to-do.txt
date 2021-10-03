@@ -5,6 +5,7 @@ FFB TO-DO
 		-make rose in more
 
 	code and bugs:
+		-more consistent HTML container names
 		-suicide key
 		-checks
 		-random disconnects
@@ -18,7 +19,6 @@ FFB TO-DO
    		-faces
    		-player hurt animations
 		-SUCK IT UP AND LEARN HOW TO LERP
-		-container for menu for easier hiding TODO NEXT
 		-use florrText on death screen
 		-option for disabling background (or just make it less laggy)
 

@@ -15,25 +15,38 @@
 		<div id="menu-div">
         	<canvas id="petal-background"></canvas>
         	<div id="Discord">
-        	    <img src="./images/icons/discord.png" class="pointer noselect button" onclick="window.open('https://discord.gg/nKZa6hPycs')"></button>
+        	    <img src="./images/icons/discord.png" class="pointer noselect button" onmousedown="window.open('https://discord.gg/nKZa6hPycs')"></button>
         	</div>
         	<div id="Github">
-        	    <img src="./images/icons/github.png" class="pointer noselect button" onclick="window.open('https://github.com/Garklein/Florr-Arena')"></button>
+        	    <img src="./images/icons/github.png" class="pointer noselect button" onmousedown="window.open('https://github.com/Garklein/Florr-Arena')"></button>
         	</div>
         	<div id="Florr">
-        	    <img src="./images/icons/florr.png" class="pointer noselect button" onclick="window.open('https://florr.io/')"></button>
+        	    <img src="./images/icons/florr.png" class="pointer noselect button" onmousedown="window.open('https://florr.io/')"></button>
         	</div>
         	<h1 class="florrtitle noselect" id="title">FFB</h1>
         	<div style="width: 100%; position: inline;">
         	    <h3 id="subtitle" class="florrfont noselect">FantasyFlowerBuilder</h3>
         	</div>
 
-			<!-- button event listeners are added in ./src/menu.js -->
-        	<button id="settings-btn" class="florrfont noselect menu-btn">settings</button>
-        	<button id="changelog-btn" class="florrfont noselect menu-btn">changelog</button>
-        	<button id="level-btn" class="florrfont noselect menu-btn">level</button>
-        	<button id="loadout-btn" class="florrfont noselect menu-btn">loadout</button>
-        	<button id="gallery-btn" class="florrfont noselect menu-btn">gallery</button>
+        	<button id="settings-btn" onmousedown=toggleFunc("settings-container") class="florrfont noselect menu-btn">settings</button>
+        	<button id="changelog-btn" onmousedown=toggleFunc("changelog-container") class="florrfont noselect menu-btn">changelog</button>
+        	<button id="level-btn" onmousedown=toggleFunc("level") class="florrfont noselect menu-btn">level</button>
+        	<button id="loadout-btn" onmousedown=toggleFunc("loadout-container") class="florrfont noselect menu-btn">loadout</button>
+        	<button id="gallery-btn" onmousedown=toggleFunc("gallery-container") class="florrfont noselect menu-btn">gallery</button>
+			<script>
+				function toggleFunc(element) {
+					const x = document.getElementById(element); // S combinator when
+					x.hidden = !x.hidden; // S [assign] [not]
+					switch (element) {
+						case "settings-container":
+							document.getElementById("changelog-container").hidden = true;
+							break;
+						case "changelog-container":
+							document.getElementById("settings-container").hidden = true;
+							break;
+					}
+				}
+			</script>
 
         	<div id="start">
         	    <button class="florrfont noselect menu-btn" id="join">join a room</button>
@@ -82,7 +95,7 @@
         	    <p class="florrfont centertext noselect">Right click or shift to defend</p>
         	</div>
 
-        	<div class="scrollbar" id="changelog-container">
+        	<div class="scrollbar" id="changelog-container" hidden=true>
         	    <div class="list florrfont">
         	        <ul>
         	            <li id="version-number" class="florrfont-big text-center">Version Number</li>
@@ -109,8 +122,8 @@
 
         	<div class="scrollbar centered" id="gallery-container" hidden="true">
         	    <div class="tab">
-        	        <button class="tablinks florrfont" onclick="openGallery(event, 'Petals')">Petals</button>
-        	        <button class="tablinks florrfont" onclick="openGallery(event, 'Mobs')">Mobs</button>
+        	        <button class="tablinks florrfont" onmousedown="openGallery(event, 'Petals')">Petals</button>
+        	        <button class="tablinks florrfont" onmousedown="openGallery(event, 'Mobs')">Mobs</button>
         	    </div>
         	      
         	    <div id="Petals" class="tabcontent myGallery active">

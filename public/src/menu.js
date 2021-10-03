@@ -6,13 +6,6 @@ C inputJoin = document.getElementById("input-join");
 C joinSubmit = document.getElementById("join-submit");
 
 C createSubmit = document.getElementById("create-submit");
-C changelog = document.getElementById("changelog-btn")
-C gallery = document.getElementById("gallery-btn")
-C levelBtn = document.getElementById("level-btn");
-C level = document.getElementById("level");
-C loadoutBtn = document.getElementById("loadout-btn");
-C galleryContainer = document.getElementById("gallery-container");
-C loadoutContainer = document.getElementById("loadout-container");
 
 C nname = document.getElementById("name");
 C back = document.getElementById("back");
@@ -26,8 +19,6 @@ C inputY = document.getElementById("y");
 C by = document.getElementById("by");
 C units = document.getElementById("units");
 
-C settingsContainer = document.getElementById("settings-container");
-C changelogContainer = document.getElementById("changelog-container");
 C keyboard = document.getElementById("keyboard");
 C helper = document.getElementById("helper");
 
@@ -37,16 +28,9 @@ C health = document.getElementById("health");
 C bodyDamage = document.getElementById("body-damage");
 C petalNum = document.getElementById("petal-num");
 
-// icon links
-C github = document.getElementById("Github");
-C discord = document.getElementById("Discord");
-C florr = document.getElementById("Florr");
-
 C menuDiv = document.getElementById("menu-div");
 
 roomSettingsContainer.hidden = true;
-settingsContainer.hidden = true;
-changelogContainer.hidden = true;
 
 inputX.hidden = true;
 inputY.hidden = true;
@@ -64,14 +48,6 @@ window.addEventListener("load", () => {
 	loads[1] = true;
 	finishLoad();
 });
-
-// setting popup event listeners
-changelog.addEventListener("click", () => toggleFunc("changelog-container"));
-gallery.addEventListener("click", () => toggleFunc("gallery-container"));
-document.getElementById("settings-btn").addEventListener("click", () => toggleFunc("settings-container"));
-levelBtn.addEventListener("click", () => toggleFunc("level"));
-loadoutBtn.addEventListener("click", () => toggleFunc("loadout-container"));
-
 
 // Creating Games
 make.addEventListener("click", () => {
@@ -372,8 +348,5 @@ function returnToMenu() {
 	startBackground();
     canvas.hidden = true;
     document.getElementById("body").style.backgroundColor = "#1ea761";
-    level.hidden = levelHidden;
-	galleryContainer.hidden = galleryHidden;
-	loadoutContainer.hidden = loadoutHidden;
 	menuDiv.hidden = false
 }

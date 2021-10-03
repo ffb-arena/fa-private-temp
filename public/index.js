@@ -2,30 +2,6 @@
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 
-let levelHidden = true;
-let galleryHidden = true;
-let loadoutHidden = true;
-function toggleFunc(element) {
-    const x = document.getElementById(element);
-    x.hidden = !x.hidden;
-    switch (element) {
-        case "level":
-            levelHidden = !levelHidden;
-            break;
-		case "gallery-container":
-			galleryHidden = !galleryHidden;
-			break;
-		case "loadout-container":
-			loadoutHidden = !loadoutHidden;
-        case "settings-container":
-            changelogContainer.hidden = true;
-            break;
-        case "changelog-container":
-            settingsContainer.hidden = true;
-            break;
-    }
-}
-
 const gridSpace = 50;
 const spaceBetweenPingUpdates = 1000; // ms
 const perf = {
