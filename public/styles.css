@@ -661,7 +661,7 @@ input[type=number] {
 
 
 /* Stuff for level selector div */
-#level {
+#level-container {
     width: 16vw;
     height: 70vh;
 

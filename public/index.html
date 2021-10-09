@@ -30,13 +30,13 @@
 
         	<button id="settings-btn" onmousedown=toggleFunc("settings-container") class="florrfont noselect menu-btn">settings</button>
         	<button id="changelog-btn" onmousedown=toggleFunc("changelog-container") class="florrfont noselect menu-btn">changelog</button>
-        	<button id="level-btn" onmousedown=toggleFunc("level") class="florrfont noselect menu-btn">level</button>
+        	<button id="level-btn" onmousedown=toggleFunc("level-container") class="florrfont noselect menu-btn">level</button>
         	<button id="loadout-btn" onmousedown=toggleFunc("loadout-container") class="florrfont noselect menu-btn">loadout</button>
         	<button id="gallery-btn" onmousedown=toggleFunc("gallery-container") class="florrfont noselect menu-btn">gallery</button>
 			<script>
 				function toggleFunc(element) {
 					const x = document.getElementById(element); // S combinator when
-					x.hidden = !x.hidden; // S [assign] [not]
+					x.hidden = !x.hidden; // S assign not document.getElementById(element)
 					switch (element) {
 						case "settings-container":
 							document.getElementById("changelog-container").hidden = true;
@@ -63,7 +63,7 @@
         	    <button class="florrfont" id="create-submit" hidden="true">create room</button>
         	</div>
 
-        	<div id="level" hidden="true">
+        	<div id="level-container" hidden="true">
         	    <p id="level-display">Level 45</p>
         	    <input id="level-input" type="range" min="1" max="45" value="45" orient="vertical">
 
@@ -99,7 +99,7 @@
         	    <div class="list florrfont">
         	        <ul>
         	            <li id="version-number" class="florrfont-big text-center">Version Number</li>
-        	            <li class="florrfont-big text-center">26-9-21 beta @ 10:53 AM EST</li>
+        	            <li id="date" class="florrfont-big text-center">8-10-21 beta @ 8:42 PM EST</li>
         	            <li class="changelog-separator"></li>
         	            <li class="florrfont-big">April 28th 2021</li>
         	            <li class="florrfont-small">-New Changelog</li>

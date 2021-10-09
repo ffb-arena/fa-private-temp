@@ -5,7 +5,6 @@ FFB TO-DO
 		-make rose in more
 
 	code and bugs:
-		-more consistent HTML container names
 		-suicide key
 		-checks
 		-random disconnects
