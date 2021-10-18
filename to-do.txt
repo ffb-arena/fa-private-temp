@@ -19,7 +19,6 @@ FFB TO-DO
    		-player hurt animations
 		-SUCK IT UP AND LEARN HOW TO LERP
 		-use florrText on death screen
-		-option for disabling background (or just make it less laggy)
 
 	physics:
 		-petals always evenly spaced
