@@ -76,7 +76,7 @@ const petalStats = {
 		post: (petal, mul, centre, rad, player) => {
 			rad = Math.min(rad, C.normal);
 			if (petal.healing) {
-				petal.healingRad -= 2 * mul;
+				petal.healingRad = Math.max(0, petal.healingRad - 2 * mul);
 				rad = petal.healingRad;
 			} else if (Date.now() > petal.healTime && player.pubInfo.hp < player.pubInfo.maxHP) {
 				petal.healing = true;

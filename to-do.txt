@@ -17,7 +17,6 @@ FFB TO-DO
 		-way to delete petals
    		-faces
    		-player hurt animations
-		-SUCK IT UP AND LEARN HOW TO LERP
 		-use florrText on death screen
 
 	physics:
