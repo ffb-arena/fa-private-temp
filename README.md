@@ -4,7 +4,7 @@
 Make sure you have [Node.js](https://nodejs.org/en/download/) installed  
 cd to the root where you cloned this/downloaded the files  
 Run `npm i` followed by `node index`  
-Go to localhost:9700   
+Go to localhost:9700  
 
 ## Files and folders
 
@@ -12,6 +12,11 @@ Go to localhost:9700
 
 * Main server file
 * Handles rooms, connections, minifying, and the main server loop
+
+### [macros.js](/macros.js)
+
+* The "macros" that preprocess the client code
+* Should be read before reading any client code
 
 ### [to-do.txt](/to-do.txt)
 
@@ -26,13 +31,17 @@ Go to localhost:9700
 
 * All game constants, used in other files
 
+#### [server/enums.js](/server/enums.js)
+
+* Some enums for the other files
+
 #### [server/files.js](/server/files.js)
 
 * List of public JavaScript files that need to be combined
 
 #### [server/functions.js](/server/functions.js)
 
-* All game functions, used in other files
+* General game functions, used in other files
 
 #### [server/packet-handler.js](/server/packet-handler.js)
 
@@ -64,6 +73,11 @@ Go to localhost:9700
 
 * All petal statistics
 
+##### [server/player/debuff.js](/server/player/debuff.js)
+
+* The class for debuffs
+* Currently contains poison, would also contain honey debuff, dandelion debuff etc.
+
 ##### [server/player/collisions.js](/server/player/collisions.js)
 
 * Player-player collision handling
@@ -84,7 +98,7 @@ Go to localhost:9700
 
 ### [public/styles.css](/public/styles.css)
 
-* The CSS file for the above HTML file
+* The CSS file for the HTML files
 
 ### [public/credits.html](/public/credits.html)
 
@@ -118,6 +132,11 @@ Go to localhost:9700
 * Initializes client WebSocket and handles messages
 * Controls a loading screen until the WebSocket opens
 
+#### [public/src/florr-text.js](/public/src/florr-text.js)
+
+* Contains a function to draw text
+* Is pretty bad
+
 #### [public/src/game](/public/src/game)
 
 * Folder for everything to do with the client game itself
@@ -146,9 +165,5 @@ Go to localhost:9700
 ##### [public/src/game/inventory.js](/public/src/game/inventory.js)
 
 * Client inventory rendering
-
-##### [public/src/game/florr-text.js](/public/src/game/florr-text.js)
-
-* This file has a function which draws the text
 
 If you've read down here and like this, you may also be interested in [viter](https://github.com/FeeshDev/viter)

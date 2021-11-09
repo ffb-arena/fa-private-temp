@@ -35,4 +35,4 @@ FFB TO-DO
 -far future
 	-tdm
 	-yy opposite knockback
-	-remove while on background type selecting
+	-remove `while` on background type selecting

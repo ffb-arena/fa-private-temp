@@ -15,15 +15,7 @@ const http = require("http");
 const path = require("path");
 const fs = require("fs");
 const WebSocket = require("ws");
-const { createHash } = require("crypto");
 const core = require("@babel/core");
-const hash = str => {
-	const hasher = createHash("sha256");
-	hasher.update(str);
-	return hasher.digest("hex");
-}
-
-let whitelist = JSON.parse(fs.readFileSync("./whitelist.json"));
 const macros = require("./macros.js");
 
 function getClient() {
@@ -68,17 +60,6 @@ const error = res => {
 }
 // Server
 const server = http.createServer((req, res) => {
-	const ip = hash(req.headers["x-forwarded-for"] || res.socket.remoteAddress);
-	if (whitelistPointer.next && req.url !== "/clist") {
-		whitelistPointer.next = false;
-		whitelist.testers.push(ip);
-	}
-	if (req.url !== "/a") {
-		if (!(whitelist.devs.includes(ip) || whitelist.testers.includes(ip))) {
-		 	error(res);
-		 	return;
-		}
-	}
     let contentType;
     let file = path.join(
         __dirname,
@@ -121,13 +102,7 @@ const server = http.createServer((req, res) => {
         if (req.url === "/index.js") {
 			if (minify) content = fs.readFileSync("./scratch-client.js");
 			else content = getClient();
-        } else if (req.url === "/clist") {
-		  	content = JSON.stringify(whitelist);
-			contentType = "application/json";
-        } else if (req.url === "/a") {
-			content = ip;
-			contentType = "text/html";
-		}
+        }
         res.writeHead(200, { "Content-Type": contentType });
         res.end(content);
     });
@@ -137,7 +112,6 @@ const server = http.createServer((req, res) => {
 const wss = new WebSocket.Server({ server });
 const time = {};
 let rooms = new Map().set("", new Room(20, 20, debug));
-let whitelistPointer = { next: false, list: whitelist }; // "pointer"
 
 // When a websocket connects
 wss.on("connection", (ws, req) => {
@@ -179,11 +153,10 @@ wss.on("connection", (ws, req) => {
         myRoom = undefined;
     });
 
-	const ip = hash(req.headers["x-forwarded-for"] || ws._socket.remoteAddress);
     // Messages being received from that socket
     ws.on("message", message => {
         // ph = packet handler
-        [myRoom, myID, myName, bruh] = ph(message, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer, ip);
+        [myRoom, myID, myName, bruh] = ph(message, myRoom, myID, myName, rooms, bruh, ws);
     });
 });
 

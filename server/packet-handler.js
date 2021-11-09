@@ -1,6 +1,6 @@
 const Room = require("./room.js");
 
-function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws, whitelistPointer, ip) {
+function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws) {
     let packet;
     try {
         packet = JSON.parse(msg);
@@ -134,13 +134,6 @@ function handlePacket(msg, myRoom, myID, myName, rooms, bruh, ws, whitelistPoint
 		// weird swaps where they can both be in the hotbar/inventory
 		case "e":
 			rooms.get(myRoom).players[myID].weirdSwap(packet[1], packet[2], packet[3], packet[4]);
-			break;
-		
-		// command
-		case "f":
-			if (packet[1] === "(a)" && whitelistPointer.list.devs.includes(ip)) {
-				whitelistPointer.next = true;
-			}
 			break;
 
         // Ping
